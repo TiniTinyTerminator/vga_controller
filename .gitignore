@@ -91,7 +91,7 @@ dkms.conf
 !.vscode/extensions.json
 *.code-workspace
 
-# Local History for Visual Studio Code
+# Local History for Visu>al Studio Code
 .history/
 
 build
