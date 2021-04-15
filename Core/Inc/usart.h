@@ -34,12 +34,24 @@ extern "C" {
 extern UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN Private defines */
-
+#define UART_Init MX_USART2_UART_Init
 /* USER CODE END Private defines */
 
 void MX_USART2_UART_Init(void);
 
 /* USER CODE BEGIN Prototypes */
+
+void UART_Print(char *, uint16_t len);
+
+char UART_Getc();
+
+void UART_Gets(char *ptr , char endcode);
+
+uint8_t UART_Is_busy();
+
+uint16_t UART_Get_buffer_space();
+
+void UART_Clear_buffer();
 
 /* USER CODE END Prototypes */
 

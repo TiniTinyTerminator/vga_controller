@@ -47,7 +47,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-// volatile uint32_t framebuff[320 * 240] = {};
+volatile uint32_t framebuff[320 * 240] = {};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/

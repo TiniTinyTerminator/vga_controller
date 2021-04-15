@@ -41,6 +41,7 @@ extern DMA_HandleTypeDef hdma_memtomem_dma2_stream0;
 void MX_DMA_Init(void);
 
 /* USER CODE BEGIN Prototypes */
+void UART_TX_Pop(uint32_t *des, uint32_t max_length);
 
 /* USER CODE END Prototypes */
 
