@@ -9,6 +9,8 @@
  * 
  */
 
+#pragma once
+
 #include <inttypes.h>
 
 /**
@@ -25,7 +27,7 @@ typedef struct
  * @brief pointer to vector
  * 
  */
-typedef Pvector_t *vector_t;
+typedef vector_t *Pvector_t;
 
 /**
  * @brief 
@@ -53,7 +55,7 @@ void API_Set_draw_color(uint8_t color);
  * 
  * @param fill 
  */
-void API_Set_fill(uint_t fill);
+void API_Set_fill(uint8_t fill);
 
 /**
  * @brief 
@@ -78,7 +80,7 @@ void API_Draw_square(const Pvector_t start, uint32_t width, uint32_t height);
  * @param vector_list 
  * @param length 
  */
-void API_Draw_polygon(const *Pvector_t vector_list, uint32_t length);
+void API_Draw_polygon(const Pvector_t * vector_list, uint32_t length);
 
 /**
  * @brief 
@@ -86,7 +88,7 @@ void API_Draw_polygon(const *Pvector_t vector_list, uint32_t length);
  * @param position 
  * @param radius 
  */
-void API_Draw_Circle(const vector_t position, uint32_t radius);
+void API_Draw_circle(const vector_t position, uint32_t radius);
 
 /**
  * @brief 

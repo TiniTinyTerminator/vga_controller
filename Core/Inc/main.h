@@ -7,13 +7,13 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -32,7 +32,8 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <inttypes.h>
+#include "stdint.h"
+#include "stm32_ub_vga_screen.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -58,34 +59,26 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define CS_I2C_SPI_Pin GPIO_PIN_3
-#define CS_I2C_SPI_GPIO_Port GPIOE
-#define PH0_OSC_IN_Pin GPIO_PIN_0
-#define PH0_OSC_IN_GPIO_Port GPIOH
-#define PH1_OSC_OUT_Pin GPIO_PIN_1
-#define PH1_OSC_OUT_GPIO_Port GPIOH
-#define OTG_FS_PowerSwitchOn_Pin GPIO_PIN_0
-#define OTG_FS_PowerSwitchOn_GPIO_Port GPIOC
-#define B1_Pin GPIO_PIN_0
-#define B1_GPIO_Port GPIOA
-#define BOOT1_Pin GPIO_PIN_2
-#define BOOT1_GPIO_Port GPIOB
-#define GREEN_LED_Pin GPIO_PIN_12
-#define GREEN_LED_GPIO_Port GPIOD
-#define ORANGE_LED_Pin GPIO_PIN_13
-#define ORANGE_LED_GPIO_Port GPIOD
-#define RED_LED_Pin GPIO_PIN_14
-#define RED_LED_GPIO_Port GPIOD
-#define BLUE_RED_Pin GPIO_PIN_15
-#define BLUE_RED_GPIO_Port GPIOD
-#define SWDIO_Pin GPIO_PIN_13
-#define SWDIO_GPIO_Port GPIOA
-#define SWCLK_Pin GPIO_PIN_14
-#define SWCLK_GPIO_Port GPIOA
-#define SWO_Pin GPIO_PIN_3
-#define SWO_GPIO_Port GPIOB
-#define MEMS_INT2_Pin GPIO_PIN_1
-#define MEMS_INT2_GPIO_Port GPIOE
+#define VGA_BLUE0_Pin GPIO_PIN_8
+#define VGA_BLUE0_GPIO_Port GPIOE
+#define VGA_BLUE1_Pin GPIO_PIN_9
+#define VGA_BLUE1_GPIO_Port GPIOE
+#define VGA_GREEN0_Pin GPIO_PIN_10
+#define VGA_GREEN0_GPIO_Port GPIOE
+#define VGA_GREEN1_Pin GPIO_PIN_11
+#define VGA_GREEN1_GPIO_Port GPIOE
+#define VGA_GREEN2_Pin GPIO_PIN_12
+#define VGA_GREEN2_GPIO_Port GPIOE
+#define VGA_RED0_Pin GPIO_PIN_13
+#define VGA_RED0_GPIO_Port GPIOE
+#define VGA_RED1_Pin GPIO_PIN_14
+#define VGA_RED1_GPIO_Port GPIOE
+#define VGA_RED2_Pin GPIO_PIN_15
+#define VGA_RED2_GPIO_Port GPIOE
+#define VGA_HSYNC_Pin GPIO_PIN_11
+#define VGA_HSYNC_GPIO_Port GPIOB
+#define VGA_VSYNC_Pin GPIO_PIN_12
+#define VGA_VSYNC_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
