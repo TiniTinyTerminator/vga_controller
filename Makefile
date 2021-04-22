@@ -191,5 +191,5 @@ clean:
 # dependencies
 #######################################
 -include $(wildcard $(BUILD_DIR)/*.d)
--include flash.mk
+-include commands.mk
 # *** EOF ***
