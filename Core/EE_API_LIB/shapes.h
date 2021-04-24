@@ -88,7 +88,7 @@ void API_Draw_polygon(const Pvector_t * vector_list, uint32_t length);
  * @param position 
  * @param radius 
  */
-void API_Draw_circle(const vector_t position, uint32_t radius);
+void API_Draw_circle(const Pvector_t position, uint32_t radius);
 
 /**
  * @brief 
