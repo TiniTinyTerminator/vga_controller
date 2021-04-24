@@ -19,8 +19,8 @@
  */
 typedef struct
 {
-    uint32_t x;
-    uint32_t y;
+    int32_t x;
+    int32_t y;
 } vector_t;
 
 /**
@@ -28,6 +28,36 @@ typedef struct
  * 
  */
 typedef vector_t *Pvector_t;
+
+/**
+ * @brief callback type to bind drawing function to interface
+ * 
+ */
+typedef (* DrawPixelCallback)(uint32_t x, uint32_t y, uint32_t color);
+
+/**
+ * @brief this functions implements the function that binds the draw pixel function.
+ * 
+ * @param callback address of callback function
+ */
+void API_Bind_draw_pixel_callback(DrawPixelCallback callback);
+
+/**
+ * @brief set the resolution of the used display
+ * 
+ * @param w 
+ * @param h 
+ */
+void API_Set_resolution(uint32_t w, uint32_t h);
+
+/**
+ * @brief Gets the given width and height of the framebuffer
+ * 
+ * @param w the width of the framebuffer
+ * @param h the height of the framebuffer
+ * @return return -1 if no resolution is set
+ */
+char API_Get_resolution(uint32_t *w, uint32_t *h);
 
 /**
  * @brief 
@@ -56,6 +86,13 @@ void API_Set_draw_color(uint8_t color);
  * @param fill 
  */
 void API_Set_fill(uint8_t fill);
+
+/**
+ * @brief draw pixel at a certain position
+ * 
+ * @param pos 
+ */
+void API_Set_Pixel(const Pvector_t pos, uint8_t color);
 
 /**
  * @brief 
@@ -106,3 +143,11 @@ void API_Put_text(const char * string, uint32_t length);
  * @param border 
  */
 void API_Put_textBox(const char * string, uint32_t length, uint32_t border);
+
+/**
+ * @brief check if object is in framebuffer
+ * 
+ * @param w 
+ * @param h 
+ */
+char API_Check_inbounds(const Pvector_t, uint32_t w, uint32_t h);
