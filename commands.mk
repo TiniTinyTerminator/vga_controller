@@ -8,6 +8,6 @@ flash:
 # doxygen
 #######################################
 docs:
-	-doxygen configs/doxygen.cfg
+	-doxygen
 	-make -C $(BUILD_DIR)/latex/ all
 	-mv $(BUILD_DIR)/latex/refman.pdf $(BUILD_DIR)/manual.pdf

@@ -59,7 +59,10 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c \
 Core/Src/system_stm32f4xx.c \
 Core/Src/syscalls.c \
-Core/ub_lib/stm32_ub_vga_screen.c
+Core/ub_lib/stm32_ub_vga_screen.c \
+Core/EE_API_LIB/src/shapes.c \
+Core/EE_API_LIB/src/configuration.c
+
 
 # ASM sources
 ASM_SOURCES =  \
@@ -121,7 +124,10 @@ C_INCLUDES =  \
 -IDrivers/STM32F4xx_HAL_Driver/Inc/Legacy \
 -IDrivers/CMSIS/Device/ST/STM32F4xx/Include \
 -IDrivers/CMSIS/Include \
--ICore/ub_lib
+-ICore/ub_lib \
+-ICore/EE_API_LIB/ \
+-ICore/EE_API_LIB/inc
+
 
 
 # compile gcc flags

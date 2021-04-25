@@ -9,10 +9,15 @@
  * 
  */
 
-#include "EE_API_LIB/shapes.h"
-#include "EE_API_LIB/inc/configuration.h"
+#include "shapes.h"
 #include <math.h>
  
+extern uint32_t _w;
+extern uint32_t _h;
+extern uint8_t _filled;
+extern uint32_t _line_thickness;
+extern uint8_t _fill_color;
+extern uint8_t _draw_color;
 
 void API_Draw_circle(const Pvector_t position, uint32_t radius)
 {
@@ -54,4 +59,11 @@ void API_Draw_circle(const Pvector_t position, uint32_t radius)
             API_Set_Pixel(&pos, _draw_color);
         }
     }
+}
+
+extern DrawPixelCallback _callback ;
+
+inline void API_Draw_pixel(Pvector_t pos, uint8_t color)
+{
+    _callback(pos->x, pos->y, color);
 }

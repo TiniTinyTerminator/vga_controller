@@ -9,7 +9,21 @@
  * 
  */
 
-#pragma once
+/*! \mainpage My Personal Index Page
+ *
+ * \section intro_sec Introduction
+ *
+ * This is the introduction.
+ *
+ * \section install_sec Installation
+ *
+ * \subsection step1 Step 1: Opening the box
+ *
+ * etc...
+ */
+
+#ifndef __SHAPES_H__
+#define __SHAPES_H__
 
 #include <inttypes.h>
 
@@ -33,7 +47,7 @@ typedef vector_t *Pvector_t;
  * @brief callback type to bind drawing function to interface
  * 
  */
-typedef (* DrawPixelCallback)(uint32_t x, uint32_t y, uint32_t color);
+typedef void (* DrawPixelCallback)(uint32_t x, uint32_t y, uint32_t color);
 
 /**
  * @brief this functions implements the function that binds the draw pixel function.
@@ -51,15 +65,6 @@ void API_Bind_draw_pixel_callback(DrawPixelCallback callback);
 void API_Set_resolution(uint32_t w, uint32_t h);
 
 /**
- * @brief Gets the given width and height of the framebuffer
- * 
- * @param w the width of the framebuffer
- * @param h the height of the framebuffer
- * @return return -1 if no resolution is set
- */
-char API_Get_resolution(uint32_t *w, uint32_t *h);
-
-/**
  * @brief 
  * 
  * @param thickess 
@@ -67,7 +72,7 @@ char API_Get_resolution(uint32_t *w, uint32_t *h);
 void API_Set_line_thickness(uint32_t thickess);
 
 /**
- * @brief 
+ * @brief abababa
  * 
  * @param color 
  */
@@ -151,3 +156,5 @@ void API_Put_textBox(const char * string, uint32_t length, uint32_t border);
  * @param h 
  */
 char API_Check_inbounds(const Pvector_t, uint32_t w, uint32_t h);
+
+#endif
