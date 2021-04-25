@@ -44,17 +44,30 @@ typedef struct
 typedef vector_t *Pvector_t;
 
 /**
- * @brief callback type to bind drawing function to interface
+ * @brief callback type to bind function thats able to set pixels
  * 
  */
-typedef void (* DrawPixelCallback)(uint32_t x, uint32_t y, uint32_t color);
+typedef void (* SetPixelCallback)(uint32_t x, uint32_t y, uint32_t color);
 
 /**
- * @brief this functions implements the function that binds the draw pixel function.
+ * @brief callback type that changes background
+ * 
+ */
+typedef void (* SetFillScreenCallback)(uint32_t color);
+
+/**
+ * @brief this functions implements the function is able to set pixels in the framebuffer.
  * 
  * @param callback address of callback function
  */
-void API_Bind_draw_pixel_callback(DrawPixelCallback callback);
+void API_Bind_set_pixel_callback(SetPixelCallback callback);
+
+/**
+ * @brief this function implements the functions that se
+ * 
+ * @param callback 
+ */
+void API_Bind_fill_screen_callback(SetFillScreenCallback callback);
 
 /**
  * @brief set the resolution of the used display
@@ -98,6 +111,13 @@ void API_Set_fill(uint8_t fill);
  * @param pos 
  */
 void API_Set_Pixel(const Pvector_t pos, uint8_t color);
+
+/**
+ * @brief fill the framebuffer with a certain color
+ * 
+ * @param color the color
+ */
+void API_fill_screen(uint8_t color);
 
 /**
  * @brief 

@@ -10,6 +10,7 @@
  */
 
 #include "shapes.h"
+#include <stdio.h>
 #include <math.h>
  
 extern uint32_t _w;
@@ -18,6 +19,27 @@ extern uint8_t _filled;
 extern uint32_t _line_thickness;
 extern uint8_t _fill_color;
 extern uint8_t _draw_color;
+
+extern SetPixelCallback _set_pixel_callback;
+extern SetFillScreenCallback _fill_screen_callback;
+
+inline void API_Set_pixel(const Pvector_t pos, uint8_t color)
+{
+    _set_pixel_callback(pos->x, pos->y, color);
+}
+
+inline void API_fill_screen(uint8_t color)
+{
+    if(_fill_screen_callback != NULL)
+        _fill_screen_callback(color);
+    else
+    {
+        vector_t pos;
+        for(pos.x = 0; pos.x < _w; pos.x++)
+            for(pos.y = 0; pos.y < _h; pos.y ++)
+                API_Set_pixel(&pos, color);
+    }
+}
 
 void API_Draw_circle(const Pvector_t position, uint32_t radius)
 {
@@ -59,11 +81,4 @@ void API_Draw_circle(const Pvector_t position, uint32_t radius)
             API_Set_Pixel(&pos, _draw_color);
         }
     }
-}
-
-extern DrawPixelCallback _callback ;
-
-inline void API_Draw_pixel(Pvector_t pos, uint8_t color)
-{
-    _callback(pos->x, pos->y, color);
 }

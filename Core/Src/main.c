@@ -25,7 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "shapes.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -93,12 +93,14 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   UB_VGA_Screen_Init(); // Init VGA-Screen
+  API_Set_resolution(VGA_DISPLAY_X, VGA_DISPLAY_Y);
+  API_Bind_set_pixel_callback((SetPixelCallback)UB_VGA_SetPixel);
+  API_Bind_fill_screen_callback((SetFillScreenCallback)UB_VGA_FillScreen);
 
-  UB_VGA_FillScreen(VGA_COL_WHITE);
-  UB_VGA_SetPixel(10,10,10);
-  UB_VGA_SetPixel(0,0,0x00);
-  UB_VGA_SetPixel(319,0,0x00);
+  API_fill_screen(VGA_COL_BLACK);
 
+  API_Set_draw_color(VGA_COL_BLUE);
+  API_Set_fill(1);
   /* USER CODE END 2 */
 
   /* Infinite loop */

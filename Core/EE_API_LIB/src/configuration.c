@@ -12,9 +12,9 @@
 #include "shapes.h"
 #include <stddef.h>
 
-static uint32_t _w;
+uint32_t _w;
 
-static uint32_t _h;
+uint32_t _h;
 
 void API_Set_resolution(uint32_t w, uint32_t h)
 {
@@ -22,37 +22,44 @@ void API_Set_resolution(uint32_t w, uint32_t h)
     _h = h;
 }
 
-static uint8_t _filled = 0x0;
+uint8_t _filled = 0x0;
 
 inline void API_Set_fill(uint8_t fill)
 {
     _filled = fill;
 }
 
-static uint32_t _line_thickness = 0x1;
+uint32_t _line_thickness = 0x1;
 
 inline void API_Set_line_thickness(uint32_t thickess)
 {
     _line_thickness = thickess;
 }
 
-static uint8_t _fill_color = 0xFF;
+uint8_t _fill_color = 0xFF;
 
 inline void API_Set_fill_color(uint8_t color)
 {
     _fill_color = color;
 }
 
-static uint8_t _draw_color = 0xFF;
+uint8_t _draw_color = 0xFF;
 
 inline void API_Set_draw_color(uint8_t color)
 {
     _draw_color = color;
 }
 
-static DrawPixelCallback _callback = NULL;
+SetPixelCallback _set_pixel_callback = NULL;
 
-inline void API_Bind_draw_pixel_callback(DrawPixelCallback callback)
+inline void API_Bind_set_pixel_callback(SetPixelCallback callback)
 {
-    _callback = callback;
+    _set_pixel_callback = callback;
+}
+
+SetFillScreenCallback _fill_screen_callback = NULL;
+
+inline void API_Bind_fill_screen_callback(SetFillScreenCallback callback)
+{
+    _fill_screen_callback = callback;
 }
