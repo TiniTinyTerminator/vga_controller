@@ -8,7 +8,8 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "enter program name, for example ${workspaceFolder}/a.out",
+            "program": "build/vga_controller.bin",
+            "preLaunchTask": "setup openocd",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -21,6 +22,7 @@
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
                 }
+
             ]
         }
     ]

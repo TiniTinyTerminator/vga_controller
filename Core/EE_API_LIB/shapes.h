@@ -110,7 +110,7 @@ void API_Set_fill(uint8_t fill);
  * 
  * @param pos 
  */
-void API_Set_Pixel(const Pvector_t pos, uint8_t color);
+void API_Set_pixel(const Pvector_t pos, uint8_t color);
 
 /**
  * @brief fill the framebuffer with a certain color

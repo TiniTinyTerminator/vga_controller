@@ -125,9 +125,7 @@ C_INCLUDES =  \
 -IDrivers/CMSIS/Device/ST/STM32F4xx/Include \
 -IDrivers/CMSIS/Include \
 -ICore/ub_lib \
--ICore/EE_API_LIB/ \
--ICore/EE_API_LIB/inc
-
+-ICore/EE_API_LIB
 
 
 # compile gcc flags
