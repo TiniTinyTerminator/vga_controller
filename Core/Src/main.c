@@ -99,25 +99,8 @@ int main(void)
   API_Bind_set_pixel_callback((SetPixelCallback)UB_VGA_SetPixel);
   API_Bind_fill_screen_callback((SetFillScreenCallback)UB_VGA_FillScreen);
 
-  API_fill_screen(VGA_COL_WHITE);
+  API_Fill_screen(VGA_COL_WHITE);
 
-  API_Set_draw_color(VGA_COL_RED);
-  API_Set_fill(0);
-  API_Set_fill_color(VGA_COL_RED);
-
-  vector_t pos = {50, 50};
-//  pos.x = 100;
-//  pos.y = 100;
-
-  vector_t endpos = {60, 100};
-
-  API_Draw_vector(&pos, &endpos);
-
-  pos.x = 200;
-  pos.y = 150;
-
-  API_Set_draw_color(VGA_COL_BLUE);
-  API_Draw_square(&pos, 20, 20);
   /* USER CODE END 2 */
 
   /* Infinite loop */

@@ -6,5 +6,6 @@
         "configuration.h": "c",
         "shapes.h": "c",
         "stddef.h": "c"
-    }
+    },
+    "python.pythonPath": "/opt/anaconda3/bin/python"
 }
