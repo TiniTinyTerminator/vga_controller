@@ -103,3 +103,4 @@ dkms.conf
 build
 /Debug/
 /.project
+/STM32F407VGTX_RAM.ld
