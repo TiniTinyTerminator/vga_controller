@@ -86,7 +86,7 @@ dkms.conf
 
 # other things
 *.xml
-*.Id
+*.ld
 *.cproject
 *.mxproject
 
@@ -104,3 +104,4 @@ build
 /Debug/
 /.project
 /STM32F407VGTX_RAM.ld
+/STM32F407VGTX_FLASH.ld
