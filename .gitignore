@@ -102,3 +102,4 @@ dkms.conf
 
 build
 /Debug/
+/.project
