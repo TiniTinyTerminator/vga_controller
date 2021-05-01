@@ -11,6 +11,9 @@
 #include <fl_api_function_names.h>
 #include <string.h>
 
+//@NOTE voor het commentaar is het misschien handig om naar deze uitleg te kijken: https://www.doxygen.nl/manual/docblocks.html.
+// hier kan je zien hoe je de arguementen enzo kan opzetten voor doxygen
+
 /****************************************************************************************************/
 //function:     fl_interpreter
 //arguments:    scriptline
