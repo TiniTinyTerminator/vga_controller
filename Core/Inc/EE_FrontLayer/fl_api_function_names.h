@@ -10,106 +10,66 @@
 #ifndef INC_FL_API_FUNCTION_NAMES_H_
 #define INC_FL_API_FUNCTION_NAMES_H_
 
-
-const char NAMES_FUNCTION[][15] =
+typedef enum ID_ARGUMENT_TYPE
 {
-	"lijn",
-	"rechthoek",
-	"tekst",
-	"bitmap",
-	"clearscherm",
+	T_GETAL,
+	T_TEKST,
+	T_KLEUR,
+	T_FONTNAAM,		//nog niet aangemaakt
+	T_FONTSTIJL,	//nog niet aangemaakt
+	T_COORDINAAT,		//nog niet in gebruik
+}Arg_t;
 
-	"wacht",			//Bonus
-	"herhaal",			//Bonus
-	"cirkel",			//Bonus
-	"figuur",			//Bonus
-	"toren"
-};			//Bonus
-
-//@NOTE enumerations moeten vgm met hoofletters zijn
-
-enum ID_FUNCTION
+typedef struct Functions
 {
-	lijn,
-	rechthoek,
-	tekst,
-	bitmap,
-	clearscherm,
-	wacht,
-	herhaal,
-	cirkel,
-	figuur,
-	toren,
-	ID_FUNCTION_MAX
+	char name[20];
+	uint8_t argc;
+	Arg_t argt[6];
+}Function;
+
+const Function function_lists[10]=
+{
+		{"lijn", 		6,	{T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_KLEUR, T_GETAL}},
+		{"rechthoek", 	6,	{T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_KLEUR, T_GETAL}},
+		{"tekst", 		6,	{T_GETAL, T_KLEUR, T_TEKST, T_FONTNAAM, T_GETAL, T_FONTSTIJL}},
+		{"bitmap", 		3,	{T_GETAL, T_GETAL, T_GETAL}},
+		{"clearscherm",	1,	{T_KLEUR}},
+		//wacht,
+		//herhaal,
+		//cirkel,
+		//figuur,
+		//toren,
+		{"END_OF_LIST\0",	0}
 };
 
-enum ID_ARGUMENT_TYPE
+typedef struct Colours
 {
-	t_getal,
-	t_tekst,
-	t_kleur,
-	t_fontnaam,		//nog niet aangemaakt
-	t_fontstijl,	//nog niet aangemaakt
-	coordinaat,		//nog niet in gebruik
-};
+	char name[15];
+	int32_t hexdef;
+}Colour_t;
 
-/**
-* @NOTE voor overzicht en gemak van gebruik is het handig om een typedef te gebruiken en daar weer van een array te maken
-* Hierdoor kan ik en anderen beter zien wat je probeert te bereiken met deze array
-**/
-
-const uint8_t FUNCTION_ARG_TYPE[][10]=
-{
-		{lijn, 			6 ,t_getal, t_getal, t_getal, t_getal, t_kleur, t_getal},
-		{rechthoek, 	6, t_getal, t_getal, t_getal, t_getal, t_kleur, t_getal},
-		{tekst, 		6, t_getal, t_kleur, t_tekst, t_fontnaam, t_getal, t_fontstijl},
-		{bitmap, 		3, t_getal, t_getal, t_getal},
-		{clearscherm,	1, t_kleur}
-};
-
-const char NAMES_COLOUR[][20] =
-{
-	"zwart"			,
-	"blauw"			,
-	"lichtblauw"	,
-	"groen"			,
-	"lichtgroen"	,
-	"cyaan"			,
-	"lichtcyaan"	,
-	"rood"			,
-	"lichtrood"		,
-	"magenta"		,
-	"lichtmagenta"	,
-	"bruin"			,
-	"geel"			,
-	"grijs"			,
-	"wit"			,
-	"rose"			,			//Bonus
-	"paars"			};			//Bonus
-
-// @NOTE als het kan is het mischien handig om hier alvast de kleurcodes te koppelen aan de enum
-enum ID_COLOUR
-{
-	zwart,
-	blauw,
-	lichtblauw,
-	groen,
-	lichtgroen,
-	cyaan,
-	lichtcyaan,
-	rood,
-	lichtrood,
-	magenta,
-	lichtmagenta,
-	bruin,
-	geel,
-	grijs,
-	wit,
-	rose,			//Bonus
-	paars,			//Bonus
-	ID_COLOUR_MAX
+//according to: https://flaviocopes.com/rgb-color-codes/
+const Colour_t colour_lists[19] = {
+		{"zwart",		0x000000},
+		{"blauw",		0x0000FF},
+		{"lichtblauw",	0xADD8E6},
+		{"groen",		0x008000},
+		{"lichtgroen",	0x90EE90},
+		{"cyaan",		0x00FFFF},
+		{"lichtcyaan",	0xE0FFFF},
+		{"rood",		0xFF0000},
+		{"lichtrood",	0x800000},
+		{"magenta",		0xFF00FF},
+		{"lichtmagenta",0xEE82EE},
+		{"bruin",		0xA52A2A},
+		{"geel",		0xFF00FF},
+		{"grijs",		0x808080},
+		{"wit",			0xFFFFFF},
+		{"rose",		0xFFC0CB},			//Bonus
+		{"paars",		0x800080},
+		{"END_OF_LIST\0", 0x000000}
 };
 
 
-//@NOTE comment aangeven voor waarvoor de endif is doe je goed
+
 #endif /* INC_FL_API_FUNCTION_NAMES_H_ */
