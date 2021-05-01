@@ -4,6 +4,8 @@
  *  Created on: Apr 28, 2021
  *      Author: Daniel
  */
+//@NOTE geef een korte beschrijving van wat er in deze header file gezet wordt en vergeet niet de doxygen variabelen te declareren (@author, @file, @date, @)
+//@NOTE dubbele underscores aan beide kanten van een C header definitie
 
 #ifndef INC_FL_API_FUNCTION_NAMES_H_
 #define INC_FL_API_FUNCTION_NAMES_H_
@@ -23,6 +25,8 @@ const char NAMES_FUNCTION[][15] =
 	"figuur",			//Bonus
 	"toren"
 };			//Bonus
+
+//@NOTE enumerations moeten vgm met hoofletters zijn
 
 enum ID_FUNCTION
 {
@@ -48,6 +52,11 @@ enum ID_ARGUMENT_TYPE
 	t_fontstijl,	//nog niet aangemaakt
 	coordinaat,		//nog niet in gebruik
 };
+
+/**
+* @NOTE voor overzicht en gemak van gebruik is het handig om een typedef te gebruiken en daar weer van een array te maken
+* Hierdoor kan ik en anderen beter zien wat je probeert te bereiken met deze array
+**/
 
 const uint8_t FUNCTION_ARG_TYPE[][10]=
 {
@@ -78,6 +87,7 @@ const char NAMES_COLOUR[][20] =
 	"rose"			,			//Bonus
 	"paars"			};			//Bonus
 
+// @NOTE als het kan is het mischien handig om hier alvast de kleurcodes te koppelen aan de enum
 enum ID_COLOUR
 {
 	zwart,
@@ -101,5 +111,5 @@ enum ID_COLOUR
 };
 
 
-
+//@NOTE comment aangeven voor waarvoor de endif is doe je goed
 #endif /* INC_FL_API_FUNCTION_NAMES_H_ */
