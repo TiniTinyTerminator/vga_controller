@@ -13,24 +13,17 @@
 
 #include "stdint.h"
 
-#define SCRIPT_MAX_ARG 10
-#define SCRIPT_MAX_ARG_LEN 25	//max ascii length of single paramater
 #define SEPERATOR ','
 
-#define CMD_BUF_LEN 255
+#define QUEUE_LEN 255		//MAX uint8_t
 
-uint8_t cmd_in_buf = 0;			//total of script commando's in buffer
-uint8_t last_cmd_in_buf = 0;	//Place of last script commando in buffer
+typedef struct Queue_entry
+{
+	int entry_nr;			//position in queue
+	void* argp;				//pointer to first argument
+	int fnc_nr;				//function number				--> could also be pointer to the function
+}Qentry;
 
-/**
-* @NOTE waarom een short?
-* zorg er trouwens voor dat variabelen zon min mogelijk globaal geplaatst worden
-* zet ze zo nodig locaal in een .c bestand en gebruik dan extern om er vanaf een ander .c bestand bij te komen.
-* zo hou je de variabelen prive zodra je ze compileert
-*/
-
-//storage for scriptline seperated in function and its arguments
-short cmd_buf [CMD_BUF_LEN][SCRIPT_MAX_ARG];
 
 
 
