@@ -27,7 +27,7 @@ typedef struct Functions
 	Arg_t argt[6];
 }Function;
 
-const Function function_lists[10]=
+const Function function_list[]=
 {
 		{"lijn", 		6,	{T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_KLEUR, T_GETAL}},
 		{"rechthoek", 	6,	{T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_KLEUR, T_GETAL}},
@@ -39,7 +39,7 @@ const Function function_lists[10]=
 		//cirkel,
 		//figuur,
 		//toren,
-		{"END_OF_LIST\0",	0}
+		{"END_OF_LIST\0"}
 };
 
 typedef struct Colours
@@ -49,7 +49,8 @@ typedef struct Colours
 }Colour_t;
 
 //according to: https://flaviocopes.com/rgb-color-codes/
-const Colour_t colour_lists[19] = {
+const Colour_t colour_list[] =
+{
 		{"zwart",		0x000000},
 		{"blauw",		0x0000FF},
 		{"lichtblauw",	0xADD8E6},
@@ -67,9 +68,42 @@ const Colour_t colour_lists[19] = {
 		{"wit",			0xFFFFFF},
 		{"rose",		0xFFC0CB},			//Bonus
 		{"paars",		0x800080},
-		{"END_OF_LIST\0", 0x000000}
+		{"END_OF_LIST\0"}
 };
 
+typedef struct Fontnames
+{
+	char name[15];
+	uint8_t id;
+}Fontname_t;
 
+const Fontname_t fontname_list[] =
+{
+	{"arial",		0},
+	{"consolas",	1},
+	{"END_OF_LIST\0"}
+};
+
+typedef enum ID_FONTSYLE
+{
+	T_NORMAAL,
+	T_VET,
+	T_CURSIEF,
+}Fontstyles;
+
+typedef struct Fontstyles
+{
+	char name[15];
+	Fontstyles id;
+}Fontstyle_t;
+
+const Fontstyle_t fontstyle_list[] =
+{
+	{"normaal" , T_NORMAAL},
+	{"vet", T_VET},
+	{"cursief", T_CURSIEF},
+	{"END_OF_LIST\0"}
+};
 
 #endif /* INC_FL_API_FUNCTION_NAMES_H_ */
+
