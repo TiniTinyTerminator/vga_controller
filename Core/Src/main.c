@@ -20,12 +20,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-<<<<<<< HEAD
-#include "rtc.h"
-=======
 #include "dma.h"
 #include "tim.h"
->>>>>>> pixel_functions
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -111,8 +107,6 @@ int main(void)
 
   API_Fill_screen(VGA_COL_WHITE);
 
-<<<<<<< HEAD
-=======
   API_Draw_square(50, 50, 1, 1, VGA_COL_RED);
   API_Draw_line(10, 10, 20, 20, VGA_COL_MAGENTA);
   const int32_t posX[4] = {20, 50, 80, 150};
@@ -125,7 +119,6 @@ int main(void)
 
   /* USER CODE END 2 */
 
->>>>>>> pixel_functions
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
