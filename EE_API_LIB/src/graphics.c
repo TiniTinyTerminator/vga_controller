@@ -9,9 +9,10 @@
  * 
  */
 
-#include "shapes.h"
-#include <stdio.h>
-#include <math.h>
+#include "graphics.h"
+#include <inttypes.h>
+#include <stddef.h>
+// #include <math.h>
 
 #define sgn(v) (((v) < 0) ? -1 : ((v) > 0))
 #define abs(v) (((v) < 0) ? (v * -1) : (v))
@@ -35,11 +36,14 @@ inline void API_Fill_screen(uint8_t color)
     if (_fill_screen_callback != NULL)
         _fill_screen_callback(color);
     else
-    {
-        for (int32_t x = 0; x < _w; x++)
-            for (int32_t y = 0; y < _h; y++)
-                API_Set_pixel(x, y, color);
-    }
+        API_Fill_square(0, 0, _w, _h, color);
+}
+
+inline void API_Fill_square(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t color)
+{
+    for (; x < x + w; x++)
+        for (; y < y + h; y++)
+            API_Set_pixel(x, y, color);
 }
 
 void API_Draw_line(int32_t xA, int32_t yA, int32_t xB, int32_t yB, uint8_t color)
@@ -109,7 +113,7 @@ void API_Draw_square(int32_t x, int32_t y, uint32_t width, uint32_t height, uint
 {
     API_Draw_line(x, y, x + width, y, color);
     API_Draw_line(x, y, x, y + height, color);
-    API_Draw_line(x + width, y, x, y + height, color);
+    API_Draw_line(x + width, y, x + width, y + height + 1, color);
     API_Draw_line(x, y + height, x + width, y + height, color);
 }
 
@@ -153,7 +157,7 @@ void plotEllipseRect(uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1, uint8_t
     } while (x0 <= x1);
 
     while (y0 - y1 < b)
-    {                                           /* too early stop of flat ellipses a=1 */
+    {                                     /* too early stop of flat ellipses a=1 */
         API_Set_pixel(x0 - 1, y0, color); /* -> finish tip of ellipse */
         API_Set_pixel(x1 + 1, y0++, color);
         API_Set_pixel(x0 - 1, y1, color);
@@ -163,8 +167,8 @@ void plotEllipseRect(uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1, uint8_t
 
 void API_Draw_polygon(const int32_t *list_X, const int32_t *list_Y, uint32_t length, uint8_t color)
 {
-    for (int i = 0; i < length; i++)
-        API_Draw_line(list_X[i], list_Y[i], list_X[i + 1], list_Y[i + 1], color);
+    API_Draw_line(list_X[0], list_Y[0], list_X[length - 1], list_Y[length - 1], color);
 
-    API_Draw_line(list_X[length - 1], list_Y[length - 1], list_X[0], list_Y[0], color);
+    for (uint32_t i = 0; i < length - 1; i++)
+        API_Draw_line(list_X[i], list_Y[i], list_X[i + 1], list_Y[i + 1], color);
 }

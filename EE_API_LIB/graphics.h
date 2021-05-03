@@ -68,6 +68,17 @@ void API_Set_pixel(int32_t x, int32_t y, uint8_t color);
 void API_Fill_screen(uint8_t color);
 
 /**
+ * @brief fil
+ * 
+ * @param x 
+ * @param y 
+ * @param w 
+ * @param h 
+ * @param color 
+ */
+void API_Fill_square(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t color);
+
+/**
  * @brief 
  * 
  * @param xA 
@@ -108,21 +119,13 @@ void API_Draw_circle(int32_t x, int32_t y, uint32_t radius, uint8_t color);
 /**
  * @brief 
  * 
- * @param string 
- * @param length 
- */
-void API_Put_text(const char * string, uint32_t length);
-
-/**
- * @brief 
- * 
  * @param x 
  * @param y 
  * @param w 
  * @param h 
- * @return char 1 if shape fits in display
- * @return char 0 if shape does not fit in display
- * @return char -1 if shape is completely out of display
+ * @retval 1 if shape fits in display
+ * @retval 0 if shape does not fit in display
+ * @retval -1 if shape is completely out of display
  */
 char API_Check_inbounds(int32_t x, int32_t y, uint32_t w, uint32_t h);
 
