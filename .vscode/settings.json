@@ -1,3 +1,13 @@
 {
-    "makefile.extensionOutputFolder": "./.vscode"
+    "makefile.extensionOutputFolder": "./.vscode",
+    "files.associations": {
+        "keyboard.h": "c",
+        "ioctl.h": "c",
+        "configuration.h": "c",
+        "shapes.h": "c",
+        "stddef.h": "c",
+        "stdlib.h": "c",
+        "alloca.h": "c"
+    },
+    "python.pythonPath": "/opt/anaconda3/bin/python"
 }

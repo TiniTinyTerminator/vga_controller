@@ -1,3 +1,8 @@
+
+# Created by https://www.toptal.com/developers/gitignore/api/c,c++,eclipse,vscode
+# Edit at https://www.toptal.com/developers/gitignore?templates=c,c++,eclipse,vscode
+
+### C ###
 # Prerequisites
 *.d
 
@@ -51,23 +56,19 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+### C++ ###
 # Prerequisites
-*.d
 
 # Compiled Object files
 *.slo
-*.lo
-*.o
-*.obj
 
 # Precompiled Headers
-*.gch
-*.pch
+
+# Linker files
+
+# Debugger Files
 
 # Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
 
 # Fortran module files
 *.mod
@@ -75,14 +76,8 @@ dkms.conf
 
 # Compiled Static libraries
 *.lai
-*.la
-*.a
-*.lib
 
 # Executables
-*.exe
-*.out
-*.app
 
 # other things
 *.xml
@@ -97,11 +92,13 @@ dkms.conf
 !.vscode/extensions.json
 *.code-workspace
 
-# Local History for Visu>al Studio Code
-.history/
+# End of https://www.toptal.com/developers/gitignore/api/c,c++,eclipse,vscode
 
 build
-/Debug/
-/.project
-/STM32F407VGTX_RAM.ld
-/STM32F407VGTX_FLASH.ld
+.mxproject
+.project
+application
+STM32CubeIDE
+Debug
+Drivers
+*.launch

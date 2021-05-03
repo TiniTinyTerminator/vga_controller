@@ -3,33 +3,44 @@
   ******************************************************************************
   * @file           : main.c
   * @brief          : Main program body
-  ******************************************************************************
+  **
+  ****************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+<<<<<<< HEAD
 #include "rtc.h"
+=======
+#include "dma.h"
+#include "tim.h"
+>>>>>>> pixel_functions
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "graphics.h"
+#include <stdlib.h>
+#include <math.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+typedef struct
+{
+  double x, y;
+} Complex;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -50,6 +61,7 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
+void madelbrot(int nx, int ny, int maxIter, float realMin, float realMax, float imagMin, float imagMax);
 
 /* USER CODE END PFP */
 
@@ -86,11 +98,34 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_RTC_Init();
+  MX_DMA_Init();
+  MX_TIM1_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
+
+  UB_VGA_Screen_Init(); // Init VGA-Screen
+
+  API_Set_resolution(VGA_DISPLAY_X, VGA_DISPLAY_Y);
+  API_Bind_set_pixel_callback((SetPixelCallback)UB_VGA_SetPixel);
+  API_Bind_fill_screen_callback((SetFillScreenCallback)UB_VGA_FillScreen);
+
+  API_Fill_screen(VGA_COL_WHITE);
+
+<<<<<<< HEAD
+=======
+  API_Draw_square(50, 50, 1, 1, VGA_COL_RED);
+  API_Draw_line(10, 10, 20, 20, VGA_COL_MAGENTA);
+  const int32_t posX[4] = {20, 50, 80, 150};
+  const int32_t posY[4] = {30, 50, 10, 90};
+
+  API_Draw_polygon(posX, posY, 4, VGA_COL_CYAN);
+
+  API_Draw_circle(100, 100, 30, VGA_COL_GREEN);
+  // madelbrot(VGA_DISPLAY_X, VGA_DISPLAY_Y, 100, -0.5,0.5,-2,2);
 
   /* USER CODE END 2 */
 
+>>>>>>> pixel_functions
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -110,7 +145,6 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
   */
@@ -119,9 +153,8 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSI|RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 4;
@@ -145,19 +178,52 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RTC;
-  PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_LSI;
-  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Enables the Clock Security System
-  */
-  HAL_RCC_EnableCSS();
 }
 
 /* USER CODE BEGIN 4 */
+Complex complexSquare(Complex c)
+{
+  Complex cSq;
+  cSq.x = c.x * c.x - c.y * c.y;
+  cSq.y = 2 * c.x * c.y;
+  return cSq;
+}
 
+int iterate(Complex zInit, int maxIter)
+{
+  Complex z = zInit;
+  int cnt = 0;
+  while ((z.x * z.x + z.y * z.y <= 4) && (cnt < maxIter))
+  {
+    z = complexSquare(z);
+    z.x += zInit.x;
+    z.y += zInit.y;
+    cnt++;
+  }
+  return cnt;
+}
+void madelbrot(int nx, int ny, int maxIter, float realMin, float realMax, float imagMin, float imagMax)
+{
+  float realInc = (realMax - realMin) / nx;
+  float imagInc = (imagMax - imagMin) / ny;
+  static uint8_t color = VGA_COL_BLACK;
+
+  Complex z;
+  int x, y;
+  int cnt;
+  for (x = 0, z.x = realMin; x < nx; x++, z.x += realInc)
+    for (y = 0, z.y = imagMin; y < ny; y++, z.y += imagInc)
+    {
+      cnt = iterate(z, maxIter);
+      if (cnt == maxIter)
+        color = VGA_COL_BLACK;
+      else
+      {
+        color = (uint8_t)cnt;
+      }
+      API_Set_pixel(x, y, color);
+    }
+}
 /* USER CODE END 4 */
 
 /**
@@ -168,10 +234,7 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
+
   /* USER CODE END Error_Handler_Debug */
 }
 
@@ -187,7 +250,7 @@ void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
   /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+     tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
