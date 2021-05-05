@@ -21,27 +21,27 @@
  * @brief callback type to bind function thats able to set pixels
  * 
  */
-typedef void (* SetPixelCallback)(uint32_t x, uint32_t y, uint32_t color);
+typedef void (* SetPixelCallback_t)(uint32_t x, uint32_t y, uint32_t color);
 
 /**
  * @brief callback type that changes background
  * 
  */
-typedef void (* SetFillScreenCallback)(uint32_t color);
+typedef void (* SetFillScreenCallback_t)(uint32_t color);
 
 /**
  * @brief this functions implements the function is able to set pixels in the framebuffer.
  * 
  * @param callback address of callback function
  */
-void API_Bind_set_pixel_callback(SetPixelCallback callback);
+void API_Bind_set_pixel_callback(SetPixelCallback_t callback);
 
 /**
  * @brief this function implements the functions that se
  * 
  * @param callback 
  */
-void API_Bind_fill_screen_callback(SetFillScreenCallback callback);
+void API_Bind_fill_screen_callback(SetFillScreenCallback_t callback);
 
 /**
  * @brief 
@@ -114,7 +114,17 @@ void API_Draw_polygon(const int32_t * list_X, const int32_t * list_Y, uint32_t l
  * @param y 
  * @param radius 
  */
-void API_Draw_circle(int32_t x, int32_t y, uint32_t radius, uint8_t color);
+void API_Draw_circle(int32_t xm, int32_t ym, int32_t radius, uint8_t color);
+
+/**
+ * @brief 
+ * 
+ * @param xm 
+ * @param ym 
+ * @param r 
+ * @param color 
+ */
+void API_Fill_circle(int32_t xm, int32_t ym, int32_t radius, uint8_t color);
 
 /**
  * @brief 
@@ -128,5 +138,16 @@ void API_Draw_circle(int32_t x, int32_t y, uint32_t radius, uint8_t color);
  * @retval -1 if shape is completely out of display
  */
 char API_Check_inbounds(int32_t x, int32_t y, uint32_t w, uint32_t h);
+
+/**
+ * @brief 
+ * 
+ * @param x_lup 
+ * @param y_lup 
+ * @param w 
+ * @param h 
+ * @param bitmap 
+ */
+void API_Load_bitmap(uint32_t x_lup, uint32_t y_lup, uint32_t w, uint32_t h, const uint8_t *bitmap);
 
 #endif

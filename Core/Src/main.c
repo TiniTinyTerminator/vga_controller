@@ -27,16 +27,18 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "graphics.h"
+#include "extra.h"
+
 #include <stdlib.h>
 #include <math.h>
+#include <fonts.h>
+#include "happy_smiley.h"
+#include "me.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-typedef struct
-{
-  double x, y;
-} Complex;
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -57,7 +59,6 @@ typedef struct
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-void madelbrot(int nx, int ny, int maxIter, float realMin, float realMax, float imagMin, float imagMax);
 
 /* USER CODE END PFP */
 
@@ -102,20 +103,29 @@ int main(void)
   UB_VGA_Screen_Init(); // Init VGA-Screen
 
   API_Set_resolution(VGA_DISPLAY_X, VGA_DISPLAY_Y);
-  API_Bind_set_pixel_callback((SetPixelCallback)UB_VGA_SetPixel);
-  API_Bind_fill_screen_callback((SetFillScreenCallback)UB_VGA_FillScreen);
+  API_Bind_set_pixel_callback((SetPixelCallback_t)UB_VGA_SetPixel);
+  // API_Bind_fill_screen_callback((SetFillScreenCallback_t)UB_VGA_FillScreen);
 
   API_Fill_screen(VGA_COL_WHITE);
 
-  API_Draw_square(50, 50, 1, 1, VGA_COL_RED);
-  API_Draw_line(10, 10, 20, 20, VGA_COL_MAGENTA);
-  const int32_t posX[4] = {20, 50, 80, 150};
-  const int32_t posY[4] = {30, 50, 10, 90};
+  // API_Draw_square(50, 50, 1, 1, VGA_COL_RED);
+  // API_Draw_line(10, 10, 20, 20, VGA_COL_MAGENTA);
+  // const int32_t posX[4] = {20, 50, 80, 150};
+  // const int32_t posY[4] = {30, 50, 10, 90};
 
-  API_Draw_polygon(posX, posY, 4, VGA_COL_CYAN);
+  // API_Draw_polygon(posX, posY, 4, VGA_COL_CYAN);
 
-  API_Draw_circle(100, 100, 30, VGA_COL_GREEN);
-  // madelbrot(VGA_DISPLAY_X, VGA_DISPLAY_Y, 100, -0.5,0.5,-2,2);
+
+  // madelbrot(VGA_DISPLAY_X, VGA_DISPLAY_Y, 100, -1.5,1,-1,1);
+
+  API_Fill_screen(VGA_COL_GREEN);
+
+  API_Fill_square(30, 30, 30, 30, VGA_COL_BLUE);
+  
+  // API_Load_bitmap(200, 50, HAPPY_SMILEY_WIDTH, HAPPY_SMILEY_HEIGHT, happy_smiley_map);
+  // API_Load_bitmap(0, 0, ME_WIDTH, ME_HEIGHT, me_map);
+  API_Fill_circle(100, 100, 30, VGA_COL_RED);
+
 
   /* USER CODE END 2 */
 
@@ -174,49 +184,7 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-Complex complexSquare(Complex c)
-{
-  Complex cSq;
-  cSq.x = c.x * c.x - c.y * c.y;
-  cSq.y = 2 * c.x * c.y;
-  return cSq;
-}
 
-int iterate(Complex zInit, int maxIter)
-{
-  Complex z = zInit;
-  int cnt = 0;
-  while ((z.x * z.x + z.y * z.y <= 4) && (cnt < maxIter))
-  {
-    z = complexSquare(z);
-    z.x += zInit.x;
-    z.y += zInit.y;
-    cnt++;
-  }
-  return cnt;
-}
-void madelbrot(int nx, int ny, int maxIter, float realMin, float realMax, float imagMin, float imagMax)
-{
-  float realInc = (realMax - realMin) / nx;
-  float imagInc = (imagMax - imagMin) / ny;
-  static uint8_t color = VGA_COL_BLACK;
-
-  Complex z;
-  int x, y;
-  int cnt;
-  for (x = 0, z.x = realMin; x < nx; x++, z.x += realInc)
-    for (y = 0, z.y = imagMin; y < ny; y++, z.y += imagInc)
-    {
-      cnt = iterate(z, maxIter);
-      if (cnt == maxIter)
-        color = VGA_COL_BLACK;
-      else
-      {
-        color = (uint8_t)cnt;
-      }
-      API_Set_pixel(x, y, color);
-    }
-}
 /* USER CODE END 4 */
 
 /**

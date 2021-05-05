@@ -22,16 +22,16 @@ void API_Set_resolution(uint32_t w, uint32_t h)
     _h = h;
 }
 
-SetPixelCallback _set_pixel_callback = NULL;
+SetPixelCallback_t _set_pixel_callback = NULL;
 
-inline void API_Bind_set_pixel_callback(SetPixelCallback callback)
+inline void API_Bind_set_pixel_callback(SetPixelCallback_t callback)
 {
     _set_pixel_callback = callback;
 }
 
-SetFillScreenCallback _fill_screen_callback = NULL;
+SetFillScreenCallback_t _fill_screen_callback = NULL;
 
-inline void API_Bind_fill_screen_callback(SetFillScreenCallback callback)
+inline void API_Bind_fill_screen_callback(SetFillScreenCallback_t callback)
 {
     _fill_screen_callback = callback;
 }

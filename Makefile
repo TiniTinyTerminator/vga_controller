@@ -61,7 +61,11 @@ Core/Src/system_stm32f4xx.c \
 Core/Src/syscalls.c \
 Core/ub_lib/stm32_ub_vga_screen.c \
 EE_API_LIB/src/configuration.c \
-EE_API_LIB/src/graphics.c
+EE_API_LIB/src/graphics.c \
+EE_API_LIB/src/fonts.c \
+EE_API_LIB/src/bitmap.c \
+EE_API_LIB/src/extra.c
+
 
 
 # ASM sources

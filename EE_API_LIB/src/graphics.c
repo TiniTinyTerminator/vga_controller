@@ -20,8 +20,8 @@
 extern uint32_t _w;
 extern uint32_t _h;
 
-extern SetPixelCallback _set_pixel_callback;
-extern SetFillScreenCallback _fill_screen_callback;
+extern SetPixelCallback_t _set_pixel_callback;
+extern SetFillScreenCallback_t _fill_screen_callback;
 
 inline void API_Set_pixel(int32_t x, int32_t y, uint8_t color)
 {
@@ -39,10 +39,10 @@ inline void API_Fill_screen(uint8_t color)
         API_Fill_square(0, 0, _w, _h, color);
 }
 
-inline void API_Fill_square(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t color)
+inline void API_Fill_square(uint32_t x_lup, uint32_t y_lup, uint32_t w, uint32_t h, uint32_t color)
 {
-    for (; x < x + w; x++)
-        for (; y < y + h; y++)
+    for (uint32_t x = x_lup; x < (x_lup + w); x++)
+        for (uint32_t y = y_lup; y < (y_lup + h); y++)
             API_Set_pixel(x, y, color);
 }
 
@@ -86,27 +86,37 @@ void API_Draw_line(int32_t xA, int32_t yA, int32_t xB, int32_t yB, uint8_t color
         }
 }
 
-void API_Draw_circle(int32_t xm, int32_t ym, uint32_t radius, uint8_t color)
+void API_Draw_circle(int32_t xm, int32_t ym, int32_t radius, uint8_t color)
 {
-    int x = -radius, y = 0, err = 2 - 2 * radius; /* II. Quadrant */
+    int x = -radius, y = 0, err = 2 - 2 * radius; /* bottom left to top right */
     do
     {
-        API_Set_pixel(xm - x, ym + y, color); /*   I. Quadrant */
-        API_Set_pixel(xm - y, ym - x, color); /*  II. Quadrant */
-        API_Set_pixel(xm + x, ym - y, color); /* III. Quadrant */
-        API_Set_pixel(xm + y, ym + x, color); /*  IV. Quadrant */
+        API_Set_pixel(xm - x, ym + y, color); /* I. Quadrant +x +y */
+        API_Set_pixel(xm - y, ym - x, color); /* II. Quadrant -x +y */
+        API_Set_pixel(xm + x, ym - y, color); /* III. Quadrant -x -y */
+        API_Set_pixel(xm + y, ym + x, color); /* IV. Quadrant +x -y */
         radius = err;
         if (radius <= y)
-            err += ++y * 2 + 1; /* e_xy+e_y < 0 */
-        if (radius > x || err > y)
-            err += ++x * 2 + 1; /* e_xy+e_x > 0 or no 2nd y-step */
+            err += ++y * 2 + 1;    /* e_xy+e_y < 0 */
+        if (radius > x || err > y) /* e_xy+e_x > 0 or no 2nd y-step */
+            err += ++x * 2 + 1;    /* -> x-step now */
     } while (x < 0);
 }
 
-void API_Fill_circle(uint32_t xm, uint32_t ym, uint32_t r, uint8_t color)
+void API_Fill_circle(int32_t xm, int32_t ym, int32_t radius, uint8_t color)
 {
-    for (int ra = r; ra > 0; ra--)
-        API_Draw_circle(xm, ym, ra, color);
+    int x = -radius, y = 0, err = 2 - 2 * radius; /* bottom left to top right */
+    do
+    {
+        API_Draw_line(xm + x, ym - y, xm - x, ym - y, color);
+        API_Draw_line(xm + x, ym + y, xm - x, ym + y, color);
+
+        radius = err;
+        if (radius <= y)
+            err += ++y * 2 + 1;    /* e_xy+e_y < 0 */
+        if (radius > x || err > y) /* e_xy+e_x > 0 or no 2nd y-step */
+            err += ++x * 2 + 1;    /* -> x-step now */
+    } while (x < 0);
 }
 
 void API_Draw_square(int32_t x, int32_t y, uint32_t width, uint32_t height, uint8_t color)
