@@ -11,19 +11,28 @@
 
 // @NOTE vergeet je header define niet!!
 
+#ifndef INC_FL_INTERPRETER_H_
+#define INC_FL_INTERPRETER_H_
+
 #include "stdint.h"
 
 #define SEPERATOR ','
 
 #define QUEUE_LEN 255		//MAX uint8_t
 
+typedef void (*Apifuncp)(void* );
+
 typedef struct Queue_entry
 {
-	int entry_nr;			//position in queue
-	void* argp;				//pointer to first argument
-	int fnc_nr;				//function number				--> could also be pointer to the function
+	Apifuncp funcp;					//pointer to function
+	void* argp;						//pointer to first argument
+	int fnc_nr;						//function number
 }Qentry;
 
+
+
+//storage for scriptline seperated in function and its arguments
+uint8_t test_func(void);
 
 
 
@@ -31,3 +40,4 @@ typedef struct Queue_entry
 
 //int8_t fl_parser(char* scriptline, uint32_t size, char sep_scriptline);
 
+#endif	// INC_FL_INTERPRETER_H_

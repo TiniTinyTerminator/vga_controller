@@ -14,6 +14,22 @@
 
 //globals for managing the queue
 Qentry cmd_queue[QUEUE_LEN];
+//TODO move functionlist
+Command_t function_list[15]=
+{
+		{"lijn", 		6,	{T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_KLEUR, T_GETAL}},
+		{"rechthoek", 	6,	{T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_KLEUR, T_GETAL}},
+		{"tekst", 		6,	{T_GETAL, T_KLEUR, T_TEKST, T_FONTNAAM, T_GETAL, T_FONTSTIJL}},
+		{"bitmap", 		3,	{T_GETAL, T_GETAL, T_GETAL}},
+		{"clearscherm",	1,	{T_KLEUR}},
+		//wacht,
+		//herhaal,
+		//cirkel,
+		//figuur,
+		//toren,
+		{"END_OF_LIST\0"}
+};
+
 uint8_t last_inQ = 0;
 
 //TODO ADD check if Q_entry is currently not in use
@@ -25,7 +41,7 @@ uint8_t createQ_entry(uint8_t fnc_nr)
 		{
 			last_inQ = 0;
 		}
-	cmd_queue[last_inQ].entry_nr = 0;
+	cmd_queue[last_inQ].funcp = function_list[fnc_nr].funcp;
 	cmd_queue[last_inQ].argp = malloc((function_list[fnc_nr].argc *4));
 	cmd_queue[last_inQ].fnc_nr = fnc_nr;
 
@@ -36,7 +52,7 @@ uint8_t createQ_entry(uint8_t fnc_nr)
 //also deallocates memory that was in use
 void deleteQ_entry(uint8_t entry_nr)
 {
-	cmd_queue[entry_nr].entry_nr =0;
+	cmd_queue[entry_nr].funcp = NULL;
 	free (cmd_queue[entry_nr].argp);
 	cmd_queue[entry_nr].argp = 0;
 	cmd_queue[entry_nr].fnc_nr = 0;
@@ -71,7 +87,7 @@ uint8_t check_function(char* string, uint8_t str_len)
 }
 
 //TODO add error code
-uint8_t check_number(char* string, uint8_t str_len)
+uint32_t check_number(char* string, uint8_t str_len)
 {
 	int number;
 
@@ -206,8 +222,20 @@ int8_t fl_parser(char* scriptline, uint32_t len)
     return 0;
 }
 
-void test_func(void)
+uint8_t test_func(void)
 {
-	char testline[] = "cirkel, is dit,500,mogelijk ,500";
-	fl_parser(testline, sizeof(testline));
+	API_Init_function_list();
+	char testline[] = "rechthoek,100,200,101,102,paars,5";
+	int x =fl_parser(testline, sizeof(testline));
+	API_Next_Q(1);
+
+	int* temotest = (int*) cmd_queue[1].argp;
+	x = (int32_t) temotest[1];
+	char testline2[] = "lijn,100,333,33,55,paars,2";
+	x =fl_parser(testline2, sizeof(testline2));
+
+	char testline3[] = "bitmap,9,777,797";
+	x =fl_parser(testline3, sizeof(testline3));
+	//separgtofunc(tmp_ascii_cmd);
+	return x;
 }

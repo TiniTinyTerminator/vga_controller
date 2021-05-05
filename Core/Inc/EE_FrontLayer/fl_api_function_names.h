@@ -10,6 +10,8 @@
 #ifndef INC_FL_API_FUNCTION_NAMES_H_
 #define INC_FL_API_FUNCTION_NAMES_H_
 
+#include <stdint.h>
+
 typedef enum ID_ARGUMENT_TYPE
 {
 	T_GETAL,
@@ -25,22 +27,8 @@ typedef struct Functions
 	char name[20];
 	uint8_t argc;
 	Arg_t argt[6];
-}Function;
-
-const Function function_list[]=
-{
-		{"lijn", 		6,	{T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_KLEUR, T_GETAL}},
-		{"rechthoek", 	6,	{T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_KLEUR, T_GETAL}},
-		{"tekst", 		6,	{T_GETAL, T_KLEUR, T_TEKST, T_FONTNAAM, T_GETAL, T_FONTSTIJL}},
-		{"bitmap", 		3,	{T_GETAL, T_GETAL, T_GETAL}},
-		{"clearscherm",	1,	{T_KLEUR}},
-		//wacht,
-		//herhaal,
-		//cirkel,
-		//figuur,
-		//toren,
-		{"END_OF_LIST\0"}
-};
+	Apifuncp funcp;
+}Command_t;
 
 typedef struct Colours
 {
@@ -49,7 +37,7 @@ typedef struct Colours
 }Colour_t;
 
 //according to: https://flaviocopes.com/rgb-color-codes/
-const Colour_t colour_list[] =
+static const Colour_t colour_list[] =
 {
 		{"zwart",		0x000000},
 		{"blauw",		0x0000FF},
@@ -77,7 +65,7 @@ typedef struct Fontnames
 	uint8_t id;
 }Fontname_t;
 
-const Fontname_t fontname_list[] =
+static const Fontname_t fontname_list[] =
 {
 	{"arial",		0},
 	{"consolas",	1},
@@ -97,7 +85,7 @@ typedef struct Fontstyles
 	Fontstyles id;
 }Fontstyle_t;
 
-const Fontstyle_t fontstyle_list[] =
+static const Fontstyle_t fontstyle_list[] =
 {
 	{"normaal" , T_NORMAAL},
 	{"vet", T_VET},
@@ -106,4 +94,3 @@ const Fontstyle_t fontstyle_list[] =
 };
 
 #endif /* INC_FL_API_FUNCTION_NAMES_H_ */
-

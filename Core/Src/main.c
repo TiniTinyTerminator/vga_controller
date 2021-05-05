@@ -102,20 +102,23 @@ int main(void)
   UB_VGA_Screen_Init(); // Init VGA-Screen
 
   API_Set_resolution(VGA_DISPLAY_X, VGA_DISPLAY_Y);
+
   API_Bind_set_pixel_callback((SetPixelCallback)UB_VGA_SetPixel);
   API_Bind_fill_screen_callback((SetFillScreenCallback)UB_VGA_FillScreen);
 
   API_Fill_screen(VGA_COL_WHITE);
-
+//  madelbrot(VGA_DISPLAY_X, VGA_DISPLAY_Y, 100, -0.5,0.5,-2,2);
   API_Draw_square(50, 50, 1, 1, VGA_COL_RED);
   API_Draw_line(10, 10, 20, 20, VGA_COL_MAGENTA);
+  test_func();
   const int32_t posX[4] = {20, 50, 80, 150};
   const int32_t posY[4] = {30, 50, 10, 90};
 
   API_Draw_polygon(posX, posY, 4, VGA_COL_CYAN);
 
   API_Draw_circle(100, 100, 30, VGA_COL_GREEN);
-  // madelbrot(VGA_DISPLAY_X, VGA_DISPLAY_Y, 100, -0.5,0.5,-2,2);
+//  HAL_Delay(5000);
+
 
   /* USER CODE END 2 */
 
