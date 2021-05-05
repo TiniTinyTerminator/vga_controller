@@ -35,3 +35,10 @@ inline void API_Bind_fill_screen_callback(SetFillScreenCallback_t callback)
 {
     _fill_screen_callback = callback;
 }
+
+GetPixelCallback_t _get_pixel_callback = NULL;
+
+inline void API_Bind_get_pixel_callback(GetPixelCallback_t callback)
+{
+    _get_pixel_callback = callback;
+}

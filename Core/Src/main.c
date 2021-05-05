@@ -22,6 +22,7 @@
 #include "main.h"
 #include "dma.h"
 #include "tim.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -29,9 +30,12 @@
 #include "graphics.h"
 #include "extra.h"
 
+#include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <math.h>
 #include <fonts.h>
+
 #include "happy_smiley.h"
 #include "me.h"
 /* USER CODE END Includes */
@@ -43,6 +47,9 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define MAX_INPUT_LEN 255
+#define MAX_COMMAND_BUFFERING 40
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -53,6 +60,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+uint8_t input_buff[MAX_INPUT_LEN] = {};
+uint8_t command_buff[MAX_INPUT_LEN][MAX_COMMAND_BUFFERING] = {};
 
 /* USER CODE END PV */
 
@@ -98,34 +107,43 @@ int main(void)
   MX_DMA_Init();
   MX_TIM1_Init();
   MX_TIM2_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
+
+  HAL_UART_Receive_IT(&huart2, input_buff, 1);
 
   UB_VGA_Screen_Init(); // Init VGA-Screen
 
   API_Set_resolution(VGA_DISPLAY_X, VGA_DISPLAY_Y);
   API_Bind_set_pixel_callback((SetPixelCallback_t)UB_VGA_SetPixel);
-  // API_Bind_fill_screen_callback((SetFillScreenCallback_t)UB_VGA_FillScreen);
+  API_Bind_fill_screen_callback((SetFillScreenCallback_t)UB_VGA_FillScreen);
 
   API_Fill_screen(VGA_COL_WHITE);
 
   // API_Draw_square(50, 50, 1, 1, VGA_COL_RED);
   // API_Draw_line(10, 10, 20, 20, VGA_COL_MAGENTA);
-  // const int32_t posX[4] = {20, 50, 80, 150};
-  // const int32_t posY[4] = {30, 50, 10, 90};
 
-  // API_Draw_polygon(posX, posY, 4, VGA_COL_CYAN);
+  uint32_t posX[] = {20, 50, 80, 150};
+  uint32_t posY[] = {30, 50, 20, 10};
+
+   API_Draw_line(posX[0], posY[0], posX[1], posY[1], VGA_COL_BLUE);
+   API_Draw_line(posX[1], posY[1], posX[2], posY[2], VGA_COL_BLUE);
+   API_Draw_line(posX[2], posY[2], posX[3], posY[3], VGA_COL_BLUE);
+   API_Draw_line(posX[3], posY[3], posX[0], posY[0], VGA_COL_BLUE);
+
+  // API_Draw_line(100, 100, 50, 50, VGA_COL_BLACK);
+  API_Draw_polygon(posX, posY, 4, VGA_COL_CYAN);
 
 
   // madelbrot(VGA_DISPLAY_X, VGA_DISPLAY_Y, 100, -1.5,1,-1,1);
 
-  API_Fill_screen(VGA_COL_GREEN);
+  // API_Fill_screen(VGA_COL_GREEN);
 
-  API_Fill_square(30, 30, 30, 30, VGA_COL_BLUE);
   
   // API_Load_bitmap(200, 50, HAPPY_SMILEY_WIDTH, HAPPY_SMILEY_HEIGHT, happy_smiley_map);
-  // API_Load_bitmap(0, 0, ME_WIDTH, ME_HEIGHT, me_map);
-  API_Fill_circle(100, 100, 30, VGA_COL_RED);
-
+  // // API_Load_bitmap(0, 0, ME_WIDTH, ME_HEIGHT, me_map);
+  // API_Fill_circle(100, 100, 30, VGA_COL_RED);
+  // API_Fill_square(30, 30, 30, 30, VGA_COL_BLUE);
 
   /* USER CODE END 2 */
 
@@ -184,6 +202,33 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  static uint32_t i = 0;
+
+  if(huart != &huart2) return;
+
+  //received enter
+  if(input_buff[i] == '\n')
+  {
+    //do stuff
+
+    i = 0;
+  }
+
+  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15);
+
+  HAL_UART_Transmit(&huart2, input_buff + i, 1, HAL_MAX_DELAY);
+  //buffer full
+  if (++i >= MAX_INPUT_LEN)
+  {
+    i = 0;
+    memset(input_buff, 0, MAX_INPUT_LEN);
+  }
+
+  HAL_UART_Receive_IT(&huart2, input_buff + i, 1);
+
+}
 
 /* USER CODE END 4 */
 

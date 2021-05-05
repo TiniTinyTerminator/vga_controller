@@ -11,8 +11,6 @@
 
 #include "graphics.h"
 
-#include <inttypes.h>
-
 void API_Load_bitmap(uint32_t x_lup, uint32_t y_lup, uint32_t w, uint32_t h, const uint8_t *bitmap)
 {
     uint32_t buf_len = w * h;

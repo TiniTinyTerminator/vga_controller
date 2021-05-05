@@ -24,6 +24,12 @@
 typedef void (* SetPixelCallback_t)(uint32_t x, uint32_t y, uint32_t color);
 
 /**
+ * @brief 
+ * 
+ */
+typedef uint8_t (* GetPixelCallback_t)(uint32_t x, uint32_t y);
+
+/**
  * @brief callback type that changes background
  * 
  */
@@ -35,6 +41,13 @@ typedef void (* SetFillScreenCallback_t)(uint32_t color);
  * @param callback address of callback function
  */
 void API_Bind_set_pixel_callback(SetPixelCallback_t callback);
+
+/**
+ * @brief 
+ * 
+ * @param callback 
+ */
+void API_Bind_get_pixel_callback(GetPixelCallback_t callback);
 
 /**
  * @brief this function implements the functions that se
@@ -59,6 +72,15 @@ void API_Set_resolution(uint32_t w, uint32_t h);
  * @param color 
  */
 void API_Set_pixel(int32_t x, int32_t y, uint8_t color);
+
+/**
+ * @brief 
+ * 
+ * @param x 
+ * @param y 
+ * @return uint8_t 
+ */
+uint8_t API_Get_pixel(int32_t x, int32_t y);
 
 /**
  * @brief fill the framebuffer with a certain color

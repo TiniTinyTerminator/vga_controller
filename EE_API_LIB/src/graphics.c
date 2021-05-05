@@ -22,6 +22,7 @@ extern uint32_t _h;
 
 extern SetPixelCallback_t _set_pixel_callback;
 extern SetFillScreenCallback_t _fill_screen_callback;
+extern GetPixelCallback_t _get_pixel_callback;
 
 inline void API_Set_pixel(int32_t x, int32_t y, uint8_t color)
 {
@@ -29,6 +30,14 @@ inline void API_Set_pixel(int32_t x, int32_t y, uint8_t color)
         return;
 
     _set_pixel_callback(x, y, color);
+}
+
+inline uint8_t API_Get_pixel(int32_t x, int32_t y)
+{
+    if (_get_pixel_callback == NULL)
+        return 0x0;
+
+    return _get_pixel_callback(x, y);
 }
 
 inline void API_Fill_screen(uint8_t color)
@@ -46,44 +55,75 @@ inline void API_Fill_square(uint32_t x_lup, uint32_t y_lup, uint32_t w, uint32_t
             API_Set_pixel(x, y, color);
 }
 
+// void API_Draw_line(int32_t xA, int32_t yA, int32_t xB, int32_t yB, uint8_t color)
+// {
+//     int dx = abs(xB - xA);
+//     int sx = xA < xB ? 1 : -1;
+
+//     int dy = -abs(yB - yA);
+//     int sy = yA < yB ? 1 : -1;
+
+//     int err = dx + dy, e2; /* error value e_xy */
+
+//     if (dx == 0)
+//         for (uint32_t y = (sy ? yA : yB); y < (sy ? yB : yA); y++)
+//         {
+//             API_Set_pixel(xA, y, color);
+//         }
+
+//     else if (dy == 0)
+//         for (uint32_t x = (sx ? xA : xB); x < (sx ? xB : xA); x++)
+//         {
+//             API_Set_pixel(x, yA, color);
+//         }
+//     else
+//         for(;;)
+//         { /* loop */
+//             API_Set_pixel(xA, yA, color);
+
+//             e2 = 2 * err;
+//             if (e2 >= dy)
+//             {
+//                 if(xA == xB) break;
+//                 err += dy;
+//                 xA += sx;
+//             } /* e_xy+e_x > 0 */
+//             if (e2 <= dx)
+//             {
+//                 if(yA == yB) break;
+//                 err += dx;
+//                 yA += sy;
+//             } /* e_xy+e_y < 0 */
+//         }
+// }
+
 void API_Draw_line(int32_t xA, int32_t yA, int32_t xB, int32_t yB, uint8_t color)
 {
-    int dx = abs(xB - xA);
-    int sx = xA < xB ? 1 : -1;
+    int dx = abs(xB - xA), sx = xA < xB ? 1 : -1;
 
-    int dy = -abs(yB - yA);
-    int sy = yA < yB ? 1 : -1;
+    int dy = -abs(yB - yA), sy = yA < yB ? 1 : -1;
 
     int err = dx + dy, e2; /* error value e_xy */
 
-    if (dx == 0)
-        for (uint32_t y = (sy ? yA : yB); y < (sy ? yB : yA); y++)
-        {
-            API_Set_pixel(xA, y, color);
+    for (;;)
+    { /* loop */
+        API_Set_pixel(xA, yA, color);
+        e2 = 2 * err;
+        if (e2 >= dy)
+        { /* e_xy+e_x > 0 */
+            if (xA == xB)
+                break;
+            err += dy;
+            xA += sx;
         }
-
-    else if (dy == 0)
-        for (uint32_t x = (sx ? xA : xB); x < (sx ? xB : xA); x++)
-        {
-            API_Set_pixel(x, yA, color);
+        if (e2 <= dx)
+        { /* e_xy+e_y < 0 */
+            if (yA == yB)
+                break;
+            err += dx;
+            yA += sy;
         }
-    else
-        while (xA != xB && yA != yB)
-        { /* loop */
-            API_Set_pixel(xA, yA, color);
-
-            e2 = 2 * err;
-            if (e2 >= dy)
-            {
-                err += dy;
-                xA += sx;
-            } /* e_xy+e_x > 0 */
-            if (e2 <= dx)
-            {
-                err += dx;
-                yA += sy;
-            } /* e_xy+e_y < 0 */
-        }
+    }
 }
 
 void API_Draw_circle(int32_t xm, int32_t ym, int32_t radius, uint8_t color)
@@ -179,6 +219,8 @@ void API_Draw_polygon(const int32_t *list_X, const int32_t *list_Y, uint32_t len
 {
     API_Draw_line(list_X[0], list_Y[0], list_X[length - 1], list_Y[length - 1], color);
 
-    for (uint32_t i = 0; i < length - 1; i++)
+    API_Draw_line(list_X[3], list_X[3], list_X[2], list_X[2], color);
+
+    for (int32_t i = 0; i < length - 1; i++)
         API_Draw_line(list_X[i], list_Y[i], list_X[i + 1], list_Y[i + 1], color);
 }

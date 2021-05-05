@@ -3,6 +3,7 @@
     "files.associations": {
         "fonts.h": "c",
         "string.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "graphics.h": "c"
     }
 }
