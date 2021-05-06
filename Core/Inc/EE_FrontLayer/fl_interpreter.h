@@ -29,6 +29,19 @@ typedef struct Queue_entry
 	int fnc_nr;						//function number
 }Qentry;
 
+typedef enum FL_error
+{
+	E_NO_ERROR,
+	E_CHK_FUNC_UNKNOWN,
+	E_CHK_INVALID_NUM,
+	E_CHK_COLOR_UNKOWN,
+	E_TEKST_NO_MEM,
+	E_CHK_FONTSTYLE_UNKOWN,
+	E_CHK_FONTNAME_UNKOWN,
+	E_TO_MANY_ARGUMENTS,
+	E_EMPTY_ARGUMENT
+}FL_error_t;
+
 
 
 //storage for scriptline seperated in function and its arguments
