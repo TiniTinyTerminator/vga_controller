@@ -10,6 +10,8 @@
 #ifndef INC_FL_API_FUNCTION_NAMES_H_
 #define INC_FL_API_FUNCTION_NAMES_H_
 
+#include <stdint.h>
+
 typedef enum ID_ARGUMENT_TYPE
 {
 	T_GETAL,
@@ -24,50 +26,36 @@ typedef struct Functions
 {
 	char name[20];
 	uint8_t argc;
-	Arg_t argt[6];
-}Function;
-
-const Function function_list[]=
-{
-		{"lijn", 		6,	{T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_KLEUR, T_GETAL}},
-		{"rechthoek", 	6,	{T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_KLEUR, T_GETAL}},
-		{"tekst", 		6,	{T_GETAL, T_KLEUR, T_TEKST, T_FONTNAAM, T_GETAL, T_FONTSTIJL}},
-		{"bitmap", 		3,	{T_GETAL, T_GETAL, T_GETAL}},
-		{"clearscherm",	1,	{T_KLEUR}},
-		//wacht,
-		//herhaal,
-		//cirkel,
-		//figuur,
-		//toren,
-		{"END_OF_LIST\0"}
-};
+	Arg_t argt[7];
+	Apifuncp funcp;
+}Command_t;
 
 typedef struct Colours
 {
 	char name[15];
-	int32_t hexdef;
+	int8_t hexdef;
 }Colour_t;
 
 //according to: https://flaviocopes.com/rgb-color-codes/
-const Colour_t colour_list[] =
+static const Colour_t colour_list[] =
 {
-		{"zwart",		0x000000},
-		{"blauw",		0x0000FF},
-		{"lichtblauw",	0xADD8E6},
-		{"groen",		0x008000},
-		{"lichtgroen",	0x90EE90},
-		{"cyaan",		0x00FFFF},
-		{"lichtcyaan",	0xE0FFFF},
-		{"rood",		0xFF0000},
-		{"lichtrood",	0x800000},
-		{"magenta",		0xFF00FF},
-		{"lichtmagenta",0xEE82EE},
-		{"bruin",		0xA52A2A},
-		{"geel",		0xFF00FF},
-		{"grijs",		0x808080},
-		{"wit",			0xFFFFFF},
-		{"rose",		0xFFC0CB},			//Bonus
-		{"paars",		0x800080},
+		{"zwart",		0b00000000},
+		{"blauw",		0b11000000},
+		{"lichtblauw",	0b10010000},
+		{"groen",		0b00111000},
+		{"lichtgroen",	0b01100000},
+		{"cyaan",		0b11111000},
+		{"lichtcyaan",	0b11110010},
+		{"rood",		0b00000111},
+		{"lichtrood",	0b00000100},
+		{"magenta",		0b00111111},
+		{"lichtmagenta",0x01101101},
+		{"bruin",		0b01010011},
+		{"geel",		0b00111111},
+		{"grijs",		0b10100100},
+		{"wit",			0b11111111},
+		{"rose",		0b01011111},
+		{"paars",		0b10000100},
 		{"END_OF_LIST\0"}
 };
 
@@ -77,7 +65,7 @@ typedef struct Fontnames
 	uint8_t id;
 }Fontname_t;
 
-const Fontname_t fontname_list[] =
+static const Fontname_t fontname_list[] =
 {
 	{"arial",		0},
 	{"consolas",	1},
@@ -97,13 +85,12 @@ typedef struct Fontstyles
 	Fontstyles id;
 }Fontstyle_t;
 
-const Fontstyle_t fontstyle_list[] =
+static const Fontstyle_t fontstyle_list[] =
 {
-	{"normaal" , T_NORMAAL},
-	{"vet", T_VET},
-	{"cursief", T_CURSIEF},
+	{"normaal",	T_NORMAAL},
+	{"vet", 	T_VET},
+	{"cursief",	T_CURSIEF},
 	{"END_OF_LIST\0"}
 };
 
 #endif /* INC_FL_API_FUNCTION_NAMES_H_ */
-
