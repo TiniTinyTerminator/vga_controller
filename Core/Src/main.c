@@ -36,8 +36,9 @@
 #include <math.h>
 #include <fonts.h>
 
-#include "happy_smiley.h"
-#include "me.h"
+#include "imgs/angry_smiley.h"
+#include "imgs/happy_smiley.h"
+#include "imgs/me.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -143,8 +144,9 @@ int main(void)
   // API_Fill_screen(VGA_COL_GREEN);
 
   
-  // API_Load_bitmap(200, 50, HAPPY_SMILEY_WIDTH, HAPPY_SMILEY_HEIGHT, happy_smiley_map);
-  // // API_Load_bitmap(0, 0, ME_WIDTH, ME_HEIGHT, me_map);
+  API_Load_bitmap(200, 50, HAPPY_SMILEY_WIDTH, HAPPY_SMILEY_HEIGHT, happy_smiley_map);
+  API_Load_bitmap(0, 0, ME_WIDTH, ME_HEIGHT, me_map);
+  API_Load_bitmap(200, 100, HAPPY_SMILEY_WIDTH, HAPPY_SMILEY_HEIGHT, angry_smiley_map);
   // API_Fill_circle(100, 100, 30, VGA_COL_RED);
   // API_Fill_square(30, 30, 30, 30, VGA_COL_BLUE);
 
@@ -162,6 +164,7 @@ int main(void)
         free(command_buff[i]);
         command_buff[i] = NULL;
       }
+    HAL_Delay(50);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
