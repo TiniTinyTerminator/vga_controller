@@ -61,13 +61,16 @@
 
 /* USER CODE BEGIN PV */
 uint8_t input_buff[MAX_INPUT_LEN] = {};
-uint8_t command_buff[MAX_INPUT_LEN][MAX_COMMAND_BUFFERING] = {};
+uint8_t * command_buff[MAX_COMMAND_BUFFERING] = {};
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
+
+void append_command(const char *, ssize_t len);
+
 
 /* USER CODE END PFP */
 
@@ -110,7 +113,7 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  HAL_UART_Receive_IT(&huart2, input_buff, 1);
+  HAL_UART_Receive_DMA(&huart2, input_buff, 1);
 
   UB_VGA_Screen_Init(); // Init VGA-Screen
 
@@ -152,7 +155,13 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+    for(int i = 0; i < MAX_COMMAND_BUFFERING; i++)
+      if(command_buff[i] != NULL) {
+        // HAL_UART_Transmit(&huart2, command_buff[i], strlen(command_buff[i]), HAL_MAX_DELAY);
+        
+        free(command_buff[i]);
+        command_buff[i] = NULL;
+      }
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -208,26 +217,64 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
   if(huart != &huart2) return;
 
+  HAL_UART_Transmit(&huart2, input_buff + i, 1, HAL_MAX_DELAY);
+
   //received enter
-  if(input_buff[i] == '\n')
+  if(input_buff[i] == '\n' || input_buff[i] == '\r')
   {
     //do stuff
+    char enter[] = "\r\n";
 
+    HAL_UART_Transmit(&huart2, enter, strlen(enter), HAL_MAX_DELAY);
+
+    append_command(input_buff, i);
+
+    memset(input_buff, 0, MAX_INPUT_LEN);
     i = 0;
   }
+  else i++;
 
-  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15);
+  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
 
-  HAL_UART_Transmit(&huart2, input_buff + i, 1, HAL_MAX_DELAY);
   //buffer full
-  if (++i >= MAX_INPUT_LEN)
+  if (i >= MAX_INPUT_LEN)
   {
     i = 0;
+    char overload_string[] = "BUFFER OVERLOAD, RESETTING!!\r\n";
+    HAL_UART_Transmit(&huart2, overload_string, strlen(overload_string), HAL_MAX_DELAY);
+
     memset(input_buff, 0, MAX_INPUT_LEN);
   }
 
-  HAL_UART_Receive_IT(&huart2, input_buff + i, 1);
+  HAL_UART_Receive_DMA(&huart2, input_buff + i, 1);
 
+}
+
+void append_command(const char * str, ssize_t len)
+{
+
+  for(int i = 0; i < MAX_COMMAND_BUFFERING; i++)
+    if(command_buff[i] == NULL)
+    {
+      command_buff[i] = calloc(len + 2, (sizeof(uint8_t)));
+      
+      if(command_buff[i] != NULL)
+      {
+        strcpy(command_buff[i], str);
+        command_buff[i][len - 1] = '\r';
+        command_buff[i][len] = '\n';
+
+        return;
+      }
+      else
+      {
+        char NO_MEM[] = "Not enough memory...\r\n";
+        HAL_UART_Transmit(&huart2, NO_MEM, strlen(NO_MEM), HAL_MAX_DELAY);
+      }
+
+    }
+  char buffer_overload_string[] = "too many commands buffered, discarding...\r\n";
+  HAL_UART_Transmit(&huart2, buffer_overload_string, strlen(buffer_overload_string), HAL_MAX_DELAY);
 }
 
 /* USER CODE END 4 */
