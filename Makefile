@@ -131,6 +131,8 @@ C_INCLUDES =  \
 -IDrivers/CMSIS/Device/ST/STM32F4xx/Include \
 -IDrivers/CMSIS/Include \
 -ICore/ub_lib \
+-ICore/Inc/imgs \
+-ICore/Inc/fonts \
 -IEE_API_LIB
 
 
