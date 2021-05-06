@@ -26,7 +26,7 @@ typedef struct Functions
 {
 	char name[20];
 	uint8_t argc;
-	Arg_t argt[7];
+	Arg_t argt[11];
 	Apifuncp funcp;
 }Command_t;
 
@@ -49,7 +49,7 @@ static const Colour_t colour_list[] =
 		{"rood",		0b00000111},
 		{"lichtrood",	0b00000100},
 		{"magenta",		0b00111111},
-		{"lichtmagenta",0x01101101},
+		{"lichtmagenta",0b01101101},
 		{"bruin",		0b01010011},
 		{"geel",		0b00111111},
 		{"grijs",		0b10100100},

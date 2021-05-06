@@ -47,10 +47,20 @@ typedef enum FL_error
 //storage for scriptline seperated in function and its arguments
 uint8_t test_func(void);
 
+/****************************************************************************************************/
+//function:     fl_interpreter
+//arguments:    scriptline
+//				length of scriptline
+//returns:		E_NO_ERROR or error code
+//
+/****************************************************************************************************/
+FL_error_t fl_parser(char* scriptline, uint32_t len);
 
-
-
-
-//int8_t fl_parser(char* scriptline, uint32_t size, char sep_scriptline);
+/****************************************************************************************************/
+//function:     deleteQ_entry
+//arguments:    No. in Q;
+//returns:		none
+/****************************************************************************************************/
+void deleteQ_entry(uint8_t entry_nr);
 
 #endif	// INC_FL_INTERPRETER_H_
