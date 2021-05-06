@@ -17,6 +17,13 @@
 
 #include <inttypes.h>
 
+typedef enum DrawStyle {
+    DOT,
+    ROUND,
+    SQUARE
+} DrawStyle_t;
+
+
 /**
  * @brief callback type to bind function thats able to set pixels
  * 
@@ -90,6 +97,17 @@ uint8_t API_Get_pixel(int32_t x, int32_t y);
 void API_Fill_screen(uint8_t color);
 
 /**
+ * @brief 
+ * 
+ * @param x 
+ * @param y 
+ * @param color 
+ * @param size 
+ * @param draw_type 
+ */
+void API_Draw(int32_t x, int32_t y, uint8_t color, uint32_t size, DrawStyle_t draw_type);
+
+/**
  * @brief fil
  * 
  * @param x 
@@ -108,7 +126,7 @@ void API_Fill_square(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t co
  * @param xB 
  * @param yB 
  */
-void API_Draw_line(int32_t xA, int32_t yA, int32_t xB, int32_t yB, uint8_t color);
+void API_Draw_line(int32_t xA, int32_t yA, int32_t xB, int32_t yB, uint8_t color, uint32_t thickness, DrawStyle_t draw_style);
 
 /**
  * @brief 
@@ -118,7 +136,7 @@ void API_Draw_line(int32_t xA, int32_t yA, int32_t xB, int32_t yB, uint8_t color
  * @param width 
  * @param height 
  */
-void API_Draw_square(int32_t x, int32_t y, uint32_t width, uint32_t height, uint8_t color);
+void API_Draw_square(int32_t x, int32_t y, uint32_t width, uint32_t height, uint8_t color, uint32_t thickness);
 
 /**
  * @brief 
@@ -127,7 +145,7 @@ void API_Draw_square(int32_t x, int32_t y, uint32_t width, uint32_t height, uint
  * @param list_Y 
  * @param length 
  */
-void API_Draw_polygon(const int32_t * list_X, const int32_t * list_Y, uint32_t length, uint8_t color);
+void API_Draw_polygon(const int32_t * list_X, const int32_t * list_Y, uint32_t length, uint8_t color, uint32_t thickness, DrawStyle_t draw_style);
 
 /**
  * @brief 
@@ -136,7 +154,7 @@ void API_Draw_polygon(const int32_t * list_X, const int32_t * list_Y, uint32_t l
  * @param y 
  * @param radius 
  */
-void API_Draw_circle(int32_t xm, int32_t ym, int32_t radius, uint8_t color);
+void API_Draw_circle(int32_t xm, int32_t ym, int32_t radius, uint8_t color, uint32_t thickness);
 
 /**
  * @brief 

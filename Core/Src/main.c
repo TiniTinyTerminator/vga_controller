@@ -129,13 +129,13 @@ int main(void)
   uint32_t posX[] = {20, 50, 80, 150};
   uint32_t posY[] = {30, 50, 20, 10};
 
-   API_Draw_line(posX[0], posY[0], posX[1], posY[1], VGA_COL_BLUE);
-   API_Draw_line(posX[1], posY[1], posX[2], posY[2], VGA_COL_BLUE);
-   API_Draw_line(posX[2], posY[2], posX[3], posY[3], VGA_COL_BLUE);
-   API_Draw_line(posX[3], posY[3], posX[0], posY[0], VGA_COL_BLUE);
+   API_Draw_line(posX[0], posY[0], posX[1], posY[1], VGA_COL_BLUE, 1, ROUND);
+   API_Draw_line(posX[1], posY[1], posX[2], posY[2], VGA_COL_BLUE, 1, ROUND);
+   API_Draw_line(posX[2], posY[2], posX[3], posY[3], VGA_COL_BLUE, 1, ROUND);
+   API_Draw_line(posX[3], posY[3], posX[0], posY[0], VGA_COL_BLUE, 1, ROUND);
 
   // API_Draw_line(100, 100, 50, 50, VGA_COL_BLACK);
-  API_Draw_polygon(posX, posY, 4, VGA_COL_CYAN);
+  API_Draw_polygon(posX, posY, 4, VGA_COL_CYAN, 1, ROUND);
 
 
   // madelbrot(VGA_DISPLAY_X, VGA_DISPLAY_Y, 100, -1.5,1,-1,1);
