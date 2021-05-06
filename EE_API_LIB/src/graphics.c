@@ -145,8 +145,8 @@ void API_Draw_polygon(const int32_t *list_X, const int32_t *list_Y, uint32_t len
 {
     API_Draw_line(list_X[0], list_Y[0], list_X[length - 1], list_Y[length - 1], color, thickness, draw_style);
 
-    API_Draw_line(list_X[3], list_X[3], list_X[2], list_X[2], color, thickness, draw_style);
+    // API_Draw_line(list_X[3], list_X[3], list_X[2], list_X[2], color, thickness, draw_style);
 
-    for (int32_t i = 0; i < length - 1; i++)
+    for (int32_t i = 0; i < (length - 1); i++)
         API_Draw_line(list_X[i], list_Y[i], list_X[i + 1], list_Y[i + 1], color, thickness, draw_style);
 }

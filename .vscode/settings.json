@@ -4,6 +4,7 @@
         "fonts.h": "c",
         "string.h": "c",
         "stdlib.h": "c",
-        "graphics.h": "c"
+        "graphics.h": "c",
+        "**.xbm": "c"
     }
 }
