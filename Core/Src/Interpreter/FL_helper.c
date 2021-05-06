@@ -8,6 +8,7 @@
 
 #include "fl_interpreter.h"
 #include "fl_api_function_names.h"
+#include "graphics.h"
 
 extern Qentry cmd_queue[QUEUE_LEN];//[QUEUE_LEN];
 extern Command_t function_list[];
