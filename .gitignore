@@ -154,9 +154,10 @@ local.properties
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/c,c++,eclipse,vscode
+
+build
+.mxproject
+.project
+application
 STM32CubeIDE
 Debug
-.project
-.mxproject
-Application
-build

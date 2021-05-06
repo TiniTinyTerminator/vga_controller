@@ -22,13 +22,22 @@
 #include "main.h"
 #include "dma.h"
 #include "tim.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "graphics.h"
+#include "extra.h"
+
+#include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <math.h>
+#include <fonts.h>
+
+#include "happy_smiley.h"
+#include "me.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -41,6 +50,9 @@ typedef struct
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define MAX_INPUT_LEN 255
+#define MAX_COMMAND_BUFFERING 40
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -51,6 +63,8 @@ typedef struct
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+uint8_t input_buff[MAX_INPUT_LEN] = {};
+uint8_t * command_buff[MAX_COMMAND_BUFFERING] = {};
 
 /* USER CODE END PV */
 
@@ -58,6 +72,9 @@ typedef struct
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 void madelbrot(int nx, int ny, int maxIter, float realMin, float realMax, float imagMin, float imagMax);
+
+void append_command(const char *, ssize_t len);
+
 
 /* USER CODE END PFP */
 
@@ -97,28 +114,43 @@ int main(void)
   MX_DMA_Init();
   MX_TIM1_Init();
   MX_TIM2_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
+
+  HAL_UART_Receive_DMA(&huart2, input_buff, 1);
 
   UB_VGA_Screen_Init(); // Init VGA-Screen
 
   API_Set_resolution(VGA_DISPLAY_X, VGA_DISPLAY_Y);
-
-  API_Bind_set_pixel_callback((SetPixelCallback)UB_VGA_SetPixel);
-  API_Bind_fill_screen_callback((SetFillScreenCallback)UB_VGA_FillScreen);
+  API_Bind_set_pixel_callback((SetPixelCallback_t)UB_VGA_SetPixel);
+  API_Bind_fill_screen_callback((SetFillScreenCallback_t)UB_VGA_FillScreen);
 
   API_Fill_screen(VGA_COL_WHITE);
-//  madelbrot(VGA_DISPLAY_X, VGA_DISPLAY_Y, 100, -0.5,0.5,-2,2);
-  API_Draw_square(50, 50, 1, 1, VGA_COL_RED);
-  API_Draw_line(10, 10, 20, 20, VGA_COL_MAGENTA);
-  test_func();
-  const int32_t posX[4] = {20, 50, 80, 150};
-  const int32_t posY[4] = {30, 50, 10, 90};
 
-  API_Draw_polygon(posX, posY, 4, VGA_COL_CYAN);
+  // API_Draw_square(50, 50, 1, 1, VGA_COL_RED);
+  // API_Draw_line(10, 10, 20, 20, VGA_COL_MAGENTA);
 
-  API_Draw_circle(100, 100, 30, VGA_COL_GREEN);
-//  HAL_Delay(5000);
+  uint32_t posX[] = {20, 50, 80, 150};
+  uint32_t posY[] = {30, 50, 20, 10};
 
+   API_Draw_line(posX[0], posY[0], posX[1], posY[1], VGA_COL_BLUE, 1, ROUND);
+   API_Draw_line(posX[1], posY[1], posX[2], posY[2], VGA_COL_BLUE, 1, ROUND);
+   API_Draw_line(posX[2], posY[2], posX[3], posY[3], VGA_COL_BLUE, 1, ROUND);
+   API_Draw_line(posX[3], posY[3], posX[0], posY[0], VGA_COL_BLUE, 1, ROUND);
+
+  // API_Draw_line(100, 100, 50, 50, VGA_COL_BLACK);
+  API_Draw_polygon(posX, posY, 4, VGA_COL_CYAN, 1, ROUND);
+
+
+  // madelbrot(VGA_DISPLAY_X, VGA_DISPLAY_Y, 100, -1.5,1,-1,1);
+
+  // API_Fill_screen(VGA_COL_GREEN);
+
+  
+  // API_Load_bitmap(200, 50, HAPPY_SMILEY_WIDTH, HAPPY_SMILEY_HEIGHT, happy_smiley_map);
+  // // API_Load_bitmap(0, 0, ME_WIDTH, ME_HEIGHT, me_map);
+  // API_Fill_circle(100, 100, 30, VGA_COL_RED);
+  // API_Fill_square(30, 30, 30, 30, VGA_COL_BLUE);
 
   /* USER CODE END 2 */
 
@@ -127,7 +159,13 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+    for(int i = 0; i < MAX_COMMAND_BUFFERING; i++)
+      if(command_buff[i] != NULL) {
+        // HAL_UART_Transmit(&huart2, command_buff[i], strlen(command_buff[i]), HAL_MAX_DELAY);
+        
+        free(command_buff[i]);
+        command_buff[i] = NULL;
+      }
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -177,12 +215,70 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-Complex complexSquare(Complex c)
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-  Complex cSq;
-  cSq.x = c.x * c.x - c.y * c.y;
-  cSq.y = 2 * c.x * c.y;
-  return cSq;
+  static uint32_t i = 0;
+
+  if(huart != &huart2) return;
+
+  HAL_UART_Transmit(&huart2, input_buff + i, 1, HAL_MAX_DELAY);
+
+  //received enter
+  if(input_buff[i] == '\n' || input_buff[i] == '\r')
+  {
+    //do stuff
+    char enter[] = "\r\n";
+
+    HAL_UART_Transmit(&huart2, enter, strlen(enter), HAL_MAX_DELAY);
+
+    append_command(input_buff, i);
+
+    memset(input_buff, 0, MAX_INPUT_LEN);
+    i = 0;
+  }
+  else i++;
+
+  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
+
+  //buffer full
+  if (i >= MAX_INPUT_LEN)
+  {
+    i = 0;
+    char overload_string[] = "BUFFER OVERLOAD, RESETTING!!\r\n";
+    HAL_UART_Transmit(&huart2, overload_string, strlen(overload_string), HAL_MAX_DELAY);
+
+    memset(input_buff, 0, MAX_INPUT_LEN);
+  }
+
+  HAL_UART_Receive_DMA(&huart2, input_buff + i, 1);
+
+}
+
+void append_command(const char * str, ssize_t len)
+{
+
+  for(int i = 0; i < MAX_COMMAND_BUFFERING; i++)
+    if(command_buff[i] == NULL)
+    {
+      command_buff[i] = calloc(len + 2, (sizeof(uint8_t)));
+      
+      if(command_buff[i] != NULL)
+      {
+        strcpy(command_buff[i], str);
+        command_buff[i][len - 1] = '\r';
+        command_buff[i][len] = '\n';
+
+        return;
+      }
+      else
+      {
+        char NO_MEM[] = "Not enough memory...\r\n";
+        HAL_UART_Transmit(&huart2, NO_MEM, strlen(NO_MEM), HAL_MAX_DELAY);
+      }
+
+    }
+  char buffer_overload_string[] = "too many commands buffered, discarding...\r\n";
+  HAL_UART_Transmit(&huart2, buffer_overload_string, strlen(buffer_overload_string), HAL_MAX_DELAY);
 }
 
 int iterate(Complex zInit, int maxIter)

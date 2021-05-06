@@ -13,19 +13,35 @@
 #define __API_FONTS_H__
 
 #include "graphics.h"
+#include <inttypes.h>
 
-enum FontNames
-{
-    ARIAL,
-    CONSOLAS
-};
+#define MAX_FONTS 12
 
-enum FontStyle
+/**
+ * @brief struct define of 
+ * 
+ */
+typedef struct Glyphs
 {
-    NORMAL,
-    BOLD,
-    ITALIC
-};
+    char character;
+    
+    uint16_t w, h;
+
+    uint16_t x_off, y_off;
+    
+    const uint8_t * payload;
+
+} Glyph_t;
+
+typedef struct Fonts {
+    char *name;
+    char *style;
+    uint16_t size;
+    uint16_t length;
+
+    Glyph_t * glyphs;
+
+} Font_t;
 
 /**
  * @brief 
@@ -34,13 +50,34 @@ enum FontStyle
  * @param length 
  * @param size 
  */
-void API_Put_text(const char * string, uint32_t length, uint8_t font_size, FontNames font_name, FontStyle font_style);
+void API_Put_text(const char * string, uint32_t length);
 
 /**
  * @brief 
  * 
- * @param font_name 
+ * @param c 
  */
-void API_Set_Font(FontNames font_name);
+void API_Put_char(char c, const char * font_name, const char * style, char size);
+
+/**
+ * @brief add font to api
+ * 
+ * @param font pointer to font information
+ */
+void API_Add_font(const Font_t * font);
+
+// /**
+//  * @brief 
+//  * 
+//  * @param font 
+//  */
+// void API_Remove_font(const Font_t * font);
+
+// /**
+//  * @brief 
+//  * 
+//  * @param font 
+//  */
+// void API_Remove_font_by_name(const char * font);
 
 #endif
