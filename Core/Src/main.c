@@ -29,13 +29,17 @@
 /* USER CODE BEGIN Includes */
 #include "graphics.h"
 #include "extra.h"
+#include "fonts.h"
+#include "EE_FrontLayer/FL_Helper.h"
+#include "EE_FrontLayer/FL_interpreter.h"
 
+//stdc
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
-#include <fonts.h>
 
+//data
 #include "imgs/angry_smiley.h"
 #include "imgs/happy_smiley.h"
 #include "imgs/me.h"
@@ -43,10 +47,6 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-typedef struct
-{
-  double x, y;
-} Complex;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -62,15 +62,15 @@ typedef struct
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t input_buff[MAX_INPUT_LEN] = {};
-
+char input_buff[MAX_INPUT_LEN] = {};
+char interpreter_data[MAX_INPUT_LEN] = {};
+// uint32_t interpreter_data_len = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
-void madelbrot(int nx, int ny, int maxIter, float realMin, float realMax, float imagMin, float imagMax);
 
 /* USER CODE END PFP */
 
@@ -136,8 +136,25 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
+    uint32_t str_len = strlen(interpreter_data);
+    if(str_len > 0)
+    {
+      // printf("%s\n\r", interpreter_data);
+      HAL_UART_AbortReceive_IT(&huart2);
 
+      FL_error_t err = fl_parser(interpreter_data, str_len);
+      if(err)
+        printf("ERROR: %d\r\n", err);
+      
+      memset(interpreter_data, 0,MAX_INPUT_LEN);
+
+      HAL_UART_Receive_IT(&huart2, input_buff, 1);
+    }
+
+
+    API_Next_Q();
+    /* USER CODE END WHILE */
+    
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -210,15 +227,15 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
   if(huart != &huart2) return;
 
-  HAL_UART_Transmit(&huart2, input_buff + i, 1, HAL_MAX_DELAY);
+  putchar(input_buff[i]);
   
   //received enter
   if(input_buff[i] == '\n' || input_buff[i] == '\r')
   {
-    printf("\n\r");
+    HAL_UART_Transmit(&huart2, "\n\r", 2, HAL_MAX_DELAY);
 
 //TODO FL INTERPRETER IMPLEMENTATION
-
+    memcpy(interpreter_data, input_buff, i);
 
     i = 0;
   }
@@ -235,41 +252,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 }
 
-int iterate(Complex zInit, int maxIter)
-{
-  Complex z = zInit;
-  int cnt = 0;
-  while ((z.x * z.x + z.y * z.y <= 4) && (cnt < maxIter))
-  {
-    z = complexSquare(z);
-    z.x += zInit.x;
-    z.y += zInit.y;
-    cnt++;
-  }
-  return cnt;
-}
-void madelbrot(int nx, int ny, int maxIter, float realMin, float realMax, float imagMin, float imagMax)
-{
-  float realInc = (realMax - realMin) / nx;
-  float imagInc = (imagMax - imagMin) / ny;
-  static uint8_t color = VGA_COL_BLACK;
 
-  Complex z;
-  int x, y;
-  int cnt;
-  for (x = 0, z.x = realMin; x < nx; x++, z.x += realInc)
-    for (y = 0, z.y = imagMin; y < ny; y++, z.y += imagInc)
-    {
-      cnt = iterate(z, maxIter);
-      if (cnt == maxIter)
-        color = VGA_COL_BLACK;
-      else
-      {
-        color = (uint8_t)cnt;
-      }
-      API_Set_pixel(x, y, color);
-    }
-}
 /* USER CODE END 4 */
 
 /**

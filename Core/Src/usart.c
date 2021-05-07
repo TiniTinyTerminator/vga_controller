@@ -119,6 +119,11 @@ int _write(int fd, char * ptr, int len)
   return len;
 }
 
+int putchar(int ch) {
+  HAL_UART_Transmit(&huart2, &ch, 1, HAL_MAX_DELAY);
+  return ch;
+}
+
 /* USER CODE END 1 */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -29,7 +29,7 @@ typedef struct Glyphs
 
     uint16_t x_off, y_off;
     
-    const uint8_t * payload;
+    uint16_t 
 
 } Glyph_t;
 
