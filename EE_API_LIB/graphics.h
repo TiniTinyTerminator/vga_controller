@@ -7,8 +7,6 @@
  * 
  * @copyright Copyright (c) 2021
  * 
- * @attention some of the design of the drawing functions defined below are adaptations of the work of Alois Zingls.
- * (Alois Zingl, <a href="http://members.chello.at/~easyfilter/Bresenham.pdf">bresenham.pdf</a>)
  * 
  */
 

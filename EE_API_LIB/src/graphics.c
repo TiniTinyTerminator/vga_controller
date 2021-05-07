@@ -7,6 +7,8 @@
  * 
  * @copyright Copyright (c) 2021
  * 
+ * @attention some of the design of the drawing functions defined below are adaptations of the work of Alois Zingls.
+ * (Alois Zingl, <a href="http://members.chello.at/~easyfilter/Bresenham.pdf">bresenham.pdf</a>)
  */
 
 #include "graphics.h"
@@ -73,28 +75,28 @@ inline void API_Fill_square(uint32_t x_lup, uint32_t y_lup, uint32_t w, uint32_t
 
 void API_Draw_line(int32_t xA, int32_t yA, int32_t xB, int32_t yB, uint8_t color, uint32_t thickness, DrawStyle_t draw_style)
 {
-    int dx = abs(xB - xA), sx = xA < xB ? 1 : -1;
+    int32_t dx = abs(xB - xA), sx = xA < xB ? 1 : -1;
 
-    int dy = -abs(yB - yA), sy = yA < yB ? 1 : -1;
+    int32_t dy = -abs(yB - yA), sy = yA < yB ? 1 : -1;
 
-    int err = dx + dy, e2; /* error value e_xy */
+    int32_t error = dx + dy, e2; /* error value e_xy */
 
     for (;;)
     { /* loop */
         API_Draw(xA, yA, color, thickness, draw_style);
-        e2 = 2 * err;
+        e2 = 2 * error;
         if (e2 >= dy)
         { /* e_xy+e_x > 0 */
             if (xA == xB)
                 break;
-            err += dy;
+            error += dy;
             xA += sx;
         }
         if (e2 <= dx)
         { /* e_xy+e_y < 0 */
             if (yA == yB)
                 break;
-            err += dx;
+            error += dx;
             yA += sy;
         }
     }
@@ -102,34 +104,42 @@ void API_Draw_line(int32_t xA, int32_t yA, int32_t xB, int32_t yB, uint8_t color
 
 void API_Draw_circle(int32_t xm, int32_t ym, int32_t radius, uint8_t color, uint32_t thickness)
 {
-    int x = -radius, y = 0, err = 2 - 2 * radius; /* bottom left to top right */
+    int32_t x = -radius, y = 0, err = 2 - 2 * radius; /* bottom left to top right */
     do
     {
+
         API_Draw(xm - x, ym + y, color, thickness, ROUND); /* I. Quadrant +x +y */
         API_Draw(xm - y, ym - x, color, thickness, ROUND); /* II. Quadrant -x +y */
         API_Draw(xm + x, ym - y, color, thickness, ROUND); /* III. Quadrant -x -y */
         API_Draw(xm + y, ym + x, color, thickness, ROUND); /* IV. Quadrant +x -y */
+
         radius = err;
+
         if (radius <= y)
             err += ++y * 2 + 1;    /* e_xy+e_y < 0 */
+
         if (radius > x || err > y) /* e_xy+e_x > 0 or no 2nd y-step */
             err += ++x * 2 + 1;    /* -> x-step now */
+            
     } while (x < 0);
 }
 
 void API_Fill_circle(int32_t xm, int32_t ym, int32_t radius, uint8_t color)
 {
-    int x = -radius, y = 0, err = 2 - 2 * radius; /* bottom left to top right */
+    int32_t x = -radius, y = 0, err = 2 - 2 * radius; /* bottom left to top right */
     do
     {
         API_Draw_line(xm + x, ym - y, xm - x, ym - y, color, 1, DOT);
         API_Draw_line(xm + x, ym + y, xm - x, ym + y, color, 1, DOT);
 
         radius = err;
+        
         if (radius <= y)
             err += ++y * 2 + 1;    /* e_xy+e_y < 0 */
+
         if (radius > x || err > y) /* e_xy+e_x > 0 or no 2nd y-step */
             err += ++x * 2 + 1;    /* -> x-step now */
+
     } while (x < 0);
 }
 
@@ -145,8 +155,8 @@ void API_Draw_polygon(const int32_t *list_X, const int32_t *list_Y, uint32_t len
 {
     API_Draw_line(list_X[0], list_Y[0], list_X[length - 1], list_Y[length - 1], color, thickness, draw_style);
 
-    API_Draw_line(list_X[3], list_X[3], list_X[2], list_X[2], color, thickness, draw_style);
+    // API_Draw_line(list_X[3], list_X[3], list_X[2], list_X[2], color, thickness, draw_style);
 
-    for (int32_t i = 0; i < length - 1; i++)
+    for (int32_t i = 0; i < (length - 1); i++)
         API_Draw_line(list_X[i], list_Y[i], list_X[i + 1], list_Y[i + 1], color, thickness, draw_style);
 }
