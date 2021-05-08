@@ -92,7 +92,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+    HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -122,6 +122,9 @@ int main(void)
   // Init VGA-Screen
   UB_VGA_Screen_Init(); 
 
+  //init helperfunctions
+  API_Init_function_list();
+
   printf("\rstarted display\r\n");
 
   API_Set_resolution(VGA_DISPLAY_X, VGA_DISPLAY_Y);
@@ -136,10 +139,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    uint32_t str_len = strlen(interpreter_data);
+    int str_len = strlen(interpreter_data);
+//    printf("Str_len: %i\r\n",str_len);
     if(str_len > 0)
     {
-      // printf("%s\n\r", interpreter_data);
+//       printf("%s\n\r", interpreter_data);
       HAL_UART_AbortReceive_IT(&huart2);
 
       FL_error_t err = fl_parser(interpreter_data, str_len);
@@ -223,15 +227,14 @@ static void MX_NVIC_Init(void)
 /* USER CODE BEGIN 4 */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-  static uint32_t i = 0;
+  static uint32_t i;
 
   if(huart != &huart2) return;
 
-  putchar(input_buff[i]);
-  
   //received enter
-  if(input_buff[i] == '\n' || input_buff[i] == '\r')
+  if((input_buff[i] == '\n') || (input_buff[i] == '\r'))
   {
+	puts(input_buff);
     HAL_UART_Transmit(&huart2, "\n\r", 2, HAL_MAX_DELAY);
 
 //TODO FL INTERPRETER IMPLEMENTATION

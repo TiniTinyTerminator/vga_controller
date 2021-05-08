@@ -37,25 +37,26 @@ typedef struct Colours
 }Colour_t;
 
 //according to: https://flaviocopes.com/rgb-color-codes/
+//RRRGGGBB
 static const Colour_t colour_list[] =
 {
 		{"zwart",		0b00000000},
-		{"blauw",		0b11000000},
-		{"lichtblauw",	0b10010000},
+		{"blauw",		0b00000011},
+		{"lichtblauw",	0b00000110},
 		{"groen",		0b00111000},
-		{"lichtgroen",	0b01100000},
-		{"cyaan",		0b11111000},
-		{"lichtcyaan",	0b11110010},
-		{"rood",		0b00000111},
-		{"lichtrood",	0b00000100},
-		{"magenta",		0b00111111},
-		{"lichtmagenta",0b01101101},
-		{"bruin",		0b01010011},
-		{"geel",		0b00111111},
-		{"grijs",		0b10100100},
+		{"lichtgroen",	0b01010000},
+		{"cyaan",		0b00011111},
+		{"lichtcyaan",	0b00001101},
+		{"rood",		0b11100000},
+		{"lichtrood",	0b01000000},
+		{"magenta",		0b11100011},
+		{"lichtmagenta",0b01000101},
+		{"bruin",		0b11001001},
+		{"geel",		0b11111100},
+		{"grijs",		0b01001001},
 		{"wit",			0b11111111},
-		{"rose",		0b01011111},
-		{"paars",		0b10000100},
+		{"rose",		0b11101001},
+		{"paars",		0b00001001},
 		{"END_OF_LIST\0"}
 };
 

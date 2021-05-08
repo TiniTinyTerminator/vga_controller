@@ -19,6 +19,7 @@
 #define SEPERATOR ','
 
 #define QUEUE_LEN 255		//MAX uint8_t
+#define MAX_Q_ID	4294967295;
 
 typedef void (*Apifuncp)(void* );
 

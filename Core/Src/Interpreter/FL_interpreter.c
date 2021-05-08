@@ -30,7 +30,7 @@ Command_t function_list[15]=
 		{"END_OF_LIST\0"}
 };
 
-uint8_t last_inQ = 0;
+uint8_t last_inQ 	= 0;
 
 //TODO ADD check if Q_entry is currently not in use
 //creates an entry in the queue at the oldest position
@@ -38,12 +38,13 @@ uint8_t last_inQ = 0;
 uint8_t createQ_entry(uint8_t fnc_nr)
 {
 	if (last_inQ++ == QUEUE_LEN)
-		{
-			last_inQ = 0;
-		}
-	cmd_queue[last_inQ].funcp = function_list[fnc_nr].funcp;
-	cmd_queue[last_inQ].argp = malloc((function_list[fnc_nr].argc *4));
-	cmd_queue[last_inQ].fnc_nr = fnc_nr;
+	{
+		last_inQ = 0;
+	}
+
+	cmd_queue[last_inQ].funcp	= function_list[fnc_nr].funcp;
+	cmd_queue[last_inQ].argp	= malloc((function_list[fnc_nr].argc *4));
+	cmd_queue[last_inQ].fnc_nr	= fnc_nr;
 
 	return last_inQ;
 }
@@ -81,7 +82,7 @@ FL_error_t check_function(char* string, uint8_t str_len, int* retv)
 	int i = 0;
 	while (strncmp(string, function_list[i].name, str_len) != 0)					//check Function_list for colour
 	{
-		if (strcmp("END_OF_LIST\0", colour_list[i].name) == 0)
+		if (strcmp("END_OF_LIST\0", function_list[i].name) == 0)
 			{
 				return E_CHK_FUNC_UNKNOWN;											//error unknown function
 			}
@@ -238,29 +239,33 @@ FL_error_t fl_parser(char* scriptline, uint32_t len)
     return E_NO_ERROR;
 }
 
-uint8_t test_func(void)
-{
-	API_Init_function_list();
-	//char testline[] = "vierkant,70,70,20,20,rood,5";
-	char testline[] = "tekst,50,50,paars,dit is mokermooie tekst,consolas, 1, normaal";
-	int x =fl_parser(testline, sizeof(testline));
-//	API_Next_Q(1);
-	int* point;
-	point = (int*) cmd_queue[1].argp;
-//	deleteQ_entry(1);
-	int x1 = point[0];
-	int x2 = point[1];
-	int x3 = point[2];
-	int x4 = point[3];
-	char* x0 = x4;
-	int x5 = point[4];
-	int x6 = point[5];
-	char testline2[] = "rechthoek,90,70,10,20,blauw,5";
-
-	x =fl_parser(testline2, sizeof(testline2));
-	API_Next_Q(2);
-
-	char testline3[] = "bitmap,9,777,797";
-	x =fl_parser(testline3, sizeof(testline3));
-	return x;
-}
+//TODO remove test_func
+//uint8_t test_func(void)
+//{
+//	API_Init_function_list();
+//	char testline[] = "clearscherm,rood";
+////	char testline[] = "tekst,50,50,paars,dit is mokermooie tekst,consolas, 1, normaal";
+//	int x =fl_parser(testline, sizeof(testline));
+//
+//	int* point;
+//	point = (int*) cmd_queue[1].argp;
+//
+////	deleteQ_entry(1);
+//	int x1 = point[0];
+//	int x2 = point[1];
+//	int x3 = point[2];
+//	API_Next_Q();
+//	API_Next_Q();
+//	int x4 = point[3];
+//	char* x0 = x4;
+//	int x5 = point[4];
+//	int x6 = point[5];
+//	char testline2[] = "rechthoek,90,70,10,20,blauw,5";
+//
+//	x =fl_parser(testline2, sizeof(testline2));
+//
+//
+//	char testline3[] = "bitmap,9,777,797";
+//	x =fl_parser(testline3, sizeof(testline3));
+//	return x;
+//}

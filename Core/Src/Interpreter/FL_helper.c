@@ -8,6 +8,8 @@
 #include "FL_interpreter.h"
 #include "FL_api_function_names.h"
 #include "graphics.h"
+#include "stddef.h"
+#include "stm32f4xx_hal.h"
 
 extern Qentry cmd_queue[QUEUE_LEN];//[QUEUE_LEN];
 extern Command_t function_list[];
@@ -95,15 +97,19 @@ void API_Helper_draw_figure (void* argp)
 void API_Next_Q(void)
 {
 	Apifuncp fp;
-	if (last_outQ == last_inQ) return; // prevents executing getting ahead of loading commands
+	if (last_outQ <= last_inQ)
+	{
+		fp  = cmd_queue[last_outQ].funcp;
+		if (fp != NULL)
+		{
+			fp(cmd_queue[last_outQ].argp);
+		}
 
-	fp  = cmd_queue[last_outQ].funcp;
-	fp(cmd_queue[last_outQ].argp);
-
-	if (last_outQ++ == QUEUE_LEN)
+		if (last_outQ++ == QUEUE_LEN)
 		{
 			last_outQ = 0;
 		}
+	}
 }
 
 void API_Init_function_list(void)
