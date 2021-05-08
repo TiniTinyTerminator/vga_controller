@@ -19,7 +19,6 @@
 #define SEPERATOR ','
 
 #define QUEUE_LEN 255		//MAX uint8_t
-#define MAX_Q_ID	4294967295;
 
 typedef void (*Apifuncp)(void* );
 
@@ -38,7 +37,7 @@ typedef struct Queue_entry
  * @brief 
  * 
  */
-typedef enum FL_error
+typedef enum Parser_err_t
 {
 	///@brief brief description
 	E_NO_ERROR,
@@ -58,7 +57,7 @@ typedef enum FL_error
 	E_TO_MANY_ARGUMENTS,
 	///@brief brief description
 	E_EMPTY_ARGUMENT
-}FL_error_t;
+}Parser_err_t;
 
 /**
  * @brief storage for scriptline seperated in function and its arguments
@@ -74,7 +73,7 @@ uint8_t test_func(void);
  * @param len 
  * @return FL_error_t 
  */
-FL_error_t fl_parser(char* scriptline, uint32_t len);
+Parser_err_t fl_parser(char* scriptline, uint32_t len);
 
 /**
  * @brief delete an entry

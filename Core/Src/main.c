@@ -146,7 +146,7 @@ int main(void)
 //       printf("%s\n\r", interpreter_data);
       HAL_UART_AbortReceive_IT(&huart2);
 
-      FL_error_t err = fl_parser(interpreter_data, str_len);
+      Parser_err_t err= fl_parser(interpreter_data, str_len);
       if(err)
         printf("ERROR: %d\r\n", err);
       

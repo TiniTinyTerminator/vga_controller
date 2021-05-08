@@ -11,6 +11,7 @@
 #include <FL_api_function_names.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 //globals for managing the queue
 Qentry cmd_queue[QUEUE_LEN];
@@ -77,7 +78,7 @@ int16_t atillsep(char* script, uint32_t len, char seperator)
 }
 
 
-FL_error_t check_function(char* string, uint8_t str_len, int* retv)
+Parser_err_t check_function(char* string, uint8_t str_len, int* retv)
 {
 	int i = 0;
 	while (strncmp(string, function_list[i].name, str_len) != 0)					//check Function_list for colour
@@ -92,7 +93,7 @@ FL_error_t check_function(char* string, uint8_t str_len, int* retv)
 	return E_NO_ERROR;
 }
 
-FL_error_t check_number(char* string, uint8_t str_len, int* retv)
+Parser_err_t check_number(char* string, uint8_t str_len, int* retv)
 {
 	int number;
 
@@ -111,7 +112,7 @@ FL_error_t check_number(char* string, uint8_t str_len, int* retv)
 	return E_NO_ERROR;
 }
 
-FL_error_t check_colour(char* string, uint8_t str_len, int* retv)
+Parser_err_t check_colour(char* string, uint8_t str_len, int* retv)
 {
 	int i = 0;
 	while (strncmp(string, colour_list[i].name, str_len) != 0)					//check Colour_list for colour
@@ -129,7 +130,7 @@ FL_error_t check_colour(char* string, uint8_t str_len, int* retv)
 }
 
 //TODO add mem free
-FL_error_t check_text(char* string, uint8_t str_len, int* retv)
+Parser_err_t check_text(char* string, uint8_t str_len, int* retv)
 {
 	char* p;
 	p = calloc(str_len, sizeof(char));
@@ -143,7 +144,7 @@ FL_error_t check_text(char* string, uint8_t str_len, int* retv)
 	return E_NO_ERROR;
 }
 
-FL_error_t check_fontstyle(char* string, uint8_t str_len, int* retv)
+Parser_err_t check_fontstyle(char* string, uint8_t str_len, int* retv)
 {
 	int i = 0;
 	while (strncmp(string, fontstyle_list[i].name, str_len) != 0)					//check Colour_list for colour
@@ -159,7 +160,7 @@ FL_error_t check_fontstyle(char* string, uint8_t str_len, int* retv)
 	return E_NO_ERROR;
 }
 
-FL_error_t check_fontname(char* string, uint8_t str_len, int* retv)
+Parser_err_t check_fontname(char* string, uint8_t str_len, int* retv)
 {
 	int i = 0;
 	while (strncmp(string, fontname_list[i].name, str_len) != 0)					//check Colour_list for colour
@@ -175,6 +176,44 @@ FL_error_t check_fontname(char* string, uint8_t str_len, int* retv)
 	return E_NO_ERROR;
 }
 
+void Parser_err_handler(Parser_err_t error, int arg_cnt, char* arg_string, int arg_len, char* string, int str_len)
+{
+	printf("Error detected in input:\n\r");
+	printf("In scriptline: %.*s\n\r", str_len, string);
+
+	switch (error)
+	{
+
+	case E_NO_ERROR:
+		printf("this should not happen, consult Daniël\n\r");
+		break;
+	case E_CHK_FUNC_UNKNOWN:
+		printf("In the %i argument--> Function unknown: %.*s\n\r", arg_cnt, arg_len, arg_string);
+		break;
+	case E_CHK_INVALID_NUM:
+		printf("In the %i argument--> Invalid number: %.*s\n\r",arg_cnt+1, arg_len, arg_string);
+		break;
+	case E_CHK_COLOR_UNKOWN:
+		printf("In the %i argument--> Colour unknown: %.*s\n\r",arg_cnt+1, arg_len, arg_string);
+		break;
+	case E_TEKST_NO_MEM:
+		printf("In the %i argument--> No memory available for string: %.*s\n\r",arg_cnt+1, arg_len, arg_string);
+		break;
+	case E_CHK_FONTSTYLE_UNKOWN:
+		printf("In the %i argument--> Fontstyle unknown: %.*s\n\r",arg_cnt+1, arg_len, arg_string);
+		break;
+	case E_CHK_FONTNAME_UNKOWN:
+		printf("In the %i argument--> Fontname unknown: %.*s\n\r",arg_cnt+1, arg_len, arg_string);
+		break;
+	case E_TO_MANY_ARGUMENTS:
+		printf("Too many arguments for this function\n\r");
+		break;
+	case E_EMPTY_ARGUMENT:
+		printf("Too few arguments for this function\n\r");
+		break;
+	}
+}
+
 /****************************************************************************************************/
 //function:     fl_interpreter
 //arguments:    scriptline
@@ -182,7 +221,7 @@ FL_error_t check_fontname(char* string, uint8_t str_len, int* retv)
 //
 //
 /****************************************************************************************************/
-FL_error_t fl_parser(char* scriptline, uint32_t len)
+Parser_err_t fl_parser(char* scriptline, uint32_t len)
 {
     int i = 0;		//position counter
     int j = 0;		//argument counter
@@ -192,52 +231,69 @@ FL_error_t fl_parser(char* scriptline, uint32_t len)
 
     int* pdata;
     uint8_t q_pos;
-    FL_error_t error = E_NO_ERROR;
+    Parser_err_t error = E_NO_ERROR;
 
     arg_len = atillsep(scriptline, len, SEPERATOR);
     check_function(&scriptline[0], arg_len, &fnc_nr);
-    if (error != E_NO_ERROR) return error;
-    i += arg_len + 1;										//go to start of first argument
+    if (error != E_NO_ERROR)
+    	{
+    	//TODO errorhandler Wrong function
+    	return error;
+    	}
 
     q_pos = createQ_entry(fnc_nr);
     pdata = (int*) cmd_queue[q_pos].argp;
+    i += arg_len + 1;						//go to start of first argument
 
     while (i < len)                  //as long as the end of scriptline is not reached, continue
     {
-    		if (j == (function_list[fnc_nr].argc)) return E_TO_MANY_ARGUMENTS;		//ERROR to many arguments for function
+    		error = E_NO_ERROR;		//reset error
+    		if (j == (function_list[fnc_nr].argc))
+			{
+				error = E_TO_MANY_ARGUMENTS;					//ERROR to many arguments for function
+				break;
+			}
 
 			arg_len = atillsep(&scriptline[i], (len - i), SEPERATOR);
-
-			if (arg_len == 0) return E_EMPTY_ARGUMENT;					//ERROR empty argument
 
 			switch (function_list[fnc_nr].argt[j])
 			{
 			case T_GETAL:
-				check_number(&scriptline[i], arg_len, &pdata[j] );
+				error = check_number(&scriptline[i], arg_len, &pdata[j] );
 				break;
 			case T_TEKST:
-				check_text(&scriptline[i], arg_len, &pdata[j] );
+				error = check_text(&scriptline[i], arg_len, &pdata[j] );
 				break;
 			case T_KLEUR:
-				check_colour(&scriptline[i], arg_len, &pdata[j] );
+				error = check_colour(&scriptline[i], arg_len, &pdata[j] );
 				break;
 			case T_FONTNAAM:
-				check_fontname(&scriptline[i], arg_len, &pdata[j] );
+				error = check_fontname(&scriptline[i], arg_len, &pdata[j] );
 				break;
 			case T_FONTSTIJL:
-				check_fontstyle(&scriptline[i], arg_len, &pdata[j] );
+				error = check_fontstyle(&scriptline[i], arg_len, &pdata[j] );
 				break;
 			case T_COORDINAAT:
 				break;
-
 			}
-			if (error != E_NO_ERROR) return error;
+
+			if (arg_len == 0)
+			{
+				error = E_EMPTY_ARGUMENT;					//ERROR empty argument
+			}
+
+			if (error != E_NO_ERROR)
+			{
+				Parser_err_handler(error, j, &scriptline[i], arg_len, scriptline, len);
+			}
+
 			j++;
 			i += arg_len + 1;		//go to start of next argument
     	}
 
-    return E_NO_ERROR;
+    return error;
 }
+
 
 //TODO remove test_func
 //uint8_t test_func(void)
