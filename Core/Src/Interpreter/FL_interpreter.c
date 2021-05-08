@@ -28,7 +28,7 @@ Command_t function_list[15]=
 		//cirkel,
 		//figuur,
 		//toren,
-		{"END_OF_LIST"}
+		{END_OF_LIST}
 };
 
 uint8_t last_inQ 	= 0;
@@ -42,6 +42,8 @@ uint8_t createQ_entry(uint8_t fnc_nr)
 	{
 		last_inQ = 0;
 	}
+
+	deleteQ_entry(last_inQ);
 
 	cmd_queue[last_inQ].funcp	= function_list[fnc_nr].funcp;
 	cmd_queue[last_inQ].argp	= malloc((function_list[fnc_nr].argc *4));
@@ -60,8 +62,12 @@ void deleteQ_entry(uint8_t entry_nr)
 		free((uint32_t *)p[3]);
 	}
 	cmd_queue[entry_nr].funcp = NULL;
-	free (cmd_queue[entry_nr].argp);
-	cmd_queue[entry_nr].argp = 0;
+	if (cmd_queue[entry_nr].argp != NULL)
+	{
+		free(cmd_queue[entry_nr].argp);
+		cmd_queue[entry_nr].argp = NULL;
+	}
+
 	cmd_queue[entry_nr].fnc_nr = 0;
 }
 
@@ -77,6 +83,20 @@ int16_t atillsep(char* script, uint32_t len, char seperator)
 	return i;
 }
 
+int16_t cnttillsep(char* script, uint32_t len, char seperator)
+{
+	uint8_t i = 0;
+	uint8_t j = 0;
+
+	while (i < len)
+	{
+		if(script[i] == seperator) j++;
+		i++;
+	}
+	return j;
+}
+
+
 //! is het niet handiger om door de lengte van de array te lopen met een for loop, zo zorg je ervoor dat er nooit verder dan de list gekeken wordt.
 
 Parser_err_t check_function(char* string, uint8_t str_len, int* retv)
@@ -84,12 +104,13 @@ Parser_err_t check_function(char* string, uint8_t str_len, int* retv)
 	int i = 0;
 	while (strncmp(string, function_list[i].name, str_len) != 0)					//check Function_list for colour
 	{
-		if (strcmp("END_OF_LIST", function_list[i].name) == 0)
+		if (strcmp(END_OF_LIST, function_list[i].name) == 0)
 			{
 				return E_CHK_FUNC_UNKNOWN;											//error unknown function
 			}
 		i++;
 	}
+
 	*retv = i;			//position of function in functionlist
 	return E_NO_ERROR;
 }
@@ -118,7 +139,7 @@ Parser_err_t check_colour(char* string, uint8_t str_len, int* retv)
 	int i = 0;
 	while (strncmp(string, colour_list[i].name, str_len) != 0)					//check Colour_list for colour
 	{
-		if (strcmp("END_OF_LIST\0", colour_list[i].name) == 0)
+		if (strcmp(END_OF_LIST, colour_list[i].name) == 0)
 			{
 				return E_CHK_COLOR_UNKOWN;											//error unknown colour
 			}
@@ -127,7 +148,6 @@ Parser_err_t check_colour(char* string, uint8_t str_len, int* retv)
 
 	retv[0] = (uint8_t) colour_list[i].hexdef;
 	return E_NO_ERROR;
-
 }
 
 //TODO add mem free
@@ -150,7 +170,7 @@ Parser_err_t check_fontstyle(char* string, uint8_t str_len, int* retv)
 	int i = 0;
 	while (strncmp(string, fontstyle_list[i].name, str_len) != 0)					//check Colour_list for colour
 	{
-		if (strcmp("END_OF_LIST\0", fontstyle_list[i].name) == 0)
+		if (strcmp(END_OF_LIST, fontstyle_list[i].name) == 0)
 			{
 				return E_CHK_FONTSTYLE_UNKOWN;											//error unknown colour
 			}
@@ -166,7 +186,7 @@ Parser_err_t check_fontname(char* string, uint8_t str_len, int* retv)
 	int i = 0;
 	while (strncmp(string, fontname_list[i].name, str_len) != 0)					//check Colour_list for colour
 	{
-		if (strcmp("END_OF_LIST\0", fontname_list[i].name) == 0)
+		if (strcmp(END_OF_LIST, fontname_list[i].name) == 0)
 			{
 				return E_CHK_FONTNAME_UNKOWN;											//error unknown colour
 			}
@@ -177,40 +197,45 @@ Parser_err_t check_fontname(char* string, uint8_t str_len, int* retv)
 	return E_NO_ERROR;
 }
 
-void Parser_err_handler(Parser_err_t error, int arg_cnt, char* arg_string, int arg_len, char* string, int str_len)
+void Parser_err_handler(Parser_err_t error, int arg_cnt, char* arg_string, int arg_len, char* string, int str_len, uint8_t first_error)
 {
-	printf("Error detected in input:\r\n");
-	printf("In scriptline: %.*s\r\n", str_len, string);
+	if ( first_error == 1)
+	{
+		printf("Error detected in input:\r\n");
+		printf("In scriptline: \"%.*s\"\r\n", str_len, string);
+	}
 
 	switch (error)
 	{
-
 	case E_NO_ERROR:
 		printf("this should not happen, consult Daniël\r\n");
 		break;
 	case E_CHK_FUNC_UNKNOWN:
-		printf("In the %i argument--> Function unknown: %.*s\r\n", arg_cnt, arg_len, arg_string);
+		printf("In argument %i--> Function unknown: \"%.*s\"\r\n", arg_cnt, arg_len, arg_string);
 		break;
 	case E_CHK_INVALID_NUM:
-		printf("In the %i argument--> Invalid number: %.*s\r\n",arg_cnt+1, arg_len, arg_string);
+		printf("In argument %i--> Invalid number: \"%.*s\"\r\n",arg_cnt+1, arg_len, arg_string);
 		break;
 	case E_CHK_COLOR_UNKOWN:
-		printf("In the %i argument--> Colour unknown: %.*s\r\n",arg_cnt+1, arg_len, arg_string);
+		printf("In argument %i--> Colour unknown: \"%.*s\"\r\n",arg_cnt+1, arg_len, arg_string);
 		break;
 	case E_TEKST_NO_MEM:
-		printf("In the %i argument--> No memory available for string: %.*s\r\n",arg_cnt+1, arg_len, arg_string);
+		printf("In argument %i--> No memory available for string: \"%.*s\"\r\n",arg_cnt+1, arg_len, arg_string);
 		break;
 	case E_CHK_FONTSTYLE_UNKOWN:
-		printf("In the %i argument--> Fontstyle unknown: %.*s\r\n",arg_cnt+1, arg_len, arg_string);
+		printf("In argument %i --> Fontstyle unknown: \"%.*s\"\r\n",arg_cnt+1, arg_len, arg_string);
 		break;
 	case E_CHK_FONTNAME_UNKOWN:
-		printf("In the %i argument--> Fontname unknown: %.*s\r\n",arg_cnt+1, arg_len, arg_string);
+		printf("In argument %i --> Fontname unknown: \"%.*s\"\r\n",arg_cnt+1, arg_len, arg_string);
 		break;
 	case E_TO_MANY_ARGUMENTS:
 		printf("Too many arguments for this function\r\n");
 		break;
-	case E_EMPTY_ARGUMENT:
+	case E_TO_FEW_ARGUMENTS:
 		printf("Too few arguments for this function\r\n");
+		break;
+	case E_EMPTY_ARGUMENT:
+		printf("Argument % is empty\r\n", arg_cnt+1);
 		break;
 	}
 }
@@ -228,38 +253,50 @@ Parser_err_t fl_parser(char* scriptline, uint32_t len)
     int j = 0;		//argument counter
 
     int arg_len = 0;	//length of current argument
+    int arg_cnt = 0;	//count of entered arguments
     int fnc_nr = 0;
 
     int* pdata;
     uint8_t q_pos;
     Parser_err_t error = E_NO_ERROR;
+    uint8_t first_arg_error = 1;		//First error or not
 
     arg_len = atillsep(scriptline, len, SEPERATOR);
-    
 	error = check_function(&scriptline[0], arg_len, &fnc_nr);
 
-    if (error != E_NO_ERROR) {
-	//TODO errorhandler Wrong function
-		Parser_err_handler(error, j, &scriptline[i], arg_len, scriptline, len);
+    arg_cnt = cnttillsep(scriptline, len, SEPERATOR);
+    if (error == E_NO_ERROR)							//if function is ok check for argument count
+    {
+        if (arg_cnt < function_list[fnc_nr].argc)
+        {
+        	error = E_TO_FEW_ARGUMENTS;
+        }
+        else if (arg_cnt > function_list[fnc_nr].argc)
+        {
+        	error = E_TO_MANY_ARGUMENTS;
+        }
+    }
 
+    if (error != E_NO_ERROR)
+    {
+		Parser_err_handler(error, j, &scriptline[i], arg_len, scriptline, len, first_arg_error);
 		return error;
-	}
+    }
 
     q_pos = createQ_entry(fnc_nr);
     pdata = (int*) cmd_queue[q_pos].argp;
     i += arg_len + 1;						//go to start of first argument
 
-    while (i < len)                  //as long as the end of scriptline is not reached, continue
+    while (i <= len)                  //as long as the end of scriptline is not reached, continue
     {
-    		error = E_NO_ERROR;		//reset error
-    		if (j == (function_list[fnc_nr].argc))
-			{
-				error = E_TO_MANY_ARGUMENTS;					//ERROR to many arguments for function
-				break;
-			}
+		arg_len = atillsep(&scriptline[i], (len - i), SEPERATOR);
 
-			arg_len = atillsep(&scriptline[i], (len - i), SEPERATOR);
-
+		if (arg_len == 0)
+		{
+			error = E_EMPTY_ARGUMENT;					//ERROR to many arguments for function
+		}
+		else
+		{
 			switch (function_list[fnc_nr].argt[j])
 			{
 			case T_GETAL:
@@ -280,15 +317,20 @@ Parser_err_t fl_parser(char* scriptline, uint32_t len)
 			case T_COORDINAAT:
 				break;
 			}
+		}
 
-			if (error != E_NO_ERROR)
-			{
-				Parser_err_handler(error, j, &scriptline[i], arg_len, scriptline, len);
-			}
+		j++;
+		i += arg_len + 1;		//go to start of next argument
+    }
 
-			j++;
-			i += arg_len + 1;		//go to start of next argument
+    if(error!= E_NO_ERROR)
+    {
+    	deleteQ_entry(last_inQ);
+    	if (last_inQ-- == 0)
+    	{
+    		last_inQ = QUEUE_LEN;
     	}
+    }
 
     return error;
 }

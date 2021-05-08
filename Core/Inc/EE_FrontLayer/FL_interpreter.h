@@ -20,6 +20,8 @@
 
 #define QUEUE_LEN 255		//MAX uint8_t
 
+#define END_OF_LIST "END_OF_LIST\0"
+
 typedef void (*Apifuncp)(void* );
 
 /**
@@ -55,6 +57,8 @@ typedef enum Parser_err_t
 	E_CHK_FONTNAME_UNKOWN,
 	///@brief brief description
 	E_TO_MANY_ARGUMENTS,
+	///@brief brief description
+	E_TO_FEW_ARGUMENTS,
 	///@brief brief description
 	E_EMPTY_ARGUMENT
 }Parser_err_t;
