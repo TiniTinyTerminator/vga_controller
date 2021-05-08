@@ -4,26 +4,39 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        // {
+        // "cwd": "${workspaceFolder}",
+        // "executable": "${workspaceRoot}\\Desktop\\DaisyExamples\\pod\\MultiEffect\\build\\MultiEffect.elf",
+        // "name": "JTAG DEBUGGING ",
+        // "request": "launch",
+        // "type": "cortex-debug",
+        // "servertype": "openocd",
+        // "interface": "swd",
+        // // "svdFile": "${workspaceRoot}\\Desktop\\DaisyExamples\\seed\\stm32H750x.svd",
+        // "runToMain": true,
+        // "configFiles": [
+        //     "interface\\stlink-v1.cfg",
+        //     "target\\stm32f4x.cfg"
+        // ],
+        // "debuggerArgs": [
+        //     "-d",
+        //     "${workspaceRoot}\\Desktop\\DaisyExamples\\pod\\MultiEffectBlink\\"
+        //   ],
+        // "preRestartCommands": [
+        //     "load",
+        //     "enable breakpoint",
+        //     "monitor reset"
+        // ],
+        // "showDevDebugOutput": true,
+        // },
         {
-            "name": "(gdb) Launch",
-            "type": "cppdbg",
+            "cwd": "${workspaceRoot}",
+            "executable": "./build/vga_controller.elf",
+            "name": "Debug Microcontroller",
             "request": "launch",
-            "program": "build/vga_controller.bin",
-            "preLaunchTask": "setup openocd",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-
-            ]
+            "type": "cortex-debug",
+            "servertype": "stutil",
+            "preLaunchTask": "make binary"
         }
     ]
 }

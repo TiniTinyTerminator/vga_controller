@@ -120,7 +120,7 @@ int _write(int fd, char * ptr, int len)
 }
 
 int putchar(int ch) {
-  HAL_UART_Transmit(&huart2, &ch, 1, HAL_MAX_DELAY);
+  HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, HAL_MAX_DELAY);
   return ch;
 }
 

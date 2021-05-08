@@ -23,12 +23,12 @@ Command_t function_list[15]=
 		{"tekst", 		7,	{T_GETAL, T_GETAL, T_KLEUR, T_TEKST, T_FONTNAAM, T_GETAL, T_FONTSTIJL}},
 		{"bitmap", 		3,	{T_GETAL, T_GETAL, T_GETAL}},
 		{"clearscherm",	1,	{T_KLEUR}},
-		//wacht,
+		// wacht,
 		//herhaal,
 		//cirkel,
 		//figuur,
 		//toren,
-		{"END_OF_LIST\0"}
+		{"END_OF_LIST"}
 };
 
 uint8_t last_inQ 	= 0;
@@ -77,13 +77,14 @@ int16_t atillsep(char* script, uint32_t len, char seperator)
 	return i;
 }
 
+//! is het niet handiger om door de lengte van de array te lopen met een for loop, zo zorg je ervoor dat er nooit verder dan de list gekeken wordt.
 
 Parser_err_t check_function(char* string, uint8_t str_len, int* retv)
 {
 	int i = 0;
 	while (strncmp(string, function_list[i].name, str_len) != 0)					//check Function_list for colour
 	{
-		if (strcmp("END_OF_LIST\0", function_list[i].name) == 0)
+		if (strcmp("END_OF_LIST", function_list[i].name) == 0)
 			{
 				return E_CHK_FUNC_UNKNOWN;											//error unknown function
 			}
@@ -178,38 +179,38 @@ Parser_err_t check_fontname(char* string, uint8_t str_len, int* retv)
 
 void Parser_err_handler(Parser_err_t error, int arg_cnt, char* arg_string, int arg_len, char* string, int str_len)
 {
-	printf("Error detected in input:\n\r");
-	printf("In scriptline: %.*s\n\r", str_len, string);
+	printf("Error detected in input:\r\n");
+	printf("In scriptline: %.*s\r\n", str_len, string);
 
 	switch (error)
 	{
 
 	case E_NO_ERROR:
-		printf("this should not happen, consult Daniël\n\r");
+		printf("this should not happen, consult Daniël\r\n");
 		break;
 	case E_CHK_FUNC_UNKNOWN:
-		printf("In the %i argument--> Function unknown: %.*s\n\r", arg_cnt, arg_len, arg_string);
+		printf("In the %i argument--> Function unknown: %.*s\r\n", arg_cnt, arg_len, arg_string);
 		break;
 	case E_CHK_INVALID_NUM:
-		printf("In the %i argument--> Invalid number: %.*s\n\r",arg_cnt+1, arg_len, arg_string);
+		printf("In the %i argument--> Invalid number: %.*s\r\n",arg_cnt+1, arg_len, arg_string);
 		break;
 	case E_CHK_COLOR_UNKOWN:
-		printf("In the %i argument--> Colour unknown: %.*s\n\r",arg_cnt+1, arg_len, arg_string);
+		printf("In the %i argument--> Colour unknown: %.*s\r\n",arg_cnt+1, arg_len, arg_string);
 		break;
 	case E_TEKST_NO_MEM:
-		printf("In the %i argument--> No memory available for string: %.*s\n\r",arg_cnt+1, arg_len, arg_string);
+		printf("In the %i argument--> No memory available for string: %.*s\r\n",arg_cnt+1, arg_len, arg_string);
 		break;
 	case E_CHK_FONTSTYLE_UNKOWN:
-		printf("In the %i argument--> Fontstyle unknown: %.*s\n\r",arg_cnt+1, arg_len, arg_string);
+		printf("In the %i argument--> Fontstyle unknown: %.*s\r\n",arg_cnt+1, arg_len, arg_string);
 		break;
 	case E_CHK_FONTNAME_UNKOWN:
-		printf("In the %i argument--> Fontname unknown: %.*s\n\r",arg_cnt+1, arg_len, arg_string);
+		printf("In the %i argument--> Fontname unknown: %.*s\r\n",arg_cnt+1, arg_len, arg_string);
 		break;
 	case E_TO_MANY_ARGUMENTS:
-		printf("Too many arguments for this function\n\r");
+		printf("Too many arguments for this function\r\n");
 		break;
 	case E_EMPTY_ARGUMENT:
-		printf("Too few arguments for this function\n\r");
+		printf("Too few arguments for this function\r\n");
 		break;
 	}
 }
@@ -234,12 +235,15 @@ Parser_err_t fl_parser(char* scriptline, uint32_t len)
     Parser_err_t error = E_NO_ERROR;
 
     arg_len = atillsep(scriptline, len, SEPERATOR);
-    check_function(&scriptline[0], arg_len, &fnc_nr);
-    if (error != E_NO_ERROR)
-    	{
-    	//TODO errorhandler Wrong function
-    	return error;
-    	}
+    
+	error = check_function(&scriptline[0], arg_len, &fnc_nr);
+
+    if (error != E_NO_ERROR) {
+	//TODO errorhandler Wrong function
+		Parser_err_handler(error, j, &scriptline[i], arg_len, scriptline, len);
+
+		return error;
+	}
 
     q_pos = createQ_entry(fnc_nr);
     pdata = (int*) cmd_queue[q_pos].argp;
@@ -277,11 +281,6 @@ Parser_err_t fl_parser(char* scriptline, uint32_t len)
 				break;
 			}
 
-			if (arg_len == 0)
-			{
-				error = E_EMPTY_ARGUMENT;					//ERROR empty argument
-			}
-
 			if (error != E_NO_ERROR)
 			{
 				Parser_err_handler(error, j, &scriptline[i], arg_len, scriptline, len);
@@ -293,6 +292,7 @@ Parser_err_t fl_parser(char* scriptline, uint32_t len)
 
     return error;
 }
+    // if (error != E_NO_ERROR) {
 
 
 //TODO remove test_func

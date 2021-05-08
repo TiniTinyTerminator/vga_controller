@@ -28,9 +28,11 @@ typedef struct Glyphs
     uint16_t w, h;
 
     uint16_t x_off, y_off;
-    
-    uint16_t 
 
+    // struct kerning {
+    //     uint16_t x_off;
+    // };
+    
 } Glyph_t;
 
 typedef struct Fonts {

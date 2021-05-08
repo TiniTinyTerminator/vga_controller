@@ -116,8 +116,11 @@ int main(void)
   MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
 
+  //init function list
+  API_Init_function_list();
+
   //initialize uart receieve
-  HAL_UART_Receive_IT(&huart2, input_buff, 1);
+  HAL_UART_Receive_IT(&huart2, (uint8_t *)input_buff, 1);
   
   // Init VGA-Screen
   UB_VGA_Screen_Init(); 
@@ -144,15 +147,17 @@ int main(void)
     if(str_len > 0)
     {
 //       printf("%s\n\r", interpreter_data);
-      HAL_UART_AbortReceive_IT(&huart2);
+      // HAL_UART_AbortReceive_IT(&huart2);
+      char *data = malloc(str_len + 1);
+      strcpy(data, interpreter_data);
 
-      Parser_err_t err= fl_parser(interpreter_data, str_len);
-      if(err)
-        printf("ERROR: %d\r\n", err);
+      Parser_err_t err = fl_parser(data, str_len);
+      // if(err)
+      //   printf("ERROR: %d\r\n", err);
       
       memset(interpreter_data, 0,MAX_INPUT_LEN);
 
-      HAL_UART_Receive_IT(&huart2, input_buff, 1);
+      // HAL_UART_Receive_IT(&huart2, input_buff, 1);
     }
 
 
@@ -160,6 +165,7 @@ int main(void)
     /* USER CODE END WHILE */
     
     /* USER CODE BEGIN 3 */
+    HAL_Delay(50);
   }
   /* USER CODE END 3 */
 }
@@ -227,32 +233,37 @@ static void MX_NVIC_Init(void)
 /* USER CODE BEGIN 4 */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-  static uint32_t i;
+  static uint32_t i = 0;
 
   if(huart != &huart2) return;
+
+  putchar(input_buff[i]);
 
   //received enter
   if((input_buff[i] == '\n') || (input_buff[i] == '\r'))
   {
-	puts(input_buff);
-    HAL_UART_Transmit(&huart2, "\n\r", 2, HAL_MAX_DELAY);
+	// puts(input_buff);
+    puts("");
 
 //TODO FL INTERPRETER IMPLEMENTATION
     memcpy(interpreter_data, input_buff, i);
 
     i = 0;
   }
-  else i++;
-
-  //buffer full
-  if (i >= MAX_INPUT_LEN)
+  else
   {
-    i = 0;
-    printf("\r\nBUFFER OVERLOAD, RESETTING!!\r\n");
+    i++;
+
+    //buffer full
+    if (i >= MAX_INPUT_LEN)
+    {
+      i = 0;
+      printf("\r\nBUFFER OVERLOAD, RESETTING!!\r\n");
+    }
+
   }
 
-  HAL_UART_Receive_IT(&huart2, input_buff + i, 1);
-
+  HAL_UART_Receive_IT(&huart2, (uint8_t *)(input_buff + i), 1);
 }
 
 
