@@ -15,7 +15,16 @@
 #include "graphics.h"
 #include <inttypes.h>
 
-#define MAX_FONTS 12
+/**
+ * @brief 
+ * 
+ */
+typedef enum FontStyles {
+    NORMAL = 0b00,
+    ITALIC = 0b01,
+    BOLD = 0b10,
+    BOLDITALIC = 0b11
+} FontStyles_t;
 
 /**
  * @brief struct define of 
@@ -29,17 +38,28 @@ typedef struct Glyphs
 
     uint16_t x_off, y_off;
     
-    const uint8_t * payload;
+    // const uint8_t * payload;
 
 } Glyph_t;
 
+/**
+ * @brief 
+ * 
+ */
 typedef struct Fonts {
     char *name;
     char *style;
-    uint16_t size;
-    uint16_t length;
+
+    uint32_t size;
 
     Glyph_t * glyphs;
+
+    struct data_frame {
+        uint8_t * data;
+
+        uint32_t width;
+        uint32_t height;
+    } frame;
 
 } Font_t;
 
@@ -48,36 +68,21 @@ typedef struct Fonts {
  * 
  * @param string 
  * @param length 
+ * @param font 
  * @param size 
  */
-void API_Put_text(const char * string, uint32_t length);
+void API_Put_text(const char *string, uint32_t length, uint32_t x, uint32_t y, Font_t *font, uint8_t size, FontStyles_t style, uint8_t color);
 
 /**
  * @brief 
  * 
  * @param c 
+ * @param font 
+ * @param x 
+ * @param y 
+ * @param size 
+ * @param style 
  */
-void API_Put_char(char c, const char * font_name, const char * style, char size);
-
-/**
- * @brief add font to api
- * 
- * @param font pointer to font information
- */
-void API_Add_font(const Font_t * font);
-
-// /**
-//  * @brief 
-//  * 
-//  * @param font 
-//  */
-// void API_Remove_font(const Font_t * font);
-
-// /**
-//  * @brief 
-//  * 
-//  * @param font 
-//  */
-// void API_Remove_font_by_name(const char * font);
+void API_Put_char(char c, Font_t *font, uint32_t x, uint32_t y, uint8_t size, FontStyles_t style, uint8_t color);
 
 #endif

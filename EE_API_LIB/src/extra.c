@@ -38,7 +38,7 @@ int mandel_iterate(Complex zInit, int maxIter)
   return cnt;
 }
 
-void madelbrot(int nx, int ny, int maxIter, float realMin, float realMax, float imagMin, float imagMax)
+void API_mandelbrot(int nx, int ny, int maxIter, float realMin, float realMax, float imagMin, float imagMax)
 {
   float realInc = (realMax - realMin) / nx;
   float imagInc = (imagMax - imagMin) / ny;
