@@ -1,8 +1,7 @@
 /**
  * @file extra.h
- * @author your name (you@domain.com)
- * @brief 
- * @version 0.1
+ * @author Max Bensink (Max.bensink@student.hu.nl)
+ * @brief some extra functions that were fun to make
  * @date 2021-05-04
  * 
  * @copyright Copyright (c) 2021

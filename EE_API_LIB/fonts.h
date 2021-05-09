@@ -1,13 +1,14 @@
 /**
  * @file fonts.h
- * @author your name (you@domain.com)
- * @brief 
- * @version 0.1
+ * @author Max Bensink (Max.bensink@student.hu.nl)
+ * @brief some functions for the abillity to draw text on a display
  * @date 2021-04-30
  * 
  * @copyright Copyright (c) 2021
  * 
  */
+
+
 
 #ifndef __API_FONTS_H__
 #define __API_FONTS_H__
@@ -84,5 +85,18 @@ void API_Put_text(const char *string, uint32_t length, uint32_t x, uint32_t y, F
  * @param style 
  */
 void API_Put_char(char c, Font_t *font, uint32_t x, uint32_t y, uint8_t size, FontStyles_t style, uint8_t color);
+
+/**
+ * @brief 
+ * 
+ * @param font 
+ * @param glyph 
+ * @param x 
+ * @param y 
+ * @param size 
+ * @param styles 
+ * @param color 
+ */
+void API_Load_glyph(Font_t *font, Glyph_t *glyph, uint32_t x, uint32_t y, uint8_t size, FontStyles_t styles, uint8_t color);
 
 #endif

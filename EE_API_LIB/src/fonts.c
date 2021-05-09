@@ -1,6 +1,6 @@
 /**
  * @file fonts.c
- * @author your name (you@domain.com)
+ * @author Max Bensink (Max.bensink@student.hu.nl)
  * @brief 
  * @version 0.1
  * @date 2021-05-04
@@ -23,13 +23,13 @@ void API_Put_text(const char *string, uint32_t length, uint32_t x, uint32_t y, F
 
     uint8_t *end_char = data + length;
 
-    for (uint32_t *c = data; c < end_char; c++)
+    for (uint8_t *c = data; c < end_char; c++)
     {
         uint32_t i;
         for(i = 0; i < font->size; i++)
         {
             Glyph_t * glyph = &font->glyphs[i];
-            if (c == glyph->character)
+            if (*c == glyph->character)
             {
                 
                 API_Load_glyph(font, glyph, x, y, size, style, color);
@@ -54,8 +54,6 @@ void API_Put_char(char c, Font_t *font, uint32_t x, uint32_t y, uint8_t size, Fo
     {
         if (c == font->glyphs[i].character)
         {
-            Glyph_t *glyph = &font->glyphs[i];
-
             API_Load_glyph(font, &font->glyphs[i], x, y, size, style, color);
 
             return;
