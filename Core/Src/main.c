@@ -64,6 +64,8 @@
 /* USER CODE BEGIN PV */
 char input_buff[MAX_INPUT_LEN] = {};
 char interpreter_data[MAX_INPUT_LEN] = {};
+
+uint32_t wait_til_time = 0;
 // uint32_t interpreter_data_len = 0;
 /* USER CODE END PV */
 
@@ -135,7 +137,6 @@ int main(void)
   API_Bind_fill_screen_callback((SetFillScreenCallback_t)UB_VGA_FillScreen);
 
   API_Fill_screen(VGA_COL_YELLOW);
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -160,8 +161,10 @@ int main(void)
       // HAL_UART_Receive_IT(&huart2, input_buff, 1);
     }
 
-
-    API_Next_Q();
+    if(HAL_GetTick() > wait_til_time) {
+      API_Next_Q();
+      wait_til_time = 0;
+    }
     /* USER CODE END WHILE */
     
     /* USER CODE BEGIN 3 */

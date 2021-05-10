@@ -19,6 +19,8 @@ int last_outQ = 0; //last executed command;
 
 int repeat_line = 0; //line at which will be repeated
 
+extern uint32_t wait_til_time;
+
 void API_Helper_draw_line(void *argp)
 {
 	int *p = (int *)argp;
@@ -57,7 +59,8 @@ void API_Helper_wait(void *argp)
 	int *p = (int *)argp;
 	uint32_t waittime = (uint32_t)p[0];
 
-	HAL_Delay(waittime);
+	wait_til_time = waittime + HAL_GetTick();
+	// HAL_Delay(waittime);
 }
 
 //TODO add safeguard when repeat is longer then queue;
