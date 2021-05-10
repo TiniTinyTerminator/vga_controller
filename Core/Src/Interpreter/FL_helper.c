@@ -19,7 +19,8 @@ int last_outQ = 0; //last executed command;
 
 int repeat_line = 0; //line at which will be repeated
 
-extern uint32_t wait_til_time;
+extern uint32_t wait_time;
+extern uint32_t start_time;
 
 void API_Helper_draw_line(void *argp)
 {
@@ -59,7 +60,13 @@ void API_Helper_wait(void *argp)
 	int *p = (int *)argp;
 	uint32_t waittime = (uint32_t)p[0];
 
-	wait_til_time = waittime + HAL_GetTick();
+	wait_time = waittime;
+	start_time = HAL_GetTick();
+
+	if (wait_time < HAL_MAX_DELAY)
+	{
+		wait_time += (uint32_t)(uwTickFreq);
+	}
 	// HAL_Delay(waittime);
 }
 
