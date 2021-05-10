@@ -23,10 +23,13 @@ Command_t function_list[15]=
 		{"tekst", 		7,	{T_GETAL, T_GETAL, T_KLEUR, T_TEKST, T_FONTNAAM, T_GETAL, T_FONTSTIJL}},
 		{"bitmap", 		3,	{T_GETAL, T_GETAL, T_GETAL}},
 		{"clearscherm",	1,	{T_KLEUR}},
-		// wacht,
-		//herhaal,
-		//cirkel,
-		//figuur,
+		{"wacht",		1,	{T_GETAL}},
+		//herhaal, 			aantal (cmd), hoevaak (herhalen)
+		{"herhaal",		2,	{T_GETAL, T_GETAL}},
+		//cirkel, x, y, radius, kleur
+		{"cirkel",		2,	{T_GETAL, T_GETAL, T_GETAL, T_KLEUR}},
+		//figuur, x1,y1, x2,y2, x3,y3, x4,y4, x5,y5, kleur
+		{"figuur",		11,	{T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_KLEUR}},
 		//toren,
 		{END_OF_LIST}
 };

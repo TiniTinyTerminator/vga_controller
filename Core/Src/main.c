@@ -134,7 +134,7 @@ int main(void)
   API_Bind_set_pixel_callback((SetPixelCallback_t)UB_VGA_SetPixel);
   API_Bind_fill_screen_callback((SetFillScreenCallback_t)UB_VGA_FillScreen);
 
-  API_Fill_screen(VGA_COL_WHITE);
+  API_Fill_screen(VGA_COL_YELLOW);
 
   /* USER CODE END 2 */
 

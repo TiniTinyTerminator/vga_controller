@@ -43,7 +43,7 @@ static const Colour_t colour_list[] =
 		{"zwart",		0b00000000},
 		{"blauw",		0b00000011},
 		{"lichtblauw",	0b00000110},
-		{"groen",		0b00111000},
+		{"groen",		0b00011100},
 		{"lichtgroen",	0b01010000},
 		{"cyaan",		0b00011111},
 		{"lichtcyaan",	0b00001101},
@@ -51,13 +51,13 @@ static const Colour_t colour_list[] =
 		{"lichtrood",	0b01000000},
 		{"magenta",		0b11100011},
 		{"lichtmagenta",0b01000101},
-		{"bruin",		0b11001001},
+		{"bruin",		0b01100100},//klopt niet
 		{"geel",		0b11111100},
 		{"grijs",		0b01001001},
 		{"wit",			0b11111111},
 		{"rose",		0b11101001},
-		{"paars",		0b00001001},
-		{"END_OF_LIST\0"}
+		{"paars",		0b01000001},
+		{END_OF_LIST}
 };
 
 typedef struct Fontnames
@@ -70,7 +70,7 @@ static const Fontname_t fontname_list[] =
 {
 	{"arial",		0},
 	{"consolas",	1},
-	{"END_OF_LIST\0"}
+	{END_OF_LIST}
 };
 
 typedef enum ID_FONTSYLE
@@ -91,7 +91,7 @@ static const Fontstyle_t fontstyle_list[] =
 	{"normaal",	T_NORMAAL},
 	{"vet", 	T_VET},
 	{"cursief",	T_CURSIEF},
-	{"END_OF_LIST\0"}
+	{END_OF_LIST}
 };
 
 #endif /* INC_FL_API_FUNCTION_NAMES_H_ */
