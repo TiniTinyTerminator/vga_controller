@@ -31,7 +31,10 @@ void API_Helper_draw_line(void *argp)
 void API_Helper_draw_square(void *argp)
 {
 	int *p = (int *)argp;
-	API_Draw_square((int32_t)p[0], (int32_t)p[1], (uint32_t)p[2], (uint32_t)p[3], (uint8_t)p[4], (uint32_t)p[5]);
+	if((uint32_t)p[5] == 0)
+		API_Draw_square((int32_t)p[0], (int32_t)p[1], (uint32_t)p[2], (uint32_t)p[3], (uint8_t)p[4], 1);
+	else
+		API_Fill_square((int32_t)p[0], (int32_t)p[1], (uint32_t)p[2], (uint32_t)p[3], (uint8_t)p[4]);
 }
 
 //TODO implement API function
