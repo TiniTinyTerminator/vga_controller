@@ -29,6 +29,7 @@
 /* USER CODE BEGIN Includes */
 #include "graphics.h"
 #include "extra.h"
+#include "fonts.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -39,6 +40,8 @@
 #include "imgs/angry_smiley.h"
 #include "imgs/happy_smiley.h"
 #include "imgs/me.h"
+
+#include "fonts/aria_font_data.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -130,6 +133,21 @@ int main(void)
   API_Draw_square(101, 50, 50, 50, VGA_COL_BLUE, 1);
   API_Fill_square(50, 50, 50, 50, VGA_COL_RED);
 
+  // API_Put_char('a', &arial, 100, 100, 1, NORMAL, VGA_COL_GREEN);
+  // API_Load_glyph(&arial, &arial_glyphs[0], 100, 100, 1, NORMAL, VGA_COL_GREEN);
+
+  API_Fill_screen(VGA_COL_WHITE);
+
+  char text[] = "Beep Boop Sad Fuck";
+
+  API_Put_text(text, strlen(text), 0, 0, &arial, 3, NORMAL, VGA_COL_BLUE);
+  API_Load_bitmap(60, 60, ME_WIDTH, ME_HEIGHT, me_map);
+  // for(uint8_t c = '0'; c <= '9'; c++) {
+  //   API_Fill_screen(VGA_COL_WHITE);
+
+  //   API_Put_char(c, &arial, 150, 100, 2, NORMAL, VGA_COL_GREEN);
+  //   HAL_Delay(1000);
+  // }
   /* USER CODE END 2 */
 
   /* Infinite loop */

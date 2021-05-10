@@ -5,6 +5,7 @@
         "string.h": "c",
         "stdlib.h": "c",
         "graphics.h": "c",
-        "**.xbm": "c"
+        "**.xbm": "c",
+        "*.xbm": "cpp"
     }
 }

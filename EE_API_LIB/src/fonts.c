@@ -30,17 +30,16 @@ void API_Put_text(const char *string, uint32_t length, uint32_t x, uint32_t y, F
         {
             Glyph_t * glyph = &font->glyphs[i];
             if (*c == glyph->character)
-            {
-                
+            {         
                 API_Load_glyph(font, glyph, x, y, size, style, color);
 
-                x += glyph->w;
+                x += glyph->w * size + size;
                 break;
             }
 
         }
 
-        if(i + 1 >= font->size)
+        if(i + 1 > font->size)
             API_Draw_square(x, y, font->glyphs->w, font->glyphs->h, color, 1);
     }
 }
@@ -67,20 +66,20 @@ void API_Put_char(char c, Font_t *font, uint32_t x, uint32_t y, uint8_t size, Fo
 
 void API_Load_glyph(Font_t *font, Glyph_t *glyph, uint32_t x, uint32_t y, uint8_t size, FontStyles_t styles, uint8_t color)
 {
-    for (uint32_t y_offset = 0; y_offset < glyph->h; y_offset++)
-    {
-        for (uint32_t x_offset = 0; x_offset < glyph->w; x_offset++)
-        {
-            div_t byte_offset = div(glyph->x_off + x_offset, BITSINBYTE);
-            uint32_t needs_drawing = (font->frame.data[font->frame.width * y_offset + byte_offset.quot] & (1 << byte_offset.rem));
+    div_t bit_row = div(font->frame.width, 8);
 
-            if (needs_drawing)
-                API_Set_pixel(x + x_offset, y + y_offset, color);
+    // size--;
+
+    for(uint32_t col = glyph->x_off; col < (glyph->x_off + glyph->w); col++)
+    {
+        for(uint32_t row = glyph->y_off; row < (glyph->y_off + glyph->h); row++)
+        {
+        div_t bit_x = div(col, 8);
+
+        uint32_t row_bytes = (bit_row.rem > 0) ? bit_row.quot + 1 : bit_row.quot;
+
+        if(font->frame.data[bit_x.quot + row * row_bytes] & (1 << bit_x.rem))
+            API_Fill_square(x  + (col - glyph->x_off) * size, y + (row - glyph->y_off) * size, size, size, color);
         }
     }
 }
-
-// void API_load_glyph(Glyph_t *glyph, uint32_t x, uint32_t y, uint8_t size)
-// {
-
-// }

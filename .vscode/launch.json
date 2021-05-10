@@ -5,25 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Launch",
-            "type": "cppdbg",
+            "cwd": "${workspaceRoot}",
+            "executable": "./build/vga_controller.elf",
+            "name": "Debug Microcontroller",
             "request": "launch",
-            "program": "build/vga_controller.bin",
-            "preLaunchTask": "setup openocd",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-
-            ]
+            "type": "cortex-debug",
+            "servertype": "stutil",
+            "preLaunchTask": "make binary"
         }
     ]
 }

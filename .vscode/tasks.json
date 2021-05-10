@@ -7,6 +7,26 @@
             "label": "setup openocd",
             "type": "shell",
             "command": "openocd -f board/st_nucleo_f4.cfg"
+        },
+        {
+            "label": "make binary",
+            "type": "shell",
+            "command": [
+                // "make clean",
+                "make -j12"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "flash",
+            "type": "shell",
+            "dependsOn":[
+                "make binary"
+            ],
+            "command": "make flash",
+            "isBackground": true
         }
     ]
 }

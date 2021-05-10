@@ -49,11 +49,12 @@ typedef struct Glyphs
  */
 typedef struct Fonts {
     char *name;
-    char *style;
 
     uint32_t size;
 
     Glyph_t * glyphs;
+
+    uint8_t spacing_in_bits;
 
     struct data_frame {
         uint8_t * data;
