@@ -58,7 +58,7 @@ inline void API_Draw(int32_t x, int32_t y, uint8_t color, uint32_t size, DrawSty
         API_Set_pixel(x, y, color);
         break;
     case SQUARE:
-        API_Fill_square(x - (size / 2), y - (size / 2), size, size, color);
+        API_Fill_square(x - (size / 2), y - (size / 2), size - 1, size - 1, color);
         break;
     default:
         API_Fill_circle(x, y, size, color);
@@ -68,8 +68,8 @@ inline void API_Draw(int32_t x, int32_t y, uint8_t color, uint32_t size, DrawSty
 
 inline void API_Fill_square(uint32_t x_lup, uint32_t y_lup, uint32_t w, uint32_t h, uint32_t color)
 {
-    for (uint32_t x = x_lup; x < (x_lup + w); x++)
-        for (uint32_t y = y_lup; y < (y_lup + h); y++)
+    for (uint32_t x = x_lup; x <= (x_lup + w); x++)
+        for (uint32_t y = y_lup; y <= (y_lup + h); y++)
             API_Set_pixel(x, y, color);
 }
 
@@ -147,7 +147,7 @@ void API_Draw_square(int32_t x, int32_t y, uint32_t width, uint32_t height, uint
 {
     API_Draw_line(x, y, x + width, y, color, thickness, SQUARE);
     API_Draw_line(x, y, x, y + height, color, thickness, SQUARE);
-    API_Draw_line(x + width, y, x + width, y + height + 1, color, thickness, SQUARE);
+    API_Draw_line(x + width, y, x + width, y + height, color, thickness, SQUARE);
     API_Draw_line(x, y + height, x + width, y + height, color, thickness, SQUARE);
 }
 

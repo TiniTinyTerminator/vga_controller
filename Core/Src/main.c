@@ -126,6 +126,10 @@ int main(void)
 
   API_Fill_screen(VGA_COL_WHITE);
 
+  API_Draw_square(50, 101, 50, 50, VGA_COL_BLUE, 1);
+  API_Draw_square(101, 50, 50, 50, VGA_COL_BLUE, 1);
+  API_Fill_square(50, 50, 50, 50, VGA_COL_RED);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
