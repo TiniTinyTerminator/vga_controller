@@ -6,6 +6,7 @@
         "stdlib.h": "c",
         "graphics.h": "c",
         "**.xbm": "c",
-        "*.xbm": "cpp"
+        "*.xbm": "cpp",
+        "ctype.h": "c"
     }
 }
