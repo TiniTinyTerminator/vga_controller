@@ -38,6 +38,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
+#include <errno.h>
 
 //data
 #include "imgs/angry_smiley.h"
@@ -53,7 +54,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define MAX_INPUT_LEN 255
+#define MAX_INPUT_LEN 512
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -65,7 +66,6 @@
 
 /* USER CODE BEGIN PV */
 char input_buff[MAX_INPUT_LEN] = {};
-char interpreter_data[MAX_INPUT_LEN] = {};
 
 uint32_t wait_time = 0;
 uint32_t start_time = 0;
@@ -76,7 +76,7 @@ uint32_t start_time = 0;
 void SystemClock_Config(void);
 static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
-
+char UART_Check_for_string(int8_t * ptr, uint32_t max_size);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -125,7 +125,7 @@ int main(void)
   API_Init_function_list();
 
   //initialize uart receieve
-  HAL_UART_Receive_IT(&huart2, (uint8_t *)input_buff, 1);
+  HAL_UART_Receive_DMA(&huart2, (uint8_t *)input_buff, MAX_INPUT_LEN);
   
   // Init VGA-Screen
   UB_VGA_Screen_Init(); 
@@ -145,33 +145,28 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    int str_len = strlen(interpreter_data);
-//    printf("Str_len: %i\r\n",str_len);
-    if(str_len > 0)
+    int8_t string_data[MAX_INPUT_LEN] = "";
+    
+    char err = UART_Check_for_string(string_data, MAX_INPUT_LEN);
+
+    if(!err)
     {
-//       printf("%s\n\r", interpreter_data);
-      // HAL_UART_AbortReceive_IT(&huart2);
-      char *data = malloc(str_len + 1);
-      strcpy(data, interpreter_data);
-
-      Parser_err_t err = fl_parser(data, str_len);
-      // if(err)
-      //   printf("ERROR: %d\r\n", err);
-      
-      memset(interpreter_data, 0,MAX_INPUT_LEN);
-
-      // HAL_UART_Receive_IT(&huart2, input_buff, 1);
+      printf("data = %s\r\n", string_data);
     }
-  
-    if((HAL_GetTick() - start_time) > wait_time) {
-      wait_time = 0;
-      start_time = 0;
 
-      API_Next_Q();
-    }
+
+
+    // if((HAL_GetTick() - start_time) > wait_time) {
+    //   wait_time = 0;
+    //   start_time = 0;
+
+    //   API_Next_Q();
+    // }
     /* USER CODE END WHILE */
     
     /* USER CODE BEGIN 3 */
+
+    memset(string_data, 0, MAX_INPUT_LEN);
     HAL_Delay(50);
   }
   /* USER CODE END 3 */
@@ -238,39 +233,91 @@ static void MX_NVIC_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+char UART_Check_for_string(int8_t * ptr, uint32_t max_size)
+{
+  static uint32_t check_index = 0;
+  static uint32_t last_enter_index = 0;
+
+  uint32_t cnt = MAX_INPUT_LEN - huart2.hdmarx->Instance->NDTR;
+
+  if(check_index > cnt)
+  {
+    check_index = 0;
+    HAL_UART_AbortReceive(&huart2);
+    HAL_UART_Receive_DMA(&huart2, input_buff, MAX_INPUT_LEN);
+
+    return ENOSPC;
+  }
+  else 
+  {
+    uint32_t i;
+    for(i = check_index; i < cnt; i++)
+    {
+      if(i > MAX_INPUT_LEN) {
+        check_index = 0;
+        last_enter_index = 0;
+      }
+
+      putchar(input_buff[i]);
+
+      if(strstr(input_buff + i, "\r\n") != NULL || input_buff[i] == '\n' || input_buff[i] == '\r')
+      {
+        printf("\r\n");
+
+        if(i >= max_size) {
+          puts("ENOMEM");
+          return ENOMEM;
+        }
+
+        memcpy(ptr, input_buff + last_enter_index, i - last_enter_index);
+
+        check_index = i + 1;
+        last_enter_index = i + 1;
+        // HAL_UART_AbortReceive(&huart2);
+        // HAL_UART_Receive_DMA(&huart2, (uint8_t *)input_buff, MAX_INPUT_LEN);
+
+        return 0;
+      }
+    }
+    check_index = cnt;
+  }
+  return ENODATA;
+}
+
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-  static uint32_t i = 0;
+  // static uint32_t i = 0;
 
   if(huart != &huart2) return;
 
-  putchar(input_buff[i]);
+  // putchar(input_buff[i]);
+  // printf("\r\nBUFFER OVERLOAD, RESETTING!!\r\n");
 
   //received enter
-  if((input_buff[i] == '\n') || (input_buff[i] == '\r'))
-  {
-	// puts(input_buff);
-    puts("");
+//   if((input_buff[i] == '\n') || (input_buff[i] == '\r'))
+//   {
+// 	// puts(input_buff);
+//     puts("");
 
-//TODO FL INTERPRETER IMPLEMENTATION
-    memcpy(interpreter_data, input_buff, i);
+// //TODO FL INTERPRETER IMPLEMENTATION
+//     memcpy(interpreter_data, input_buff, i);
 
-    i = 0;
-  }
-  else
-  {
-    i++;
+//     i = 0;
+//   }
+//   else
+//   {
+//     i++;
 
-    //buffer full
-    if (i >= MAX_INPUT_LEN)
-    {
-      i = 0;
-      printf("\r\nBUFFER OVERLOAD, RESETTING!!\r\n");
-    }
+//     //buffer full
+//     if (i >= MAX_INPUT_LEN)
+//     {
+//       i = 0;
+//     }
 
-  }
+//   }
 
-  HAL_UART_Receive_IT(&huart2, (uint8_t *)(input_buff + i), 1);
+  HAL_UART_Receive_DMA(&huart2, input_buff, MAX_INPUT_LEN);
 }
 
 
