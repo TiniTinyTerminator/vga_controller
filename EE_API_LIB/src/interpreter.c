@@ -7,8 +7,8 @@
 //          to usable functions and send them to Logic Layer
 /****************************************************************************************************/
 
-#include <FL_interpreter.h>
-#include <FL_api_function_names.h>
+#include <interpreter.h>
+#include <api_function_names.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>

@@ -1,12 +1,18 @@
 /**
- * tests.c
+ * @file	interpreter.c
+ * @author	daniel.mul@student.hu.nl
+ * @brief	De interpreter vertaald een scriptcommando naar een uitvoerbarefunctie, de argumenten uit de functies worden gecontroleerd op
+ * correctheid, vervolgends wordt het vertaalde commando in de queue gezet.
+ * Om te weten hoe een commando eruit ziet moet de syntax gedefinieerd worden in de "functions_list"
+ * Tenslotte worden errors terug gestuurd mbv printf()
+ * @version 0.4
+ * @date 2021-05-11
  *
- *  Created on: 4 mei 2021
- *      Author: Daniel
- */
+ * @copyright Copyright (c) 2021
+*/
 
-#include "FL_interpreter.h"
-#include "FL_api_function_names.h"
+#include "interpreter.h"
+#include "api_function_names.h"
 #include "graphics.h"
 #include "stddef.h"
 #include "stm32f4xx_hal.h"
