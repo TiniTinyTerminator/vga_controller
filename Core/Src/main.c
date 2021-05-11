@@ -240,6 +240,7 @@ char UART_Check_for_string(int8_t * ptr, uint32_t max_size)
   if(check_index > cnt)
   {
     check_index = 0;
+    last_enter_index = 0;
     HAL_UART_AbortReceive(&huart2);
     HAL_UART_Receive_DMA(&huart2, input_buff, MAX_INPUT_LEN);
 
