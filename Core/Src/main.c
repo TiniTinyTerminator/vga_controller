@@ -30,8 +30,8 @@
 #include "graphics.h"
 #include "extra.h"
 #include "fonts.h"
-#include "EE_FrontLayer/FL_Helper.h"
-#include "EE_FrontLayer/FL_interpreter.h"
+#include "helper.h"
+#include "interpreter.h"
 
 //stdc
 #include <stdio.h>
@@ -54,7 +54,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define MAX_INPUT_LEN 512
+#define MAX_INPUT_LEN 1024
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -166,7 +166,7 @@ int main(void)
     
     /* USER CODE BEGIN 3 */
 
-    memset(string_data, 0, MAX_INPUT_LEN);
+    memset(string_data, 0, MAX_INPUT_LEN / 4);
     HAL_Delay(50);
   }
   /* USER CODE END 3 */

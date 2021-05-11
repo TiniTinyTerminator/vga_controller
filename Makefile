@@ -64,8 +64,8 @@ EE_API_LIB/src/graphics.c \
 EE_API_LIB/src/fonts.c \
 EE_API_LIB/src/bitmap.c \
 EE_API_LIB/src/extra.c \
-Core/Src/Interpreter/FL_helper.c \
-Core/Src/Interpreter/FL_interpreter.c \
+EE_API_LIB/src/helper.c \
+EE_API_LIB/src/interpreter.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \
 Core/Src/usart.c
 
@@ -134,8 +134,6 @@ C_INCLUDES =  \
 -ICore/Inc/imgs \
 -ICore/Inc/fonts \
 -IEE_API_LIB \
--ICore/Inc/EE_FrontLayer
-
 
 
 # compile gcc flags
