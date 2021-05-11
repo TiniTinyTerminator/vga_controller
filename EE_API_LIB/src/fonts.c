@@ -1,6 +1,6 @@
 /**
  * @file fonts.c
- * @author your name (you@domain.com)
+ * @author Max Bensink (Max.bensink@student.hu.nl)
  * @brief 
  * @version 0.1
  * @date 2021-05-04
@@ -13,44 +13,73 @@
 #include <stdlib.h>
 #include <string.h>
 
-static Font_t fonts[MAX_FONTS] = {};
-static Font_t * active_font = &fonts[0];
+#define BITSINBYTE 8
 
-void API_Add_font(const Font_t * font)
+void API_Put_text(const char *string, uint32_t length, uint32_t x, uint32_t y, Font_t *font, uint8_t size, FontStyles_t style, uint8_t color)
 {
-    for (uint32_t i = 0; i < MAX_FONTS; i++) {
-        if(fonts[i].name == NULL)
-            fonts[i] = *font;
-        if(strcmp(fonts[i].name, font->name) && strcmp(fonts[i].style, font->style))
-            return;
+    uint8_t *data = (uint8_t *)malloc(length);
+
+    memcpy(data, string, length);
+
+    uint8_t *end_char = data + length;
+
+    for (uint8_t *c = data; c < end_char; c++)
+    {
+        uint32_t i;
+        for(i = 0; i < font->size; i++)
+        {
+            Glyph_t * glyph = &font->glyphs[i];
+            if (*c == glyph->character)
+            {         
+                API_Load_glyph(font, glyph, x, y, size, style, color);
+
+                x += glyph->w * size + size;
+                break;
+            }
+
+        }
+
+        if(i + 1 > font->size)
+            API_Draw_square(x, y, font->glyphs->w, font->glyphs->h, color, 1);
     }
 }
 
-Font_t * API_Get_font_by_name(const char *name, const char *style, char size)
+void API_Put_char(char c, Font_t *font, uint32_t x, uint32_t y, uint8_t size, FontStyles_t style, uint8_t color)
 {
-    for (size_t i = 0; i < MAX_FONTS; i++)
-        if(strcmp(name, fonts[i].name) && strcmp(style, fonts[i].style) && size == fonts[i].size)
-            return &fonts[i];
-    
-    return NULL;
-}
 
-void API_Set_active_font(const char * font_name, const char * style, char size)
-{
-    Font_t * tmp;
+    uint32_t i;
 
-    if(strcmp(font_name, active_font->name) && strcmp(style, active_font->style) && size == active_font->size)
-        return;
-    else
+    for (i = 0; i < font->size; i++)
     {
-        tmp = API_Get_font_by_name(font_name, style, size);
-        if(tmp != NULL)
-            active_font = tmp;
-    }    
+        if (c == font->glyphs[i].character)
+        {
+            API_Load_glyph(font, &font->glyphs[i], x, y, size, style, color);
+
+            return;
+        }
+    }
+
+    if(i + 1 >= font->size)
+        API_Draw_square(x, y, font->glyphs->w, font->glyphs->h, color, 1);
+
 }
 
-// void API_Put_char(char c, uint32_t x, uint32_t y)
-// {
-//     api_put
+void API_Load_glyph(Font_t *font, Glyph_t *glyph, uint32_t x, uint32_t y, uint8_t size, FontStyles_t styles, uint8_t color)
+{
+    div_t bit_row = div(font->frame.width, 8);
 
-// }
+    // size--;
+
+    for(uint32_t col = glyph->x_off; col < (glyph->x_off + glyph->w); col++)
+    {
+        for(uint32_t row = glyph->y_off; row < (glyph->y_off + glyph->h); row++)
+        {
+        div_t bit_x = div(col, 8);
+
+        uint32_t row_bytes = (bit_row.rem > 0) ? bit_row.quot + 1 : bit_row.quot;
+
+        if(font->frame.data[bit_x.quot + row * row_bytes] & (1 << bit_x.rem))
+            API_Fill_square(x  + (col - glyph->x_off) * size, y + (row - glyph->y_off) * size, size, size, color);
+        }
+    }
+}

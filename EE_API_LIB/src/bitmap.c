@@ -1,6 +1,6 @@
 /**
  * @file bitmap.c
- * @author your name (you@domain.com)
+ * @author Max Bensink (Max.bensink@student.hu.nl)
  * @brief 
  * @version 0.1
  * @date 2021-05-04
@@ -13,27 +13,6 @@
 #include "stdlib.h"
 #include "string.h"
 
-
-// typedef struct ColorCodes
-// {
-//     uint8_t * colorName;
-//     uint8_t color;
-//     /* data */
-// } ColorCodes_t;
-
-// static const ColorCodes_t color_codes[] =
-// {
-//     {"black", 0x00},
-//     {"white", 0xFF},
-//     {"cyan", 0x},
-//     {"blue"},
-//     {"green"},
-//     {"orange"},
-//     {"red"},
-//     {"purple"}
-// };
-
-
 void API_Load_bitmap(uint32_t x_lup, uint32_t y_lup, uint32_t w, uint32_t h, const uint8_t *bitmap)
 {
     uint32_t buf_len = w * h;
@@ -43,6 +22,8 @@ void API_Load_bitmap(uint32_t x_lup, uint32_t y_lup, uint32_t w, uint32_t h, con
             if(i * w + j >= buf_len) return;
             else API_Set_pixel(x_lup + j, y_lup + i, bitmap[i * w + j]);
 }
+
+//! the X11 bitmap only works with predefined colors, which has a total of 200 predefined colors. this will make it difficult to use in embedded environments
 
 // typedef struct C
 // {

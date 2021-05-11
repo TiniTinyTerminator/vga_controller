@@ -1,6 +1,6 @@
 /**
  * @file extra.c
- * @author your name (you@domain.com)
+ * @author Max Bensink (Max.bensink@student.hu.nl)
  * @brief 
  * @version 0.1
  * @date 2021-05-05
@@ -11,12 +11,14 @@
 
 #include "graphics.h"
 
+extern uint32_t _w;
+extern uint32_t _h;
 typedef struct
 {
   double x, y;
 } Complex;
 
-Complex complexSquare(Complex c)
+inline Complex complexSquare(Complex c)
 {
   Complex cSq;
   cSq.x = c.x * c.x - c.y * c.y;
@@ -38,17 +40,17 @@ int mandel_iterate(Complex zInit, int maxIter)
   return cnt;
 }
 
-void madelbrot(int nx, int ny, int maxIter, float realMin, float realMax, float imagMin, float imagMax)
+void API_mandelbrot(int maxIter, float realMin, float realMax, float imagMin, float imagMax)
 {
-  float realInc = (realMax - realMin) / nx;
-  float imagInc = (imagMax - imagMin) / ny;
+  float realInc = (realMax - realMin) / _w;
+  float imagInc = (imagMax - imagMin) / _h;
   static uint8_t color = 0x00;
 
   Complex z;
   int x, y;
   int cnt;
-  for (x = 0, z.x = realMin; x < nx; x++, z.x += realInc)
-    for (y = 0, z.y = imagMin; y < ny; y++, z.y += imagInc)
+  for (x = 0, z.x = realMin; x < _w; x++, z.x += realInc)
+    for (y = 0, z.y = imagMin; y < _h; y++, z.y += imagInc)
     {
       cnt = mandel_iterate(z, maxIter);
       if (cnt == maxIter)

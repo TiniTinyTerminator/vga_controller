@@ -6,9 +6,6 @@
         "stdlib.h": "c",
         "graphics.h": "c",
         "**.xbm": "c",
-        "stdio.h": "c",
-        "fl_helper.h": "c",
-        "fl_interpreter.h": "c",
-        "stdint.h": "c"
+        "*.xbm": "cpp"
     }
 }

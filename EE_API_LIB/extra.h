@@ -1,8 +1,7 @@
 /**
  * @file extra.h
- * @author your name (you@domain.com)
- * @brief 
- * @version 0.1
+ * @author Max Bensink (Max.bensink@student.hu.nl)
+ * @brief some extra functions that were fun to make
  * @date 2021-05-04
  * 
  * @copyright Copyright (c) 2021
@@ -20,4 +19,4 @@
  * @param imag_min 
  * @param imag_max 
  */
-void madelbrot(int nx, int ny, int max_iter, float real_min, float real_max, float imag_min, float imag_max);
+void API_mandelbrot(int nx, int ny, int max_iter, float real_min, float real_max, float imag_min, float imag_max);

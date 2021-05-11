@@ -1,12 +1,11 @@
 /**
- * @file shapes.h
- * @author Max Bensink (max.bensink@student.hu.nl)
- * @brief drawing functions useable for a display
- * @version 0.3
- * @date 2021-04-21
+ * @file graphics.h
+ * @author Max Bensink (Max.bensink@student.hu.nl)
+ * @brief An api that helps with drawing text on the display
+ * @version 0.1
+ * @date 2021-05-09
  * 
  * @copyright Copyright (c) 2021
- * 
  * 
  */
 
@@ -15,6 +14,10 @@
 
 #include <inttypes.h>
 
+/**
+ * @brief the different draw styles
+ * 
+ */
 typedef enum DrawStyle {
     DOT,
     ROUND,
@@ -29,7 +32,7 @@ typedef enum DrawStyle {
 typedef void (* SetPixelCallback_t)(uint32_t x, uint32_t y, uint32_t color);
 
 /**
- * @brief 
+ * @brief the pixel readout callback
  * 
  */
 typedef uint8_t (* GetPixelCallback_t)(uint32_t x, uint32_t y);
@@ -62,27 +65,27 @@ void API_Bind_get_pixel_callback(GetPixelCallback_t callback);
 void API_Bind_fill_screen_callback(SetFillScreenCallback_t callback);
 
 /**
- * @brief 
+ * @brief a function that save the display size
  * 
- * @param w 
- * @param h 
+ * @param w width of the display
+ * @param h height of the display
  */
 void API_Set_resolution(uint32_t w, uint32_t h);
 
 /**
- * @brief 
+ * @brief set an pixel on the display
  * 
- * @param x 
- * @param y 
- * @param color 
+ * @param x the x position
+ * @param y the y position
+ * @param color the color of the pixel
  */
 void API_Set_pixel(int32_t x, int32_t y, uint8_t color);
 
 /**
- * @brief 
+ * @brief get the value of a position in the screen
  * 
- * @param x 
- * @param y 
+ * @param x the x position
+ * @param y the y position
  * @return uint8_t 
  */
 uint8_t API_Get_pixel(int32_t x, int32_t y);
@@ -95,34 +98,37 @@ uint8_t API_Get_pixel(int32_t x, int32_t y);
 void API_Fill_screen(uint8_t color);
 
 /**
- * @brief 
+ * @brief draw function used in the api
  * 
- * @param x 
- * @param y 
- * @param color 
- * @param size 
- * @param draw_type 
+ * @param x the x position to draw
+ * @param y the y position to draw
+ * @param color the color of the brush
+ * @param size the size of the brush
+ * @param draw_type the brush-type used
  */
 void API_Draw(int32_t x, int32_t y, uint8_t color, uint32_t size, DrawStyle_t draw_type);
 
 /**
- * @brief fil
+ * @brief fill a square on the display width a certain color
  * 
- * @param x 
- * @param y 
- * @param w 
- * @param h 
- * @param color 
+ * @param x the x lup position of the display
+ * @param y the y lup position of the display
+ * @param w the width of the square
+ * @param h the height of the square
+ * @param color the color of the square
  */
 void API_Fill_square(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t color);
 
 /**
- * @brief 
+ * @brief draw a line on the display
  * 
- * @param xA 
- * @param yA 
- * @param xB 
- * @param yB 
+ * @param xA the start x position
+ * @param yA the start y position
+ * @param xB the end x position
+ * @param yB the end y position
+ * @param color the color of the line
+ * @param thickness the thickness of the line
+ * @param draw_style the draw-style of the line, see @ref
  */
 void API_Draw_line(int32_t xA, int32_t yA, int32_t xB, int32_t yB, uint8_t color, uint32_t thickness, DrawStyle_t draw_style);
 
