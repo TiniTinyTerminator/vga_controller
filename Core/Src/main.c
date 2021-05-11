@@ -41,9 +41,6 @@
 #include <errno.h>
 
 //data
-#include "imgs/angry_smiley.h"
-#include "imgs/happy_smiley.h"
-#include "imgs/me.h"
 
 #include "fonts/aria_font_data.h"
 /* USER CODE END Includes */
@@ -145,29 +142,28 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    int8_t string_data[MAX_INPUT_LEN] = "";
+    int8_t string_data[MAX_INPUT_LEN / 4] = "";
     
-    char err = UART_Check_for_string(string_data, MAX_INPUT_LEN);
+    char err = UART_Check_for_string(string_data, MAX_INPUT_LEN / 4);
 
     if(!err)
     {
-      printf("data = %s\r\n", string_data);
+      fl_parser(string_data, strlen(string_data));
     }
 
+    if((HAL_GetTick() - start_time) > wait_time) {
+      wait_time = 0;
+      start_time = 0;
 
+      API_Next_Q();
+    }
 
-    // if((HAL_GetTick() - start_time) > wait_time) {
-    //   wait_time = 0;
-    //   start_time = 0;
-
-    //   API_Next_Q();
-    // }
     /* USER CODE END WHILE */
     
     /* USER CODE BEGIN 3 */
 
     memset(string_data, 0, MAX_INPUT_LEN / 4);
-    HAL_Delay(50);
+    HAL_Delay(5);
   }
   /* USER CODE END 3 */
 }
@@ -265,9 +261,8 @@ char UART_Check_for_string(int8_t * ptr, uint32_t max_size)
       {
         printf("\r\n");
 
-        if(i >= max_size) {
+        if(i - last_enter_index >= max_size) {
           puts("ENOMEM");
-          return ENOMEM;
         }
 
         memcpy(ptr, input_buff + last_enter_index, i - last_enter_index);
@@ -287,35 +282,8 @@ char UART_Check_for_string(int8_t * ptr, uint32_t max_size)
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-  // static uint32_t i = 0;
 
   if(huart != &huart2) return;
-
-  // putchar(input_buff[i]);
-  // printf("\r\nBUFFER OVERLOAD, RESETTING!!\r\n");
-
-  //received enter
-//   if((input_buff[i] == '\n') || (input_buff[i] == '\r'))
-//   {
-// 	// puts(input_buff);
-//     puts("");
-
-// //TODO FL INTERPRETER IMPLEMENTATION
-//     memcpy(interpreter_data, input_buff, i);
-
-//     i = 0;
-//   }
-//   else
-//   {
-//     i++;
-
-//     //buffer full
-//     if (i >= MAX_INPUT_LEN)
-//     {
-//       i = 0;
-//     }
-
-//   }
 
   HAL_UART_Receive_DMA(&huart2, input_buff, MAX_INPUT_LEN);
 }

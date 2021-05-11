@@ -7,6 +7,8 @@
         "graphics.h": "c",
         "**.xbm": "c",
         "*.xbm": "cpp",
-        "interpreter.h": "c"
+        "interpreter.h": "c",
+        "errno.h": "c",
+        "aria_font_data.h": "c"
     }
 }
