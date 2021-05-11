@@ -1,10 +1,7 @@
 /**
- * @file	interpreter.c
+ * @file	helper.c
  * @author	daniel.mul@student.hu.nl
- * @brief	De interpreter vertaald een scriptcommando naar een uitvoerbarefunctie, de argumenten uit de functies worden gecontroleerd op
- * correctheid, vervolgends wordt het vertaalde commando in de queue gezet.
- * Om te weten hoe een commando eruit ziet moet de syntax gedefinieerd worden in de "functions_list"
- * Tenslotte worden errors terug gestuurd mbv printf()
+ * @brief	De functies uit de queue worden hier gekoppeld aan de API, dit moet geinitieerd worden!!
  * @version 0.4
  * @date 2021-05-11
  *
@@ -15,14 +12,18 @@
 #include "api_function_names.h"
 
 #include "graphics.h"
+#include "fonts.h"
 
 #include <stddef.h>
+#include <string.h>
 
 #include "stm32f4xx_hal.h"
 
 #include "imgs/angry_smiley.h"
 #include "imgs/happy_smiley.h"
 #include "imgs/me.h"
+
+#include "fonts/aria_font_data.h"
 
 
 extern Qentry cmd_queue[QUEUE_LEN]; //[QUEUE_LEN];
@@ -32,6 +33,7 @@ Command_t function_list[15]=
 {
 		{"lijn", 		6,	{T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_KLEUR, T_GETAL}},
 		{"rechthoek", 	6,	{T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_KLEUR, T_GETAL}},
+		//tekst, x, y, kleur, tekst, fontnaam (arial, consolas), fontgrootte (1,2), fontstijl (normaal, vet, cursief)
 		{"tekst", 		7,	{T_GETAL, T_GETAL, T_KLEUR, T_TEKST, T_FONTNAAM, T_GETAL, T_FONTSTIJL}},
 		{"bitmap", 		3,	{T_GETAL, T_GETAL, T_GETAL}},
 		{"clearscherm",	1,	{T_KLEUR}},
@@ -73,7 +75,11 @@ void API_Helper_draw_square(void *argp)
 void API_Helper_draw_tekst(void *argp)
 {
 	int *p = (int *)argp;
-	//API_Draw_tekst((int32_t) argp[0], (int32_t) argp[1], (uint8_t) argp[2], (char*) argp[3], (uint8_t) argp[4], (uint8_t) argp[5], (uint8_t) argp[6]);
+	const char *ptext = (const char *) p[3];
+	uint32_t str_len = strlen(ptext);
+	//argp:-> 0:x, 1:y, 2:kleur, 3:tekst, 4:fontnaam (arial, consolas), 5:fontgrootte (1,2), 6:fontstijl (normaal, vet, cursief)
+	API_Put_text(ptext, str_len, (uint32_t) p[0], (uint32_t) p[1], &arial, p[5], NORMAL, (uint8_t) p[2]);
+	//			(const char *string, uint32_t length, uint32_t x, uint32_t y, Font_t *font, uint8_t size, FontStyles_t style, uint8_t color)
 }
 
 //TODO add switch case for bit maps

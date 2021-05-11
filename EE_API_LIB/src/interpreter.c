@@ -1,12 +1,15 @@
-/****************************************************************************************************/
-//file:     fl_interpreter.c
-//
-//Author:   Daniel Mul
-//Date:     16 april 2021
-//brief:    Front Layer interpreter, these functions will convert the user scripts (ASCII inputs)
-//          to usable functions and send them to Logic Layer
-/****************************************************************************************************/
-
+/**
+ * @file	interpreter.c
+ * @author	daniel.mul@student.hu.nl
+ * @brief	De interpreter vertaald een scriptcommando naar een uitvoerbarefunctie, de argumenten uit de functies worden gecontroleerd op
+ * correctheid, vervolgends wordt het vertaalde commando in de queue gezet.
+ * Om te weten hoe een commando eruit ziet moet de syntax gedefinieerd worden in de "functions_list"
+ * Tenslotte worden errors terug gestuurd mbv printf()
+ * @version 0.4
+ * @date 2021-05-11
+ *
+ * @copyright Copyright (c) 2021
+*/
 #include <interpreter.h>
 #include <api_function_names.h>
 #include <string.h>
@@ -141,12 +144,13 @@ Parser_err_t check_colour(char* string, uint8_t str_len, int* retv)
 Parser_err_t check_text(char* string, uint8_t str_len, int* retv)
 {
 	char* p;
-	p = calloc(str_len, sizeof(char));
+	p = calloc((str_len + 1), sizeof(char));
 	if (p == NULL)
 	{
 		return E_TEKST_NO_MEM;
 	}
 	memcpy(p, string, str_len);
+	p[str_len + 1] = '\0';
 
 	retv[0] = (int)p;
 	return E_NO_ERROR;
@@ -236,6 +240,7 @@ void Parser_err_handler(Parser_err_t error, int arg_cnt, char* arg_string, int a
 /****************************************************************************************************/
 Parser_err_t fl_parser(char* scriptline, uint32_t len)
 {
+	if (len == 0) return E_NO_ERROR;
     int i = 0;		//position counter
     int j = 0;		//argument counter
 

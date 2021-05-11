@@ -22,8 +22,8 @@
  */
 typedef enum FontStyles {
     NORMAL = 0b00,
-    ITALIC = 0b01,
-    BOLD = 0b10,
+    BOLD = 0b01,
+    ITALIC = 0b10,
     BOLDITALIC = 0b11
 } FontStyles_t;
 

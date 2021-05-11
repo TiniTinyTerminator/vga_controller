@@ -1,7 +1,10 @@
 #include "arial.xbm"
 #include <fonts.h>
 
-Glyph_t arial_glyphs[] = 
+#ifndef INC_ARIA_FONT_DATA_H_
+#define INC_ARIA_FONT_DATA_H_
+
+static Glyph_t arial_glyphs[] =
 {
     {'a',5, 12, 0, 0},
     {'b',5, 12, 9, 0},
@@ -92,7 +95,7 @@ Glyph_t arial_glyphs[] =
     {' ',4, 12, 5, 0}
 };
 
-Font_t arial = {
+static Font_t arial = {
     .name = "arial",
 
     .size = (sizeof(arial_glyphs))/(sizeof(Glyph_t)),
@@ -106,3 +109,5 @@ Font_t arial = {
     },
 
 };
+
+#endif// INC_ARIA_FONT_DATA_H_
