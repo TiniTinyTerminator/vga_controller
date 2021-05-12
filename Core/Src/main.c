@@ -148,7 +148,7 @@ int main(void)
 
     if(!err)
     {
-      fl_parser(string_data, strlen(string_data));
+    	API_Parser(string_data, strlen(string_data));
     }
 
     if((HAL_GetTick() - start_time) > wait_time) {

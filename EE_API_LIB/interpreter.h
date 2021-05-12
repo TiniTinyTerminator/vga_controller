@@ -1,18 +1,15 @@
-/****************************************************************************************************/
-//file:     fl_interpreter.h
-//
-//Author:   Daniel Mul
-//Date:     16 april 2021
-//brief:    Front Layer interpreter, these functions will convert the user scripts (ASCII inputs)
-//          to usable functions and send them to Logic Layer
-/****************************************************************************************************/
+/**
+ * @file	interpreter.h
+ * @author	daniel.mul@student.hu.nl
+ * @brief	Definities voor de functionaliteit van de interpreter en de vooruitstromende Queue
+ * @version 0.3
+ * @date 2021-05-11
+ *
+ * @copyright Copyright (c) 2021
+*/
 
-// @NOTE gebruike een @ voor de parameter om er een doxygen parameter van te maken, wordt dan meegenomen in de documentatie generator.
-
-// @NOTE vergeet je header define niet!!
-
-#ifndef INC_FL_INTERPRETER_H_
-#define INC_FL_INTERPRETER_H_
+#ifndef _INC_FL_INTERPRETER_H_
+#define _INC_FL_INTERPRETER_H_
 
 #include "stdint.h"
 
@@ -20,12 +17,13 @@
 
 #define QUEUE_LEN 255		//MAX uint8_t
 
-#define END_OF_LIST "END_OF_LIST\0"
+#define END_OF_LIST "END_OF_LIST"
 
 typedef void (*Apifuncp)(void* );
 
 /**
- * @brief 
+ * @brief datatype for the queue,
+ * @attention pointer is (void) but data can be anything, good prototyping is required
  * 
  */
 typedef struct Queue_entry
@@ -36,39 +34,35 @@ typedef struct Queue_entry
 }Qentry;
 
 /**
- * @brief 
+ * @brief enum for errors
  * 
  */
 typedef enum Parser_err_t
 {
-	///@brief brief description
+	///@brief Niks aan de hand
 	E_NO_ERROR,
-	///@brief brief description
+	///@brief onbekende functie
 	E_CHK_FUNC_UNKNOWN,
-	///@brief brief description
+	///@brief argument is geen getal
 	E_CHK_INVALID_NUM,
-	///@brief brief description
+	///@brief argument is geen float
+	E_CHK_INVALID_FLOAT,
+	///@brief onbekende kleur
 	E_CHK_COLOR_UNKOWN,
-	///@brief brief description
+	///@brief Te weinig ruimte voor opslaan van string
 	E_TEKST_NO_MEM,
-	///@brief brief description
+	///@brief onbekende fontstijl
 	E_CHK_FONTSTYLE_UNKOWN,
-	///@brief brief description
+	///@brief onbekende fontname
 	E_CHK_FONTNAME_UNKOWN,
-	///@brief brief description
+	///@brief te veel argumenten (of ',') ingevoerd
 	E_TO_MANY_ARGUMENTS,
-	///@brief brief description
+	///@brief te weinig argumenten ingevoerd
 	E_TO_FEW_ARGUMENTS,
-	///@brief brief description
+	///@brief argument bevat geen inhoud
 	E_EMPTY_ARGUMENT
 }Parser_err_t;
 
-/**
- * @brief storage for scriptline seperated in function and its arguments
- * 
- * @return uint8_t 
- */
-uint8_t test_func(void);
 
 /**
  * @brief interpret the variables given from the input
@@ -77,7 +71,7 @@ uint8_t test_func(void);
  * @param len 
  * @return FL_error_t 
  */
-Parser_err_t fl_parser(char* scriptline, uint32_t len);
+Parser_err_t API_Parser(char* scriptline, uint32_t len);
 
 /**
  * @brief delete an entry

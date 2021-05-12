@@ -1,14 +1,15 @@
-/*
- * fl_api_function_names.h
+/**
+ * @file	api_function_names.h
+ * @author	daniel.mul@student.hu.nl
+ * @brief	Definities en types zodat de interpreter de commands kan begrijpen
+ * @version 0.6
+ * @date 2021-05-12
  *
- *  Created on: Apr 28, 2021
- *      Author: Daniel
- */
-//@NOTE geef een korte beschrijving van wat er in deze header file gezet wordt en vergeet niet de doxygen variabelen te declareren (@author, @file, @date, @)
-//@NOTE dubbele underscores aan beide kanten van een C header definitie
+ * @copyright Copyright (c) 2021
+*/
 
-#ifndef INC_FL_API_FUNCTION_NAMES_H_
-#define INC_FL_API_FUNCTION_NAMES_H_
+#ifndef _INC_FL_API_FUNCTION_NAMES_H_
+#define _INC_FL_API_FUNCTION_NAMES_H_
 
 #include <stdint.h>
 
@@ -17,9 +18,9 @@ typedef enum ID_ARGUMENT_TYPE
 	T_GETAL,
 	T_TEKST,
 	T_KLEUR,
-	T_FONTNAAM,		//nog niet aangemaakt
-	T_FONTSTIJL,	//nog niet aangemaakt
-	T_COORDINAAT,		//nog niet in gebruik
+	T_FONTNAAM,
+	T_FONTSTIJL,
+	T_KOMMA,
 }Arg_t;
 
 typedef struct Functions
@@ -51,7 +52,7 @@ static const Colour_t colour_list[] =
 		{"lichtrood",	0b01000000},
 		{"magenta",		0b11100011},
 		{"lichtmagenta",0b01000101},
-		{"bruin",		0b01100100},//klopt niet
+		{"bruin",		0b01100100},
 		{"geel",		0b11111100},
 		{"grijs",		0b01001001},
 		{"wit",			0b11111111},
@@ -94,4 +95,4 @@ static const Fontstyle_t fontstyle_list[] =
 	{END_OF_LIST}
 };
 
-#endif /* INC_FL_API_FUNCTION_NAMES_H_ */
+#endif /* _INC_FL_API_FUNCTION_NAMES_H_ */

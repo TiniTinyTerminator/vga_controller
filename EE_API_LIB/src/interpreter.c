@@ -23,7 +23,6 @@ uint8_t last_inQ 	= 0;
 
 extern Command_t function_list[];
 
-//TODO ADD check if Q_entry is currently not in use
 //creates an entry in the queue at the oldest position
 //also allocates memory according to function argument count
 uint8_t createQ_entry(uint8_t fnc_nr)
@@ -49,7 +48,10 @@ void deleteQ_entry(uint8_t entry_nr)
 	if (cmd_queue[entry_nr].fnc_nr == 2)
 	{
 		uint32_t* p = (uint32_t*) cmd_queue[entry_nr].argp;
-		free((uint32_t *)p[3]);
+		if (p != 0)
+		{
+			free((uint32_t *)p[3]);
+		}
 	}
 	cmd_queue[entry_nr].funcp = NULL;
 	if (cmd_queue[entry_nr].argp != NULL)
@@ -87,8 +89,6 @@ int16_t cnttillsep(char* script, uint32_t len, char seperator)
 }
 
 
-//! is het niet handiger om door de lengte van de array te lopen met een for loop, zo zorg je ervoor dat er nooit verder dan de list gekeken wordt.
-
 Parser_err_t check_function(char* string, uint8_t str_len, int* retv)
 {
 	int i = 0;
@@ -111,7 +111,7 @@ Parser_err_t check_number(char* string, uint8_t str_len, int* retv)
 
 	if (str_len == 1)
 	{
-		number = string[0] - 48;
+		number = string[0] - '0';
 		if ((number < 0) || (number > 9))	return E_CHK_INVALID_NUM;	//error invalid number
 	}
 	else
@@ -124,6 +124,27 @@ Parser_err_t check_number(char* string, uint8_t str_len, int* retv)
 	return E_NO_ERROR;
 }
 
+Parser_err_t check_float(char* string, uint8_t str_len, int* retv)
+{
+	float number;
+
+	if (str_len < 3)
+	{
+		int whole = string[0] - '0';
+		int komma = string[1] - '.';
+		int decimal = string[2] -'0';
+		int x = whole + komma + decimal;
+		if (x != 0)	return E_CHK_INVALID_FLOAT;		//error invalid number
+	}
+	else
+	{
+		number = (float)atof(string);
+		if (number == 0)	return E_CHK_INVALID_FLOAT;		//error invalid number
+	}
+
+	retv[0] = (float)number;
+	return E_NO_ERROR;
+}
 Parser_err_t check_colour(char* string, uint8_t str_len, int* retv)
 {
 	int i = 0;
@@ -140,7 +161,6 @@ Parser_err_t check_colour(char* string, uint8_t str_len, int* retv)
 	return E_NO_ERROR;
 }
 
-//TODO add mem free
 Parser_err_t check_text(char* string, uint8_t str_len, int* retv)
 {
 	char* p;
@@ -207,6 +227,9 @@ void Parser_err_handler(Parser_err_t error, int arg_cnt, char* arg_string, int a
 	case E_CHK_INVALID_NUM:
 		printf("In argument %i--> Invalid number: \"%.*s\"\r\n",arg_cnt+1, arg_len, arg_string);
 		break;
+	case E_CHK_INVALID_FLOAT:
+		printf("In argument %i--> Invalid float: \"%.*s\"\r\n",arg_cnt+1, arg_len, arg_string);
+		break;
 	case E_CHK_COLOR_UNKOWN:
 		printf("In argument %i--> Colour unknown: \"%.*s\"\r\n",arg_cnt+1, arg_len, arg_string);
 		break;
@@ -231,14 +254,8 @@ void Parser_err_handler(Parser_err_t error, int arg_cnt, char* arg_string, int a
 	}
 }
 
-/****************************************************************************************************/
-//function:     fl_interpreter
-//arguments:    scriptline
-//
-//
-//
-/****************************************************************************************************/
-Parser_err_t fl_parser(char* scriptline, uint32_t len)
+
+Parser_err_t API_Parser(char* scriptline, uint32_t len)
 {
 	if (len == 0) return E_NO_ERROR;
     int i = 0;		//position counter
@@ -294,6 +311,9 @@ Parser_err_t fl_parser(char* scriptline, uint32_t len)
 			case T_GETAL:
 				error = check_number(&scriptline[i], arg_len, &pdata[j] );
 				break;
+			case T_KOMMA:
+				error = check_float(&scriptline[i], arg_len, &pdata[j] );
+				break;
 			case T_TEKST:
 				error = check_text(&scriptline[i], arg_len, &pdata[j] );
 				break;
@@ -306,56 +326,26 @@ Parser_err_t fl_parser(char* scriptline, uint32_t len)
 			case T_FONTSTIJL:
 				error = check_fontstyle(&scriptline[i], arg_len, &pdata[j] );
 				break;
-			case T_COORDINAAT:
-				break;
 			}
 		}
+	if(error != E_NO_ERROR)
+	{
+		deleteQ_entry(last_inQ);
+		if (last_inQ-- == 0)
+		{
+			last_inQ = QUEUE_LEN;
+		}
+	Parser_err_handler(error, j, &scriptline[i], arg_len, scriptline, len, first_arg_error);
+	}
 
 		j++;
 		i += arg_len + 1;		//go to start of next argument
     }
 
-    if(error!= E_NO_ERROR)
-    {
-    	deleteQ_entry(last_inQ);
-    	if (last_inQ-- == 0)
-    	{
-    		last_inQ = QUEUE_LEN;
-    	}
-    }
+
 
     return error;
 }
     // if (error != E_NO_ERROR) {
 
 
-//TODO remove test_func
-//uint8_t test_func(void)
-//{
-//	API_Init_function_list();
-//	char testline[] = "clearscherm,rood";
-////	char testline[] = "tekst,50,50,paars,dit is mokermooie tekst,consolas, 1, normaal";
-//	int x =fl_parser(testline, sizeof(testline));
-//
-//	int* point;
-//	point = (int*) cmd_queue[1].argp;
-//
-////	deleteQ_entry(1);
-//	int x1 = point[0];
-//	int x2 = point[1];
-//	int x3 = point[2];
-//	API_Next_Q();
-//	API_Next_Q();
-//	int x4 = point[3];
-//	char* x0 = x4;
-//	int x5 = point[4];
-//	int x6 = point[5];
-//	char testline2[] = "rechthoek,90,70,10,20,blauw,5";
-//
-//	x =fl_parser(testline2, sizeof(testline2));
-//
-//
-//	char testline3[] = "bitmap,9,777,797";
-//	x =fl_parser(testline3, sizeof(testline3));
-//	return x;
-//}

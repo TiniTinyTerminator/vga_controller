@@ -18,6 +18,8 @@ typedef struct
   double x, y;
 } Complex;
 
+Complex complexSquare(Complex c);
+
 inline Complex complexSquare(Complex c)
 {
   Complex cSq;
