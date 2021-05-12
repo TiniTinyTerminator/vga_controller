@@ -37,11 +37,11 @@
  */
 typedef enum DrawStyle
 {
-    //!@brief draw a single dot
+    ///@brief draw a single dot
     DOT,
-    //!@brief draw a circle
+    ///@brief draw a circle
     ROUND,
-    //!@brief draw a square
+    ///@brief draw a square
     SQUARE
 } DrawStyle_t;
 

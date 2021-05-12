@@ -59,6 +59,7 @@ int mandel_iterate(Complex_t z_initial, uint32_t max_iterations)
 
 void API_mandelbrot(int max_iterations, double real_min, double real_max, double imag_min, double imag_max)
 {
+  //!@brief calculate the distance between each pixel on the x and y axis
   float real_inc = (real_max - real_min) / _w;
   float imag_inc = (imag_max - imag_min) / _h;
 
@@ -67,17 +68,23 @@ void API_mandelbrot(int max_iterations, double real_min, double real_max, double
   Complex_t z;
 
   int32_t x, y;
-
+  
+  //for each x position
   for (x = 0, z.real = real_min; x < _w; x++, z.real += real_inc)
+    //for each y position
     for (y = 0, z.imag = imag_min; y < _h; y++, z.imag += imag_inc)
     {
+      //iterate till the maximume iteration has been reached
       uint32_t cnt = mandel_iterate(z, max_iterations);
       if (cnt == max_iterations)
+      //set color to black if maximum iterations has been reached
         color = 0x00;
       else
       {
+      //set color dependig on the interations
         color = (uint8_t)cnt;
       }
+      //draw that pixel
       API_Set_pixel(x, y, color);
     }
 }
