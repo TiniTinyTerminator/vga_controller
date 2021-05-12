@@ -159,19 +159,8 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-    // uint32_t x, y;
-
-    // x = rand() % VGA_DISPLAY_X;
-    // y = rand() % VGA_DISPLAY_Y;
-
-    // uint8_t c = rand() % ('z' - 'a') + 'a';
-
-    // API_Put_char(c, &arial, x, y, rand() % 4, NORMAL, rand() % 255);
-
-    // API_mandelbrot(8000, 	-0.086291288187, -0.085363637229, -0.859106886962, -0.858457531291);
-
     memset(string_data, 0, MAX_INPUT_LEN / 4);
-    HAL_Delay(1);
+    HAL_Delay(50);
   }
   /* USER CODE END 3 */
 }

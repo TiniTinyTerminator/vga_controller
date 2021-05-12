@@ -14,6 +14,9 @@
 #include "interpreter.h"
 
 #include <stdint.h>
+/**
+ * @brief ennum for argumenttypes
+ */
 typedef enum ID_ARGUMENT_TYPE
 {
 	T_GETAL,
@@ -24,6 +27,9 @@ typedef enum ID_ARGUMENT_TYPE
 	T_KOMMA,
 }Arg_t;
 
+/**
+ * @brief container for functions
+ */
 typedef struct Functions
 {
 	char name[20];
@@ -32,14 +38,18 @@ typedef struct Functions
 	Apifuncp funcp;
 }Command_t;
 
+/**
+ * @brief container for colours
+ */
 typedef struct Colours
 {
 	char name[15];
 	int8_t hexdef;
 }Colour_t;
 
-//according to: https://flaviocopes.com/rgb-color-codes/
-//RRRGGGBB
+/**
+ * @brief list of colours with corresponding 8bit code
+ */
 static const Colour_t colour_list[] =
 {
 		{"zwart",		0b00000000},
@@ -62,12 +72,18 @@ static const Colour_t colour_list[] =
 		{END_OF_LIST}
 };
 
+/**
+ * @brief container for fontnames
+ */
 typedef struct Fontnames
 {
 	char name[15];
 	uint8_t id;
 }Fontname_t;
 
+/**
+ * @brief list of fontnames with id
+ */
 static const Fontname_t fontname_list[] =
 {
 	{"arial",		0},
@@ -75,6 +91,9 @@ static const Fontname_t fontname_list[] =
 	{END_OF_LIST}
 };
 
+/**
+ * @brief enum for fontstyles
+ */
 typedef enum ID_FONTSYLE
 {
 	T_NORMAAL,
@@ -82,12 +101,18 @@ typedef enum ID_FONTSYLE
 	T_CURSIEF,
 }Fontstyles;
 
+/**
+ * @brief container for fontstyles
+ */
 typedef struct Fontstyles
 {
 	char name[15];
 	Fontstyles id;
 }Fontstyle_t;
 
+/**
+ * @brief list of fontstyles and corresponding ID.
+ */
 static const Fontstyle_t fontstyle_list[] =
 {
 	{"normaal",	T_NORMAAL},

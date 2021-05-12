@@ -22,8 +22,134 @@ uint8_t last_inQ 	= 0;
 
 extern Command_t function_list[];
 
-//creates an entry in the queue at the oldest position
+/**
+ * @brief //creates an entry in the queue at the oldest position
 //also allocates memory according to function argument count
+ *
+ * @param entry_nr nr of entry in the queue
+ */
+
+/**
+ * @brief Delete a entry in the queue
+ *
+ * @param entry_nr nr of entry in the queue
+ */
+uint8_t createQ_entry(uint8_t fnc_nr);
+
+/**
+ * @brief Counts the length till the separator
+ *
+ * @param script 	pointer to script string
+ * @param len		length of the string
+ * @param seperator	Separation character
+ *
+ * @ret length of till the separator
+ */
+int16_t atillsep(char* script, uint32_t len, char seperator);
+
+/**
+ * @brief Counts the amount of separators
+ *
+ * @param script 	pointer to script string
+ * @param len		length of the string
+ * @param separator	Separation character
+ *
+ * @ret separator count
+ */
+int16_t cntsep(char* script, uint32_t len, char seperator);
+
+/**
+ * @brief Checks if the string (function) is available in the functionlist and puts it in the retv
+ *
+ * @param script 	pointer to script string
+ * @param len		length of the string
+ * @param retv		pointer to location for the function data
+ *
+ * @retval ERROR, NO_ERROR
+ */
+Parser_err_t check_function(char* string, uint8_t str_len, int* retv);
+
+/**
+ * @brief Checks if the string (number) is a valid number and puts it in the retv
+ *
+ * @param script 	pointer to script string
+ * @param len		length of the string
+ * @param retv		pointer to location for the number data
+ *
+ * @retval ERROR, NO_ERROR
+ */
+Parser_err_t check_number(char* string, uint8_t str_len, int* retv);
+
+/**
+ * @brief Checks if the string (float) is a valid float and puts it in the retv
+ *
+ * @param script 	pointer to script string
+ * @param len		length of the string
+ * @param retv		pointer to location for the float data
+ *
+ * @retval ERROR, NO_ERROR
+ */
+Parser_err_t check_float(char* string, uint8_t str_len, int* retv);
+
+/**
+ * @brief Checks if the string (colour) is available in the colourlist and puts it in the retv
+ *
+ * @param script 	pointer to script string
+ * @param len		length of the string
+ * @param retv		pointer to location for the colour data
+ *
+ * @retval ERROR, NO_ERROR
+ */
+Parser_err_t check_colour(char* string, uint8_t str_len, int* retv);
+
+/**
+ * @brief Allocates memory for the string, and copies the data to it
+ *
+ * @param script 	pointer to script string
+ * @param len		length of the string
+ * @param retv		pointer to location for the pointer to the string
+ *
+ * @retval ERROR, NO_ERROR
+ */
+Parser_err_t check_text(char* string, uint8_t str_len, int* retv);
+
+/**
+ * @brief Checks if the string (fontstyle) is available in the fontstyle_list and puts it in the retv
+ *
+ * @param script 	pointer to script string
+ * @param len		length of the string
+ * @param retv		pointer to location for the fontstyle data
+ *
+ * @retval ERROR, NO_ERROR
+ */
+Parser_err_t check_fontstyle(char* string, uint8_t str_len, int* retv);
+
+/**
+ * @brief Checks if the string (fontname) is available in the fontname_list and puts it in the retv
+ *
+ * @param script 	pointer to script string
+ * @param len		length of the string
+ * @param retv		pointer to location for the fontname data
+ *
+ * @retval ERROR, NO_ERROR
+ */
+Parser_err_t check_fontname(char* string, uint8_t str_len, int* retv);
+
+/**
+ * @brief Prints the errors to the standard out put (__write), and gives context about the errors
+ *
+ * @param error			kind of errror
+ * @param arg_cnt		The argument where it went wrong
+ * @param arg_string	Pointer to char data of the argument
+ * @param arg_len		length of arg_string
+ * @param string		pointer to char data where it went wrong
+ * @param str_len		length of string
+ * @param first_error	0/1 determines if string is also printed out, prevents long error messages, with multiple errors in one command
+ *
+ * @retval ERROR, NO_ERROR
+ */
+void Parser_err_handler(Parser_err_t error, int arg_cnt, char* arg_string, int arg_len, char* string, int str_len, uint8_t first_error);
+
 uint8_t createQ_entry(uint8_t fnc_nr)
 {
 	if (last_inQ++ == QUEUE_LEN)
@@ -40,8 +166,7 @@ uint8_t createQ_entry(uint8_t fnc_nr)
 	return last_inQ;
 }
 
-//creates an entry in the queue at the <VARIABLE INT> position
-//also deallocates memory that was in use
+
 void deleteQ_entry(uint8_t entry_nr)
 {
 	if (cmd_queue[entry_nr].fnc_nr == 2)
@@ -62,8 +187,6 @@ void deleteQ_entry(uint8_t entry_nr)
 	cmd_queue[entry_nr].fnc_nr = 0;
 }
 
-
-//counts characters in string till separator
 int16_t atillsep(char* script, uint32_t len, char seperator)
 {
 	uint8_t i = 0;
@@ -75,7 +198,7 @@ int16_t atillsep(char* script, uint32_t len, char seperator)
 	return i;
 }
 
-int16_t cnttillsep(char* script, uint32_t len, char seperator)
+int16_t cntsep(char* script, uint32_t len, char seperator)
 {
 	uint8_t i = 0;
 	uint8_t j = 0;
@@ -272,7 +395,7 @@ Parser_err_t API_Parser(char* scriptline, uint32_t len)
     arg_len = atillsep(scriptline, len, SEPERATOR);
 	error = check_function(&scriptline[0], arg_len, &fnc_nr);
 
-    arg_cnt = cnttillsep(scriptline, len, SEPERATOR);
+    arg_cnt = cntsep(scriptline, len, SEPERATOR);
     if (error == E_NO_ERROR)							//if function is ok check for argument count
     {
         if (arg_cnt < function_list[fnc_nr].argc)
