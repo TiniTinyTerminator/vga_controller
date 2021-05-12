@@ -31,25 +31,31 @@ extern GetPixelCallback_t _get_pixel_callback;
 
 inline void API_Set_pixel(int32_t x, int32_t y, uint8_t color)
 {
+    // return if no pixel callback has been set
     if (_set_pixel_callback == NULL)
         return;
 
+    // excecute callback
     _set_pixel_callback(x, y, color);
 }
 
 inline uint8_t API_Get_pixel(int32_t x, int32_t y)
 {
+    // return 0 if no get pixel callback has been set
     if (_get_pixel_callback == NULL)
         return 0x0;
 
+    // excecute callback
     return _get_pixel_callback(x, y);
 }
 
 inline void API_Fill_screen(uint8_t color)
 {
+    // excecute callback if set
     if (_fill_screen_callback != NULL)
         _fill_screen_callback(color);
     else
+    // excecute API_Fill_square function to fill screen
         API_Fill_square(0, 0, _w, _h, color);
 }
 
@@ -71,16 +77,26 @@ inline void API_Draw(int32_t x, int32_t y, uint8_t color, uint32_t size, DrawSty
 
 inline void API_Fill_square(uint32_t x_lup, uint32_t y_lup, uint32_t w, uint32_t h, uint32_t color)
 {
+    //fill for x and y positions color
     for (uint32_t x = x_lup; x <= (x_lup + w); x++)
         for (uint32_t y = y_lup; y <= (y_lup + h); y++)
             API_Set_pixel(x, y, color);
 }
 
+///@see http://members.chello.at/~easyfilter/Bresenham.pdf
+
 void API_Draw_line(int32_t xA, int32_t yA, int32_t xB, int32_t yB, uint8_t color, uint32_t thickness, DrawStyle_t draw_style)
 {
-    int32_t dx = abs(xB - xA), sx = xA < xB ? 1 : -1;
+    // calculate the length of the line in the horizontal direction
+    int32_t dx = abs(xB - xA);
 
-    int32_t dy = -abs(yB - yA), sy = yA < yB ? 1 : -1;
+    // check if line goes left or right
+    int32_t sx = xA < xB ? 1 : -1;
+
+    // calculate the length of the line in the vertical direction
+    int32_t dy = -abs(yB - yA);
+    // check if line goes up or down
+    int32_t sy = yA < yB ? 1 : -1;
 
     int32_t error = dx + dy, e2; /* error value e_xy */
 
@@ -107,10 +123,12 @@ void API_Draw_line(int32_t xA, int32_t yA, int32_t xB, int32_t yB, uint8_t color
 
 void API_Draw_circle(int32_t xm, int32_t ym, int32_t radius, uint8_t color, uint32_t thickness)
 {
-    int32_t x = -radius, y = 0, err = 2 - 2 * radius; /* bottom left to top right */
+    int32_t x = -radius;
+    int32_t y = 0;
+    int32_t err = 2 - 2 * radius; /* bottom left to top right */
     do
     {
-
+        // draw the lines of each quadrant
         API_Draw(xm - x, ym + y, color, thickness, ROUND); /* I. Quadrant +x +y */
         API_Draw(xm - y, ym - x, color, thickness, ROUND); /* II. Quadrant -x +y */
         API_Draw(xm + x, ym - y, color, thickness, ROUND); /* III. Quadrant -x -y */
@@ -119,11 +137,11 @@ void API_Draw_circle(int32_t xm, int32_t ym, int32_t radius, uint8_t color, uint
         radius = err;
 
         if (radius <= y)
-            err += ++y * 2 + 1;    /* e_xy+e_y < 0 */
+            err += ++y * 2 + 1; /* e_xy+e_y < 0 */
 
         if (radius > x || err > y) /* e_xy+e_x > 0 or no 2nd y-step */
             err += ++x * 2 + 1;    /* -> x-step now */
-            
+
     } while (x < 0);
 }
 
@@ -132,13 +150,14 @@ void API_Fill_circle(int32_t xm, int32_t ym, int32_t radius, uint8_t color)
     int32_t x = -radius, y = 0, err = 2 - 2 * radius; /* bottom left to top right */
     do
     {
+        // draw a line of each half
         API_Draw_line(xm + x, ym - y, xm - x, ym - y, color, 1, DOT);
         API_Draw_line(xm + x, ym + y, xm - x, ym + y, color, 1, DOT);
 
         radius = err;
-        
+
         if (radius <= y)
-            err += ++y * 2 + 1;    /* e_xy+e_y < 0 */
+            err += ++y * 2 + 1; /* e_xy+e_y < 0 */
 
         if (radius > x || err > y) /* e_xy+e_x > 0 or no 2nd y-step */
             err += ++x * 2 + 1;    /* -> x-step now */
@@ -148,6 +167,7 @@ void API_Fill_circle(int32_t xm, int32_t ym, int32_t radius, uint8_t color)
 
 void API_Draw_square(int32_t x, int32_t y, uint32_t width, uint32_t height, uint8_t color, uint32_t thickness)
 {
+    // draw a line for each side of the square
     API_Draw_line(x, y, x + width, y, color, thickness, SQUARE);
     API_Draw_line(x, y, x, y + height, color, thickness, SQUARE);
     API_Draw_line(x + width, y, x + width, y + height, color, thickness, SQUARE);
