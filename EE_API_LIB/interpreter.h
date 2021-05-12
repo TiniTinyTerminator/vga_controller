@@ -8,10 +8,27 @@
  * @copyright Copyright (c) 2021
 */
 
+/**
+ * 		@section interpreter_sec interprerer 
+ *      @brief here are the files where the graphic functions are defined
+ *      @see interpreter.h
+ *      @see helper.h
+ *      @see api_function_names.h
+ *      @see interpreter.c
+ *      @see helper.c
+ * 
+ *      @brief In this part we have few main functions used by the program
+ *      @see API_Next_Q(void);
+ *      @see API_Init_function_list(void);
+ *      @see API_Parser(char* scriptline, uint32_t len);
+ *      <hr/>
+ */
+
+
 #ifndef _INC_FL_INTERPRETER_H_
 #define _INC_FL_INTERPRETER_H_
 
-#include "stdint.h"
+#include <stdint.h>
 
 #define SEPERATOR ','
 

@@ -79,7 +79,7 @@ typedef struct Fonts {
  * @param y the y position
  * @param font the font to use for the text
  * @param size the size to use for the font
- * @param style the style of the text, see FontStyles
+ * @param style the style of the text, see @ref FontStyles
  * @param color the color of the string
  */
 void API_Put_text(const char *string, uint32_t length, uint32_t x, uint32_t y, Font_t *font, uint8_t size, FontStyles_t style, uint8_t color);
@@ -92,7 +92,7 @@ void API_Put_text(const char *string, uint32_t length, uint32_t x, uint32_t y, F
  * @param y the y position
  * @param font the font to use for the character
  * @param size the size to use for the font
- * @param style the styles of the text, see FontStyles
+ * @param style the styles of the text, see @ref FontStyles
  */
 void API_Put_char(char c, uint32_t x, uint32_t y, Font_t *font, uint8_t size, FontStyles_t style, uint8_t color);
 
@@ -104,7 +104,7 @@ void API_Put_char(char c, uint32_t x, uint32_t y, Font_t *font, uint8_t size, Fo
  * @param x the x position
  * @param y the y position
  * @param size the size to generate the glyph in
- * @param styles the style to generate the glyph in
+ * @param styles the style to generate the glyph in, see @ref FontStyles
  * @param color the color of the glyph
  */
 void API_Load_glyph(Font_t *font, Glyph_t *glyph, uint32_t x, uint32_t y, uint8_t size, FontStyles_t styles, uint8_t color);

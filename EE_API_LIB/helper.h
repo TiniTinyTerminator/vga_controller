@@ -9,15 +9,6 @@
  * 
  */
 
-/*
- * FL_Helper.h
- *
- *  Created on: 6 mei 2021
- *      Author: Daniel
- *
- *      Function for executing the queue
- *      API_Init_function_list MUST BE CALLED first
- */
 
 #ifndef CORE_INC_EE_FRONTLAYER_FL_HELPER_H_
 #define CORE_INC_EE_FRONTLAYER_FL_HELPER_H_

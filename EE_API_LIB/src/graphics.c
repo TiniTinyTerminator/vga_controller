@@ -1,7 +1,7 @@
 /**
- * @file shapes.c
+ * @file graphics.c
  * @author Max Bensink (Max.bensink@student.hu.nl)
- * @brief 
+ * @brief the source file of most graphical functions
  * @date 2021-04-27
  * 
  * @copyright Copyright (c) 2021
@@ -11,7 +11,15 @@
 #include <inttypes.h>
 #include <stddef.h>
 
+/**
+ * @brief an macro tho define the sign of a value
+ */
 #define sgn(v) (((v) < 0) ? -1 : ((v) > 0))
+
+/**
+ * @brief a macro that returns the absolute value
+ * 
+ */
 #define abs(v) (((v) < 0) ? (v * -1) : (v))
 
 extern uint32_t _w;

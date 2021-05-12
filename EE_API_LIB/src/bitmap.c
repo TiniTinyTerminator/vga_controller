@@ -1,7 +1,7 @@
 /**
  * @file bitmap.c
  * @author Max Bensink (Max.bensink@student.hu.nl)
- * @brief 
+ * @brief source file of the @ref API_Load_bitmap function
  * @date 2021-05-04
  * 
  * @copyright Copyright (c) 2021
@@ -24,7 +24,7 @@ void API_Load_bitmap(uint32_t x_lup, uint32_t y_lup, uint32_t w, uint32_t h, con
         for(uint32_t j = 0; j < w; j++)
             //if index goes over buffer, return
             if(i * w + j >= buf_len) return;
-            else API_Set_pixel(x_lup + j, y_lup + i, bitmap[i * w + j]);
+            API_Set_pixel(x_lup + j, y_lup + i, bitmap[i * w + j]);
 }
 
 //! the X11 bitmap only works with predefined colors, which has a total of 200 predefined colors. this will make it difficult to use in embedded environments

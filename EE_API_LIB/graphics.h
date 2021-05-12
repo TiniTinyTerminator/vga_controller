@@ -8,6 +8,24 @@
  * 
  */
 
+/**
+ *      @mainpage Introduction 
+ *      @brief in this document will be explained how the EE_API_LIB works and how it can be used.
+ *      under here will be some files to look into.
+ *      @see graphics.h
+ *      @see graphics.c
+ *      @see bitmap.c
+ *      @see fonts.c
+ *      @see extra.h
+ *      @see extra.c
+ * 
+ *      @brief In this part we have few main functions used by the program
+ *      @see API_Set_pixel(int32_t x, int32_t y, uint8_t color);
+ *      @see API_Draw(int32_t x, int32_t y, uint8_t color, uint32_t size, DrawStyle_t draw_type);
+ *      @see API_Load_bitmap(uint32_t x_lup, uint32_t y_lup, uint32_t w, uint32_t h, const uint8_t *bitmap);
+ *      @see API_Draw_line(int32_t xA, int32_t yA, int32_t xB, int32_t yB, uint8_t color, uint32_t thickness, DrawStyle_t draw_style);
+ *      <hr/>
+ */
 
 /**
  * @warning some of the design of the drawing functions defined below are adaptations of the work of Alois Zingls.
@@ -23,30 +41,30 @@
  * @brief the different draw styles
  * 
  */
-typedef enum DrawStyle {
+typedef enum DrawStyle
+{
     DOT,
     ROUND,
     SQUARE
 } DrawStyle_t;
 
-
 /**
  * @brief callback type to bind function thats able to set pixels
  * 
  */
-typedef void (* SetPixelCallback_t)(uint32_t x, uint32_t y, uint32_t color);
+typedef void (*SetPixelCallback_t)(uint32_t x, uint32_t y, uint32_t color);
 
 /**
  * @brief the pixel readout callback
  * 
  */
-typedef uint8_t (* GetPixelCallback_t)(uint32_t x, uint32_t y);
+typedef uint8_t (*GetPixelCallback_t)(uint32_t x, uint32_t y);
 
 /**
  * @brief callback type that changes background
  * 
  */
-typedef void (* SetFillScreenCallback_t)(uint32_t color);
+typedef void (*SetFillScreenCallback_t)(uint32_t color);
 
 /**
  * @brief this functions implements the function is able to set pixels in the framebuffer.
@@ -159,7 +177,7 @@ void API_Draw_square(int32_t x_lup, int32_t y_lup, uint32_t width, uint32_t heig
  * @param thickness the thickness of the lines
  * @param draw_style the draw style of the lines
  */
-void API_Draw_polygon(const int32_t * list_X, const int32_t * list_Y, uint32_t length, uint8_t color, uint32_t thickness, DrawStyle_t draw_style);
+void API_Draw_polygon(const int32_t *list_X, const int32_t *list_Y, uint32_t length, uint8_t color, uint32_t thickness, DrawStyle_t draw_style);
 
 /**
  * @brief draw a circle on the display

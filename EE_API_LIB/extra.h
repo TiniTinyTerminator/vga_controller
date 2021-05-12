@@ -8,6 +8,11 @@
  * 
  */
 
+#include <inttypes.h>
+
+#ifndef __EXTRA_H__
+#define __EXTRA_H__
+
 /**
  * @brief calculate the mandelbrot and visualize it on the display
  * 
@@ -17,4 +22,6 @@
  * @param imag_min minimum imaginary number (y-axis)
  * @param imag_max maximum imaginary number (y-axis)
  */
-void API_mandelbrot(int max_iterations, double real_min, double real_max, double imag_min, double imag_max);
+void API_mandelbrot(uint32_t max_iterations, double real_min, double real_max, double imag_min, double imag_max);
+
+#endif
