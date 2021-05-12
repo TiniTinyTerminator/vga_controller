@@ -2,19 +2,14 @@
  * @file shapes.c
  * @author Max Bensink (Max.bensink@student.hu.nl)
  * @brief 
- * @version 0.1
  * @date 2021-04-27
  * 
  * @copyright Copyright (c) 2021
- * 
- * @attention some of the design of the drawing functions defined below are adaptations of the work of Alois Zingls.
- * (Alois Zingl, <a href="http://members.chello.at/~easyfilter/Bresenham.pdf">bresenham.pdf</a>)
  */
 
 #include "graphics.h"
 #include <inttypes.h>
 #include <stddef.h>
-// #include <math.h>
 
 #define sgn(v) (((v) < 0) ? -1 : ((v) > 0))
 #define abs(v) (((v) < 0) ? (v * -1) : (v))

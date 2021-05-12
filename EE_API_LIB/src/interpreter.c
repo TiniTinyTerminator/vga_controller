@@ -1,15 +1,13 @@
 /**
- * @file	interpreter.c
- * @author	daniel.mul@student.hu.nl
- * @brief	De interpreter vertaald een scriptcommando naar een uitvoerbarefunctie, de argumenten uit de functies worden gecontroleerd op
- * correctheid, vervolgends wordt het vertaalde commando in de queue gezet.
- * Om te weten hoe een commando eruit ziet moet de syntax gedefinieerd worden in de "functions_list"
- * Tenslotte worden errors terug gestuurd mbv printf()
- * @version 0.4
- * @date 2021-05-11
- *
+ * @file interpreter.c
+ * @author Daniel Mul (you@domain.com)
+ * @brief Front Layer interpreter, these functions will convert the user scripts (ASCII inputs) to usable functions and send them to Logic Layer
+ * @date 16 april 2021
+ * 
  * @copyright Copyright (c) 2021
-*/
+ * 
+ */
+
 #include <interpreter.h>
 #include <api_function_names.h>
 #include <string.h>
@@ -126,7 +124,7 @@ Parser_err_t check_number(char* string, uint8_t str_len, int* retv)
 
 Parser_err_t check_float(char* string, uint8_t str_len, int* retv)
 {
-	float number;
+	float number = 0;
 
 	if (str_len < 3)
 	{

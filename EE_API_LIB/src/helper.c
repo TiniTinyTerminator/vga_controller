@@ -45,7 +45,7 @@ Command_t function_list[15]=
 		{"cirkel",		4,	{T_GETAL, T_GETAL, T_GETAL, T_KLEUR}},
 		//figuur, x1,y1, x2,y2, x3,y3, x4,y4, x5,y5, kleur
 		{"figuur",		11,	{T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_KLEUR}},
-		{"mandelbrot",	7,	{T_GETAL, T_GETAL, T_GETAL, T_KOMMA, T_KOMMA, T_KOMMA, T_KOMMA}},
+		{"mandelbrot",	5,	{T_GETAL, T_KOMMA, T_KOMMA, T_KOMMA, T_KOMMA}},
 		//toren,
 		{END_OF_LIST}
 };
@@ -159,7 +159,7 @@ void API_Helper_draw_figure(void *argp)
 void API_Helper_draw_mandebroth(void *argp)
 {
 	int *p = (int *)argp;
-	API_mandelbrot( p[0], p[1], p[2], (float) p[3], (float) p[4], (float) p[5], (float) p[6]);
+	API_mandelbrot( p[0], (float)p[1], (float)p[2], (float) p[3], (float) p[4]);
 }
 void API_Next_Q(void)
 {

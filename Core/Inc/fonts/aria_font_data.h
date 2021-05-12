@@ -1,8 +1,9 @@
-#include "arial.xbm"
 #include <fonts.h>
 
-#ifndef INC_ARIA_FONT_DATA_H_
-#define INC_ARIA_FONT_DATA_H_
+#ifndef __INC_ARIAL_FONT_DATA_H__
+#define __INC_ARIAL_FONT_DATA_H__
+
+#include "arial.xbm"
 
 static Glyph_t arial_glyphs[] =
 {

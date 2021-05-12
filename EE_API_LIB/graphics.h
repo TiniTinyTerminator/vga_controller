@@ -2,11 +2,16 @@
  * @file graphics.h
  * @author Max Bensink (Max.bensink@student.hu.nl)
  * @brief An api that helps with drawing text on the display
- * @version 0.1
  * @date 2021-05-09
  * 
  * @copyright Copyright (c) 2021
  * 
+ */
+
+
+/**
+ * @warning some of the design of the drawing functions defined below are adaptations of the work of Alois Zingls.
+ * (Alois Zingl, <a href="http://members.chello.at/~easyfilter/Bresenham.pdf">bresenham.pdf</a>)
  */
 
 #ifndef __SHAPES_H__

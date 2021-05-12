@@ -3,7 +3,7 @@
   ******************************************************************************
   * @file           : main.c
   * @brief          : Main program body
-  **
+  *
   ****************************************************************************
   * @attention
   *
@@ -40,9 +40,6 @@
 #include <math.h>
 #include <errno.h>
 
-//data
-
-#include "fonts/aria_font_data.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -73,7 +70,7 @@ uint32_t start_time = 0;
 void SystemClock_Config(void);
 static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
-char UART_Check_for_string(int8_t * ptr, uint32_t max_size);
+char UART_Check_for_string(char * ptr, uint32_t max_size);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -94,7 +91,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-    HAL_Init();
+  HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -142,7 +139,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    int8_t string_data[MAX_INPUT_LEN / 4] = "";
+    char string_data[MAX_INPUT_LEN / 4] = "";
     
     char err = UART_Check_for_string(string_data, MAX_INPUT_LEN / 4);
 
@@ -159,11 +156,22 @@ int main(void)
     }
 
     /* USER CODE END WHILE */
-    
+
     /* USER CODE BEGIN 3 */
 
+    // uint32_t x, y;
+
+    // x = rand() % VGA_DISPLAY_X;
+    // y = rand() % VGA_DISPLAY_Y;
+
+    // uint8_t c = rand() % ('z' - 'a') + 'a';
+
+    // API_Put_char(c, &arial, x, y, rand() % 4, NORMAL, rand() % 255);
+
+    // API_mandelbrot(8000, 	-0.086291288187, -0.085363637229, -0.859106886962, -0.858457531291);
+
     memset(string_data, 0, MAX_INPUT_LEN / 4);
-    HAL_Delay(5);
+    HAL_Delay(1);
   }
   /* USER CODE END 3 */
 }
@@ -230,7 +238,7 @@ static void MX_NVIC_Init(void)
 
 /* USER CODE BEGIN 4 */
 
-char UART_Check_for_string(int8_t * ptr, uint32_t max_size)
+inline char UART_Check_for_string(char * ptr, uint32_t max_size)
 {
   static uint32_t check_index = 0;
   static uint32_t last_enter_index = 0;
@@ -242,20 +250,21 @@ char UART_Check_for_string(int8_t * ptr, uint32_t max_size)
     check_index = 0;
     last_enter_index = 0;
     HAL_UART_AbortReceive(&huart2);
-    HAL_UART_Receive_DMA(&huart2, input_buff, MAX_INPUT_LEN);
+    HAL_UART_Receive_DMA(&huart2, (uint8_t *)input_buff, MAX_INPUT_LEN);
 
     return ENOSPC;
   }
   else 
   {
     uint32_t i;
+
+    if(check_index > MAX_INPUT_LEN) {
+      check_index = 0;
+      last_enter_index = 0;
+    }
+
     for(i = check_index; i < cnt; i++)
     {
-      if(i > MAX_INPUT_LEN) {
-        check_index = 0;
-        last_enter_index = 0;
-      }
-
       putchar(input_buff[i]);
 
       if(strstr(input_buff + i, "\r\n") != NULL || input_buff[i] == '\n' || input_buff[i] == '\r')
@@ -286,7 +295,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
   if(huart != &huart2) return;
 
-  HAL_UART_Receive_DMA(&huart2, input_buff, MAX_INPUT_LEN);
+  HAL_UART_Receive_DMA(&huart2, (uint8_t *)input_buff, MAX_INPUT_LEN);
 }
 
 

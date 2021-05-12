@@ -11,12 +11,10 @@
 /**
  * @brief 
  * 
- * @param nx 
- * @param ny 
  * @param max_iter 
  * @param real_min 
  * @param real_max 
  * @param imag_min 
  * @param imag_max 
  */
-void API_mandelbrot(int nx, int ny, int max_iter, float real_min, float real_max, float imag_min, float imag_max);
+void API_mandelbrot(int max_iter, double real_min, double real_max, double imag_min, double imag_max);

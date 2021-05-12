@@ -11,8 +11,9 @@
 #ifndef _INC_FL_API_FUNCTION_NAMES_H_
 #define _INC_FL_API_FUNCTION_NAMES_H_
 
-#include <stdint.h>
+#include "interpreter.h"
 
+#include <stdint.h>
 typedef enum ID_ARGUMENT_TYPE
 {
 	T_GETAL,

@@ -2,7 +2,6 @@
  * @file configuration.c
  * @author Max Bensink (Max.bensink@student.hu.nl)
  * @brief 
- * @version 0.1
  * @date 2021-04-25
  * 
  * @copyright Copyright (c) 2021

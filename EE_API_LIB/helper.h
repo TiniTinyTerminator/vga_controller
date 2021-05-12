@@ -1,3 +1,13 @@
+/**
+ * @file helper.h
+ * @author Daniel Mul (you@domain.com)
+ * @brief 
+ * @date 2021-05-11
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 /*
  * FL_Helper.h
  *
