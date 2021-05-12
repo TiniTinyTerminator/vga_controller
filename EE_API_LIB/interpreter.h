@@ -9,21 +9,19 @@
 */
 
 /**
- * 		@section interpreter_sec interprerer 
- *      @brief here are the files where the graphic functions are defined
- *      @see interpreter.h
- *      @see helper.h
- *      @see api_function_names.h
- *      @see interpreter.c
- *      @see helper.c
- * 
- *      @brief In this part we have few main functions used by the program
- *      @see API_Next_Q(void);
- *      @see API_Init_function_list(void);
- *      @see API_Parser(char* scriptline, uint32_t len);
- *      <hr/>
+ * @section interpreter_sec interprerer 
+ * @brief here are the files where the graphic functions are defined
+ * @see interpreter.h
+ * @see helper.h
+ * @see api_function_names.h
+ * @see interpreter.c
+ * @see helper.c
+ * @brief In this part we have few main functions used by the program
+ * @see API_Next_Q(void);
+ * @see API_Init_function_list(void);
+ * @see API_Parser(char* scriptline, uint32_t len);
+ * <hr/>
  */
-
 
 #ifndef _INC_FL_INTERPRETER_H_
 #define _INC_FL_INTERPRETER_H_
@@ -32,11 +30,11 @@
 
 #define SEPERATOR ','
 
-#define QUEUE_LEN 255		//MAX uint8_t
+#define QUEUE_LEN 255 //MAX uint8_t
 
-#define END_OF_LIST "END_OF_LIST"	//end of stringlists
+#define END_OF_LIST "END_OF_LIST" //end of stringlists
 
-typedef void (*Apifuncp)(void* );
+typedef void (*Apifuncp)(void *);
 
 /**
  * @brief container for a Queue entry
@@ -45,10 +43,10 @@ typedef void (*Apifuncp)(void* );
  */
 typedef struct Queue_entry
 {
-	Apifuncp funcp;					//pointer to function
-	void* argp;						//pointer to first argument
-	int fnc_nr;						//function number
-}Qentry;
+	Apifuncp funcp; //pointer to function
+	void *argp;		//pointer to first argument
+	int fnc_nr;		//function number
+} Qentry;
 
 /**
  * @brief enum for errors
@@ -77,7 +75,7 @@ typedef enum Parser_err_t
 	E_TO_FEW_ARGUMENTS,
 	///@brief argument bevat geen inhoud
 	E_EMPTY_ARGUMENT
-}Parser_err_t;
+} Parser_err_t;
 
 /**
  * @brief interpret the scriptline given from the input
@@ -86,7 +84,7 @@ typedef enum Parser_err_t
  * @param len 
  * @return ERROR enum
  */
-Parser_err_t API_Parser(char* scriptline, uint32_t len);
+Parser_err_t API_Parser(char *scriptline, uint32_t len);
 
 /**
  * @brief delete an entry in the Queue
@@ -95,4 +93,4 @@ Parser_err_t API_Parser(char* scriptline, uint32_t len);
  */
 void deleteQ_entry(uint8_t entry_nr);
 
-#endif	// INC_FL_INTERPRETER_H_
+#endif // INC_FL_INTERPRETER_H_

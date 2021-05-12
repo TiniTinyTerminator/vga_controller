@@ -3,33 +3,27 @@
  * @author Max Bensink (Max.bensink@student.hu.nl)
  * @brief An api that helps with drawing text on the display
  * @date 2021-05-09
- * 
- * @copyright Copyright (c) 2021
- * 
- */
-
-/**
- *      @mainpage Introduction 
- *      @brief in this document will be explained how the EE_API_LIB works and how it can be used.
- *      under here will be some files to look into.
- *      @see graphics.h
- *      @see graphics.c
- *      @see bitmap.c
- *      @see fonts.c
- *      @see extra.h
- *      @see extra.c
- * 
- *      @brief In this part we have few main functions used by the program
- *      @see API_Set_pixel(int32_t x, int32_t y, uint8_t color);
- *      @see API_Draw(int32_t x, int32_t y, uint8_t color, uint32_t size, DrawStyle_t draw_type);
- *      @see API_Load_bitmap(uint32_t x_lup, uint32_t y_lup, uint32_t w, uint32_t h, const uint8_t *bitmap);
- *      @see API_Draw_line(int32_t xA, int32_t yA, int32_t xB, int32_t yB, uint8_t color, uint32_t thickness, DrawStyle_t draw_style);
- *      <hr/>
- */
-
-/**
  * @warning some of the design of the drawing functions defined below are adaptations of the work of Alois Zingls.
  * (Alois Zingl, <a href="http://members.chello.at/~easyfilter/Bresenham.pdf">bresenham.pdf</a>)
+ * @copyright Copyright (c) 2021
+ */
+
+/**
+ * @mainpage Introduction 
+ * @brief in this document will be explained how the EE_API_LIB works and how it can be used.
+ * under here will be some files to look into.
+ * @see graphics.h
+ * @see graphics.c
+ * @see bitmap.c
+ * @see fonts.c
+ * @see extra.h
+ * @see extra.c
+ * @brief In this part we have few main functions used by the program
+ * @see API_Set_pixel(int32_t x, int32_t y, uint8_t color);
+ * @see API_Draw(int32_t x, int32_t y, uint8_t color, uint32_t size, DrawStyle_t draw_type);
+ * @see API_Load_bitmap(uint32_t x_lup, uint32_t y_lup, uint32_t w, uint32_t h, const uint8_t *bitmap);
+ * @see API_Draw_line(int32_t xA, int32_t yA, int32_t xB, int32_t yB, uint8_t color, uint32_t thickness, DrawStyle_t draw_style);
+ * <hr/>
  */
 
 #ifndef __SHAPES_H__
@@ -43,8 +37,11 @@
  */
 typedef enum DrawStyle
 {
+    //!@brief draw a single dot
     DOT,
+    //!@brief draw a circle
     ROUND,
+    //!@brief draw a square
     SQUARE
 } DrawStyle_t;
 
