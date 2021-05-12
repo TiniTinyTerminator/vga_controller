@@ -50,7 +50,7 @@ void API_Put_text(const char *string, uint32_t length, uint32_t x, uint32_t y, F
     }
 
     //clear memory
-    memcpy(data, 0, length);
+    memset(data, 0, length);
     //free memory
     free(data);
 }
