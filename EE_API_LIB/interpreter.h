@@ -17,12 +17,12 @@
 
 #define QUEUE_LEN 255		//MAX uint8_t
 
-#define END_OF_LIST "END_OF_LIST"
+#define END_OF_LIST "END_OF_LIST"	//end of stringlists
 
 typedef void (*Apifuncp)(void* );
 
 /**
- * @brief datatype for the queue,
+ * @brief container for a Queue entry
  * @attention pointer is (void) but data can be anything, good prototyping is required
  * 
  */
@@ -35,7 +35,6 @@ typedef struct Queue_entry
 
 /**
  * @brief enum for errors
- * 
  */
 typedef enum Parser_err_t
 {
@@ -63,18 +62,17 @@ typedef enum Parser_err_t
 	E_EMPTY_ARGUMENT
 }Parser_err_t;
 
-
 /**
- * @brief interpret the variables given from the input
+ * @brief interpret the scriptline given from the input
  * 
  * @param scriptline 
  * @param len 
- * @return FL_error_t 
+ * @return ERROR enum
  */
 Parser_err_t API_Parser(char* scriptline, uint32_t len);
 
 /**
- * @brief delete an entry
+ * @brief delete an entry in the Queue
  * 
  * @param entry_nr the position of the entry
  */

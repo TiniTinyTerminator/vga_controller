@@ -26,7 +26,6 @@
 
 #include "fonts/aria_font_data.h"
 
-
 extern Qentry cmd_queue[QUEUE_LEN]; //[QUEUE_LEN];
 extern int last_inQ;
 
@@ -34,29 +33,94 @@ Command_t function_list[15]=
 {
 		{"lijn", 		6,	{T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_KLEUR, T_GETAL}},
 		{"rechthoek", 	6,	{T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_KLEUR, T_GETAL}},
-		//tekst, x, y, kleur, tekst, fontnaam (arial, consolas), fontgrootte (1,2), fontstijl (normaal, vet, cursief)
 		{"tekst", 		7,	{T_GETAL, T_GETAL, T_KLEUR, T_TEKST, T_FONTNAAM, T_GETAL, T_FONTSTIJL}},
 		{"bitmap", 		3,	{T_GETAL, T_GETAL, T_GETAL}},
 		{"clearscherm",	1,	{T_KLEUR}},
 		{"wacht",		1,	{T_GETAL}},
-		//herhaal, 			aantal (cmd), hoevaak (herhalen)
 		{"herhaal",		2,	{T_GETAL, T_GETAL}},
-		//cirkel, x, y, radius, kleur
 		{"cirkel",		4,	{T_GETAL, T_GETAL, T_GETAL, T_KLEUR}},
-		//figuur, x1,y1, x2,y2, x3,y3, x4,y4, x5,y5, kleur
 		{"figuur",		11,	{T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_GETAL, T_KLEUR}},
 		{"mandelbrot",	5,	{T_GETAL, T_KOMMA, T_KOMMA, T_KOMMA, T_KOMMA}},
-		//toren,
 		{END_OF_LIST}
 };
 
 
 int last_outQ = 0; //last executed command;
-
 int repeat_line = 0; //line at which will be repeated
 
 extern uint32_t wait_time;
 extern uint32_t start_time;
+
+/**
+ * @brief Connects arguments to API_Draw_line
+ *
+ * @param argp	pointer to arguments
+ */
+void API_Helper_draw_line(void *argp);
+
+/**
+ * @brief Connects arguments to API_Draw_square
+ *
+ * @param argp	pointer to arguments
+ */
+void API_Helper_draw_square(void *argp);
+
+/**
+ * @brief Connects arguments to API_Put_text
+ *
+ * @param argp	pointer to arguments
+ */
+void API_Helper_draw_tekst(void *argp);
+
+/**
+ * @brief Connects arguments to API_Load_bitmap
+ *
+ * @param argp	pointer to arguments
+ */
+void API_Helper_draw_bitmap(void *argp);
+
+/**
+ * @brief Connects arguments to API_Fill_screen
+ *
+ * @param argp	pointer to arguments
+ */
+void API_Helper_fillscreen(void *argp);
+
+/**
+ * @brief causes a delay, conform the API
+ *
+ * @param argp	pointer to arguments
+ */
+void API_Helper_wait(void *argp);
+
+/**
+ * @brief causes a loop in Queue, conform the API
+ *
+ * @param argp	pointer to arguments
+ */
+void API_Helper_repeat(void *argp);
+
+/**
+ * @brief Connects arguments to API_Draw_circle
+ *
+ * @param argp	pointer to arguments
+ */
+void API_Helper_draw_circle(void *argp);
+
+/**
+ * @brief Connects arguments to API_Draw_polygon
+ *
+ * @param argp	pointer to arguments
+ */
+void API_Helper_draw_figure(void *argp);
+
+/**
+ * @brief Connects arguments to API_mandelbrot
+ *
+ * @param argp	pointer to arguments
+ */
+void API_Helper_draw_mandelbrot(void *argp);
+
 
 void API_Helper_draw_line(void *argp)
 {
@@ -156,7 +220,7 @@ void API_Helper_draw_figure(void *argp)
 	API_Draw_polygon(list_X, list_Y, (uint32_t)5, (uint8_t)p[10], 1, DOT);
 }
 
-void API_Helper_draw_mandebroth(void *argp)
+void API_Helper_draw_mandelbrot(void *argp)
 {
 	int *p = (int *)argp;
 	API_mandelbrot( p[0], (float)p[1], (float)p[2], (float) p[3], (float) p[4]);
@@ -191,5 +255,5 @@ void API_Init_function_list(void)
 	function_list[i++].funcp = API_Helper_repeat;
 	function_list[i++].funcp = API_Helper_draw_circle;
 	function_list[i++].funcp = API_Helper_draw_figure;
-	function_list[i++].funcp = API_Helper_draw_mandebroth;
+	function_list[i++].funcp = API_Helper_draw_mandelbrot;
 }
