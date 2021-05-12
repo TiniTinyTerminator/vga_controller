@@ -13,6 +13,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <ctype.h>
 
 //globals for managing the queue
 Qentry cmd_queue[QUEUE_LEN];
@@ -60,6 +61,7 @@ void deleteQ_entry(uint8_t entry_nr)
 
 	cmd_queue[entry_nr].fnc_nr = 0;
 }
+
 
 //counts characters in string till separator
 int16_t atillsep(char* script, uint32_t len, char seperator)
@@ -252,7 +254,6 @@ void Parser_err_handler(Parser_err_t error, int arg_cnt, char* arg_string, int a
 	}
 }
 
-
 Parser_err_t API_Parser(char* scriptline, uint32_t len)
 {
 	if (len == 0) return E_NO_ERROR;
@@ -297,7 +298,11 @@ Parser_err_t API_Parser(char* scriptline, uint32_t len)
     while (i <= len)                  //as long as the end of scriptline is not reached, continue
     {
 		arg_len = atillsep(&scriptline[i], (len - i), SEPERATOR);
-
+		while( isspace((unsigned char)scriptline[i]) )					//removes whitespaces
+		{
+			i++;
+			arg_len--;
+		}
 		if (arg_len == 0)
 		{
 			error = E_EMPTY_ARGUMENT;					//ERROR to many arguments for function
@@ -340,10 +345,8 @@ Parser_err_t API_Parser(char* scriptline, uint32_t len)
 		i += arg_len + 1;		//go to start of next argument
     }
 
-
-
     return error;
 }
-    // if (error != E_NO_ERROR) {
+
 
 
