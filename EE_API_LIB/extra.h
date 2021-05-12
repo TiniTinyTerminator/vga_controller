@@ -9,12 +9,12 @@
  */
 
 /**
- * @brief 
+ * @brief calculate the mandelbrot and visualize it on the display
  * 
- * @param max_iter 
- * @param real_min 
- * @param real_max 
- * @param imag_min 
- * @param imag_max 
+ * @param max_iterations the maximum amount of iterations per pixel
+ * @param real_min minimum real number (x-axis)
+ * @param real_max maximum real number (x-axis)
+ * @param imag_min minimum imaginary number (y-axis)
+ * @param imag_max maximum imaginary number (y-axis)
  */
-void API_mandelbrot(int max_iter, double real_min, double real_max, double imag_min, double imag_max);
+void API_mandelbrot(int max_iterations, double real_min, double real_max, double imag_min, double imag_max);

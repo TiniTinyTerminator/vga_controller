@@ -43,7 +43,7 @@ void API_Put_text(const char *string, uint32_t length, uint32_t x, uint32_t y, F
     }
 }
 
-void API_Put_char(char c, Font_t *font, uint32_t x, uint32_t y, uint8_t size, FontStyles_t style, uint8_t color)
+void API_Put_char(char c, uint32_t x, uint32_t y, Font_t *font, uint8_t size, FontStyles_t style, uint8_t color)
 {
 
     uint32_t i;

@@ -51,21 +51,21 @@ typedef void (* SetFillScreenCallback_t)(uint32_t color);
 /**
  * @brief this functions implements the function is able to set pixels in the framebuffer.
  * 
- * @param callback address of callback function
+ * @param callback address of set pixel function
  */
 void API_Bind_set_pixel_callback(SetPixelCallback_t callback);
 
 /**
- * @brief 
+ * @brief this functions implements the function is able to get pixels from the framebuffer.
  * 
- * @param callback 
+ * @param callback address of the get pixel function
  */
 void API_Bind_get_pixel_callback(GetPixelCallback_t callback);
 
 /**
- * @brief this function implements the functions that se
+ * @brief this function implements the functions that fills the screen if avaiblabe.
  * 
- * @param callback 
+ * @param callback address of the fill screen function
  */
 void API_Bind_fill_screen_callback(SetFillScreenCallback_t callback);
 
@@ -138,50 +138,58 @@ void API_Fill_square(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t co
 void API_Draw_line(int32_t xA, int32_t yA, int32_t xB, int32_t yB, uint8_t color, uint32_t thickness, DrawStyle_t draw_style);
 
 /**
- * @brief 
+ * @brief draw a square on the display
  * 
- * @param x 
- * @param y 
- * @param width 
- * @param height 
+ * @param x_lup the x lup position
+ * @param y_lup the y lup position
+ * @param width the width of the square
+ * @param height the height of the square
+ * @param color the color of the lines
+ * @param thickness the thickness of the lines
  */
-void API_Draw_square(int32_t x, int32_t y, uint32_t width, uint32_t height, uint8_t color, uint32_t thickness);
+void API_Draw_square(int32_t x_lup, int32_t y_lup, uint32_t width, uint32_t height, uint8_t color, uint32_t thickness);
 
 /**
- * @brief 
+ * @brief draw a polygon on the display
  * 
- * @param list_X 
- * @param list_Y 
- * @param length 
+ * @param list_X a list of the x positions of the polygon
+ * @param list_Y a list of the y positions of the polygon
+ * @param length the length of the arrays
+ * @param color the color of the lines
+ * @param thickness the thickness of the lines
+ * @param draw_style the draw style of the lines
  */
 void API_Draw_polygon(const int32_t * list_X, const int32_t * list_Y, uint32_t length, uint8_t color, uint32_t thickness, DrawStyle_t draw_style);
 
 /**
- * @brief 
+ * @brief draw a circle on the display
  * 
- * @param x 
- * @param y 
- * @param radius 
+ * @param xm the x position of the middle of the circle
+ * @param ym the y position of the middle of the circle
+ * @param radius the radius of the circle
+ * @param color the color of the circle
+ * @param thickness the thickness of the line
  */
 void API_Draw_circle(int32_t xm, int32_t ym, int32_t radius, uint8_t color, uint32_t thickness);
 
 /**
- * @brief 
+ * @brief draw a filled circle on the display 
  * 
- * @param xm 
- * @param ym 
- * @param r 
- * @param color 
+ * @param xm the x position of the middle of the circle
+ * @param ym the y position of the middle of the circle
+ * @param radius the radius of the circle
+ * @param color the color of the circle
  */
 void API_Fill_circle(int32_t xm, int32_t ym, int32_t radius, uint8_t color);
 
 /**
- * @brief 
+ * @brief a function that checks if what is drawn is in the framebuffer
  * 
- * @param x 
- * @param y 
- * @param w 
- * @param h 
+ * @param x the x lup position of the object
+ * @param y the y lup position of the object
+ * @param w the width of the object
+ * @param h the height of the object
+ * @return char
  * @retval 1 if shape fits in display
  * @retval 0 if shape does not fit in display
  * @retval -1 if shape is completely out of display
@@ -189,13 +197,13 @@ void API_Fill_circle(int32_t xm, int32_t ym, int32_t radius, uint8_t color);
 char API_Check_inbounds(int32_t x, int32_t y, uint32_t w, uint32_t h);
 
 /**
- * @brief 
+ * @brief load an bitmap into the framebuffer
  * 
- * @param x_lup 
- * @param y_lup 
- * @param w 
- * @param h 
- * @param bitmap 
+ * @param x_lup the x lup of position
+ * @param y_lup the y lup of the position
+ * @param w the width of the bitmap
+ * @param h the height of the bitmap
+ * @param bitmap the bitmap array
  */
 void API_Load_bitmap(uint32_t x_lup, uint32_t y_lup, uint32_t w, uint32_t h, const uint8_t *bitmap);
 

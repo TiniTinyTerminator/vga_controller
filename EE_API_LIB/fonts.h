@@ -17,7 +17,7 @@
 #include <inttypes.h>
 
 /**
- * @brief 
+ * @brief the different available font styles
  * 
  */
 typedef enum FontStyles {
@@ -28,7 +28,7 @@ typedef enum FontStyles {
 } FontStyles_t;
 
 /**
- * @brief struct define of 
+ * @brief struct definition of a glyph (and small part of an image)
  * 
  */
 typedef struct Glyphs
@@ -39,68 +39,73 @@ typedef struct Glyphs
 
     uint16_t x_off, y_off;
     
-    // const uint8_t * payload;
-
-    // struct kerning {
-    //     uint16_t x_off;
-    // };
-    
 } Glyph_t;
 
 /**
- * @brief 
+ * @brief a struct definition for information about the font
  * 
  */
 typedef struct Fonts {
+    //!@brief the name of the font
     char *name;
-
+    //!@brief the amount of glyphs in the font
     uint32_t size;
-
+    //!@brief a pointer to the array of glyphs
     Glyph_t * glyphs;
-
+    //!@brief the space between the fonts
     uint8_t spacing_in_bits;
 
+    /**
+     * @brief the internal struct for the dataframe of the font
+     * 
+     */
     struct data_frame {
+        //!@brief a pointer to the data
         uint8_t * data;
-
+        //!@brief the width of the frame in bits
         uint32_t width;
+        //!@brief the height of the frame in bits
         uint32_t height;
     } frame;
 
 } Font_t;
 
 /**
- * @brief 
+ * @brief display the given text on the display
  * 
- * @param string 
- * @param length 
- * @param font 
- * @param size 
+ * @param string the string to display
+ * @param length the length of the string
+ * @param x the x position
+ * @param y the y position
+ * @param font the font to use for the text
+ * @param size the size to use for the font
+ * @param style the style of the text, see FontStyles
+ * @param color the color of the string
  */
 void API_Put_text(const char *string, uint32_t length, uint32_t x, uint32_t y, Font_t *font, uint8_t size, FontStyles_t style, uint8_t color);
 
 /**
- * @brief 
+ * @brief put a single character on the display
  * 
- * @param c 
- * @param font 
- * @param x 
- * @param y 
- * @param size 
- * @param style 
+ * @param c the character
+ * @param x the x position
+ * @param y the y position
+ * @param font the font to use for the character
+ * @param size the size to use for the font
+ * @param style the styles of the text, see FontStyles
  */
-void API_Put_char(char c, Font_t *font, uint32_t x, uint32_t y, uint8_t size, FontStyles_t style, uint8_t color);
+void API_Put_char(char c, uint32_t x, uint32_t y, Font_t *font, uint8_t size, FontStyles_t style, uint8_t color);
 
 /**
- * @brief 
+ * @brief load a glyph from the font out of the data array
  * 
- * @param font 
- * @param glyph 
- * @param x 
- * @param y 
- * @param size 
- * @param styles 
- * @param color 
+ * @param font the font of the glyph
+ * @param glyph the glyph to print
+ * @param x the x position
+ * @param y the y position
+ * @param size the size to generate the glyph in
+ * @param styles the style to generate the glyph in
+ * @param color the color of the glyph
  */
 void API_Load_glyph(Font_t *font, Glyph_t *glyph, uint32_t x, uint32_t y, uint8_t size, FontStyles_t styles, uint8_t color);
 

@@ -16,46 +16,59 @@ extern uint32_t _h;
 typedef struct
 {
   double x, y;
-} Complex;
+} Complex_t;
 
-Complex complexSquare(Complex c);
-
-inline Complex complexSquare(Complex c)
-{
-  Complex cSq;
-  cSq.x = c.x * c.x - c.y * c.y;
-  cSq.y = 2 * c.x * c.y;
-  return cSq;
+/**
+ * @brief apply a square function on the complex number 
+ * 
+ * @param c the complex number
+ * @return Complex_t the squared number
+ */
+inline Complex_t Complex_square(Complex_t c)
+{  
+  return (Complex_t){c.x * c.x - c.y * c.y, 2 * c.x * c.y};
 }
 
-int mandel_iterate(Complex zInit, int maxIter)
+/**
+ * @brief calculate the position in the mandelbrot till the 
+ * 
+ * @param z_initial 
+ * @param max_iterations 
+ * @return int 
+ */
+int mandel_iterate(Complex_t z_initial, uint32_t max_iterations)
 {
-  Complex z = zInit;
-  int cnt = 0;
-  while ((z.x * z.x + z.y * z.y <= 4) && (cnt < maxIter))
+  Complex_t z = z_initial;
+
+
+  uint32_t cnt = 0;
+  
+  while ((z.x * z.x + z.y * z.y <= 4) && (cnt < max_iterations))
   {
-    z = complexSquare(z);
-    z.x += zInit.x;
-    z.y += zInit.y;
+    z = Complex_square(z);
+    z.x += z_initial.x;
+    z.y += z_initial.y;
     cnt++;
   }
   return cnt;
 }
 
-void API_mandelbrot(int maxIter, double realMin, double realMax, double imagMin, double imagMax)
+void API_mandelbrot(int max_iterations, double real_min, double real_max, double imag_min, double imag_max)
 {
-  float realInc = (realMax - realMin) / _w;
-  float imagInc = (imagMax - imagMin) / _h;
+  float real_inc = (real_max - real_min) / _w;
+  float imag_inc = (imag_max - imag_min) / _h;
+
   static uint8_t color = 0x00;
 
-  Complex z;
-  int x, y;
-  int cnt;
-  for (x = 0, z.x = realMin; x < _w; x++, z.x += realInc)
-    for (y = 0, z.y = imagMin; y < _h; y++, z.y += imagInc)
+  Complex_t z;
+
+  int32_t x, y;
+  
+  for (x = 0, z.x = real_min; x < _w; x++, z.x += real_inc)
+    for (y = 0, z.y = imag_min; y < _h; y++, z.y += imag_inc)
     {
-      cnt = mandel_iterate(z, maxIter);
-      if (cnt == maxIter)
+      uint32_t cnt = mandel_iterate(z, max_iterations);
+      if (cnt == max_iterations)
         color = 0x00;
       else
       {
